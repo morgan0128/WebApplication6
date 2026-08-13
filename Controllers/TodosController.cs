@@ -12,7 +12,7 @@ public sealed class TodosController(ApplicationDbContext dbContext, IWebHostEnvi
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<TodoItemDto>>> GetTodos()
     {
-        await EnsureDevelopmentDatabaseCreatedAsync();
+        // await EnsureDevelopmentDatabaseCreatedAsync();
 
         var todos = await dbContext.TodoItems
             .AsNoTracking()
@@ -27,7 +27,7 @@ public sealed class TodosController(ApplicationDbContext dbContext, IWebHostEnvi
     [HttpGet("{id:int}")]
     public async Task<ActionResult<TodoItemDto>> GetTodo(int id)
     {
-        await EnsureDevelopmentDatabaseCreatedAsync();
+        // await EnsureDevelopmentDatabaseCreatedAsync();
 
         var todo = await dbContext.TodoItems
             .AsNoTracking()
@@ -41,7 +41,7 @@ public sealed class TodosController(ApplicationDbContext dbContext, IWebHostEnvi
     [HttpPost]
     public async Task<ActionResult<TodoItemDto>> CreateTodo(CreateTodoItemRequest request)
     {
-        await EnsureDevelopmentDatabaseCreatedAsync();
+        // await EnsureDevelopmentDatabaseCreatedAsync();
 
         var title = request.Title?.Trim();
         if (string.IsNullOrWhiteSpace(title))
@@ -61,7 +61,7 @@ public sealed class TodosController(ApplicationDbContext dbContext, IWebHostEnvi
     [HttpPut("{id:int}")]
     public async Task<ActionResult<TodoItemDto>> UpdateTodo(int id, UpdateTodoItemRequest request)
     {
-        await EnsureDevelopmentDatabaseCreatedAsync();
+        // await EnsureDevelopmentDatabaseCreatedAsync();
 
         var todo = await dbContext.TodoItems.FindAsync(id);
         if (todo is null)
@@ -78,7 +78,7 @@ public sealed class TodosController(ApplicationDbContext dbContext, IWebHostEnvi
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteTodo(int id)
     {
-        await EnsureDevelopmentDatabaseCreatedAsync();
+        // await EnsureDevelopmentDatabaseCreatedAsync();
 
         var todo = await dbContext.TodoItems.FindAsync(id);
         if (todo is null)
@@ -92,12 +92,12 @@ public sealed class TodosController(ApplicationDbContext dbContext, IWebHostEnvi
         return NoContent();
     }
 
-    private Task EnsureDevelopmentDatabaseCreatedAsync()
-    {
-        return environment.IsDevelopment()
-            ? dbContext.Database.EnsureCreatedAsync()
-            : Task.CompletedTask;
-    }
+    // private Task EnsureDevelopmentDatabaseCreatedAsync()
+    // {
+    //     return environment.IsDevelopment()
+    //         ? dbContext.Database.EnsureCreatedAsync()
+    //         : Task.CompletedTask;
+    // }
 
     private static TodoItemDto ToDto(TodoItem todo)
     {

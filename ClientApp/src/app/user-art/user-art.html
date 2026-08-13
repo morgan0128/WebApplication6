@@ -1,0 +1,32 @@
+<main class="app-user-art">
+  <section class="workspace">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">ASP.NET MVC + Angular + PostgreSQL</p>
+
+      </div>
+
+    </header>
+
+    <form (ngSubmit)="uploadImage()">
+      <input
+        type="file"
+        accept="image/png,image/jpeg,image/webp"
+        (change)="onFileSelected($event)"
+      />
+
+      @if (previewUrl){
+        <img [src]="previewUrl" alt="Selected image preview" width="240" />
+      }
+
+      @if (imageError2){
+        <p>{{ imageError2 }}</p>
+      }
+
+      <button type="submit" [disabled]="!selectedFile || isUploading">
+        {{ isUploading ? 'Uploading...' : 'Upload' }}
+      </button>
+    </form>
+
+  </section>
+</main>

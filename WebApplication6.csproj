@@ -16,6 +16,7 @@
 
     <ItemGroup>
       <Folder Include="ClientApp\scripts\" />
+      <Folder Include="wwwroot\uploads\" />
     </ItemGroup>
 
 </Project>
