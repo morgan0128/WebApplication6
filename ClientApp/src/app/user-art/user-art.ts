@@ -5,6 +5,8 @@ import {FormsModule} from '@angular/forms';
 // import {ImageService, ImageDto} from '../services/ImageService';
 // import { ImageService } from '../services/ImageService'
 import { ImageLoader } from '../image-loader/image-loader'
+import {ɵEmptyOutletComponent} from '@angular/router';
+import {NgComponentOutlet, NgOptimizedImage} from '@angular/common';
 
 interface ImageDTO {
   id: number;
@@ -17,7 +19,7 @@ interface ImageDTO {
 
 @Component({
   selector: 'app-user-art',
-  imports: [FormsModule, ImageLoader],
+  imports: [FormsModule, NgOptimizedImage],
   templateUrl: './user-art.html',
   styleUrl: './user-art.css',
 })
@@ -26,103 +28,20 @@ export class UserArt implements OnInit {
 
   private readonly apiImageUrl = '/api/Image';
 
-  private imageLoader = new ImageLoader();
+  imageLoader = new ImageLoader();
 
-  // constructor(private imageService: ImageService) {}
-  // protected readonly images = signal<Image[]>([]);
-  // protected readonly imagesFileInfo = signal<FileInfo[]>([]);
-  // protected blobs = signal<Blob[]>([]);
-  // protected urls = signal<string[]>([]);
-  // images = signal<MediaSource[]>([]);
-  // urls = signal<string[]>([]);
   urls: string[] = [];
-
-  protected readonly imagesIsLoading = signal(true);
-  protected readonly imageDTOLoadingError = signal<string | null>(null);
-  protected readonly imagesLoadingError = signal<string | null>(null);
 
   selectedFile: File | null = null;
   previewImageUrl: string | null = null;
   imageUploadError: string | null = null;
   imageIsUploading = false;
 
-  protected readonly imageError = signal<string | null>(null);
-
   protected readonly images = signal<ImageDTO[]>([]);
 
-  // protected readonly imagesMedia = signal<MediaSource[]>([]);
-
   ngOnInit(): void {
-    this.loadImageDTOs();
+    // this.loadImageDTOs();
   }
-
-  // constructor() {
-  //   effect(() => {
-  //     this.loadImages();
-  //   })
-  // }
-
-  // protected loadImages(): void {
-  //   this.imagesIsLoading.set(true);
-  //   this.imagesLoadingError.set(null);
-  //
-  //   // this.
-  //
-  //   // return this.http.get<Blob[]>(this.apiImageUrl).subscribe
-  // }
-
-  //  loadImages(): void {
-  //   this.imagesIsLoading.set(true);
-  //   this.imageDTOLoadingError.set(null);
-  //   this.imagesLoadingError.set(null);
-  //
-  //   this.loadImageDTOs();
-  //
-  //
-  //   if (this.imageDTOLoadingError()){
-  //     this.imagesIsLoading.set(false);
-  //     this.imagesLoadingError.set('Could not load image DTOs');
-  //     return;
-  //   }
-  //
-  //
-  //    this.images().forEach(image => {
-  //      var path = this.apiImageUrl + "/" + (image.id);
-  //      this.http.get(path, {responseType: 'blob'}).subscribe({
-  //        next: blob => {
-  //          this.urls.push(URL.createObjectURL(blob));
-  //          console.log(this.urls);
-  //        },
-  //        error: () => {
-  //          this.imagesIsLoading.set(false);
-  //          this.imagesLoadingError.set('Could not complete loading images from DTOs');
-  //          console.log(this.imagesLoadingError);
-  //          this.imagesIsLoading.set(false);
-  //        }
-  //      });
-  //    })
-  //
-  //    this.imagesIsLoading.set(false);
-  //
-  //
-  // }
-
-  loadImage(): void{
-    this.imageLoader.loadImage();
-  }
-
-  private loadImageDTOs(): void {
-    this.http.get<ImageDTO[]>(this.apiImageUrl).subscribe({
-      next: dto => {
-        this.images.set(dto);
-        console.log("DTO Success: " + dto);
-      },
-      error: () => {
-        this.imageDTOLoadingError.set('Could not load images');
-        console.log(this.imageDTOLoadingError);
-      }
-    });
-}
 
   protected onFileSelected(event: Event): void {
     this.imageUploadError = null;
@@ -184,4 +103,5 @@ export class UserArt implements OnInit {
   //   });
   // }
 
+  protected readonly ImageLoader = ImageLoader;
 }

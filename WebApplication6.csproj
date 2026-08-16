@@ -16,7 +16,15 @@
 
     <ItemGroup>
       <Folder Include="ClientApp\scripts\" />
+      <Folder Include="ClientApp\src\app\services\" />
       <Folder Include="wwwroot\uploads\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="ClientApp\public\bf93dc6c-9dd3-4b45-992b-dcfc2ce64a1e.png">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

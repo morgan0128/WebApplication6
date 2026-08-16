@@ -1,13 +1,16 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import { UserArt } from '../user-art/user-art';
+import {Observable} from 'rxjs'
+import {AnyCatcher} from 'rxjs/internal/AnyCatcher';
 import {NgOptimizedImage} from '@angular/common';
 
-
-interface ImageUrlDTO{
-  url: string,
-  width: number,
-  height: number
+interface ImageUrlDTO1{
+  id: number,
+  fileContent: Blob
+}
+interface ImageUrlDTO2{
+  id: number,
+  url: string
 }
 
 @Component({
@@ -18,53 +21,54 @@ interface ImageUrlDTO{
 })
 export class ImageLoader implements OnInit {
   private readonly http = inject(HttpClient);
-  private readonly apiImageId5Url = '/api/Image/5';
+  private readonly apiImageId5Url = '/api/Image';
 
-  // imageUrl: string | null = null;
+  protected readonly displayingAll = signal<boolean>(false);
 
   imageUrls: string[] = ([]);
 
+  imageIdList: number[] = [];
+
+  protected readonly imagesLoaded = signal<boolean>(false);
+
   ngOnInit() {
-    this.loadImage();
+    // this.loadImage();
+    this.loadImages();
+
   }
 
-  loadImage(): void {
+  displayAll() {
+    let switched = !this.displayingAll();
+    this.displayingAll.set(switched)
+  }
 
-    this.http.get(this.apiImageId5Url, {responseType: 'blob'}).subscribe({
-      next: blob => {
-        this.imageUrls.push(URL.createObjectURL(blob));
-      },
-      error: () => {
-        console.log('Could not load image');
+  loadImages(): void {
+    this.generateData().subscribe({
+
+      next: list => {
+        this.imageIdList = list;
+        const pathPref = 'api/Image/';
+
+        this.imageIdList.forEach(value => {
+          let path = pathPref + value;
+          this.http.get(path, {responseType: 'blob'}).subscribe({
+            next: blob => {
+              this.imageUrls.push(URL.createObjectURL(blob));
+            },
+            error: () => {
+              console.log('Failed to load images');
+            }
+          });
+        })
+
+        this.imagesLoaded.set(true);
       }
-    })
+    });
+
   }
 
-  // loadImageById(id: number): void {
-  //   var path = this.apiImageUrl + '/' + id;
-  //   this.http.get(path, {responseType: 'blob'}).subscribe({
-  //     next: blob => {
-  //       this.imageUrls.push(URL.createObjectURL(blob));
-  //     },
-  //     error: () => {
-  //       console.log('Could not load image');
-  //     }
-  //   })
-  // }
-
-  // loadImage(): string | null{
-  //   this.http.get(this.apiImageUrl, {responseType: 'blob'}).subscribe({
-  //     next: blob => {
-  //       return URL.createObjectURL(blob);
-  //     },
-  //     error: () => {
-  //       console.log('Could not load image');
-  //       return null;
-  //     },
-  //     complete: () => {
-  //       return null;
-  //     }
-  //   })
-  // }
+  generateData(){
+    return this.http.get<number[]>('api/Image');
+  }
 
 }

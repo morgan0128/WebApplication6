@@ -1,9 +1,21 @@
 <main class ="app-image-loader">
   <section class="workspace">
-    <button class="primary-button" (click)="loadImage()">Load Image</button>
-    <br>
-    @if (imageUrls.length !== 0){
-      <img [src]="imageUrls.at(0)" alt="Loaded image">
+
+<!--    <button class="primary-button" (click)="loadImage()">Load Image</button>-->
+    @if (imagesLoaded()){
+        <button class="primary-button" (click)="displayAll()">Display All Images</button>
+        <br>
+        @if (displayingAll()){
+          @for (imgUrl of imageUrls; track imgUrl){
+            <img [src]="imgUrl" alt="Loaded image">
+          }
+        }
+
     }
+
+<!--    @if (imageUrl !== null){-->
+<!--      <img [src]="imageUrl" alt="image hi">-->
+<!--    }-->
+
   </section>
   </main>
