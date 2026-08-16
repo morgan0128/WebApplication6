@@ -15,18 +15,41 @@
         (change)="onFileSelected($event)"
       />
 
-      @if (previewUrl){
-        <img [src]="previewUrl" alt="Selected image preview" width="240" />
+      @if (previewImageUrl){
+        <img [src]="previewImageUrl" alt="Selected image preview" width="240" />
       }
 
-      @if (imageError2){
-        <p>{{ imageError2 }}</p>
+      @if (imageUploadError){
+        <p>{{ imageUploadError }}</p>
       }
 
-      <button type="submit" [disabled]="!selectedFile || isUploading">
-        {{ isUploading ? 'Uploading...' : 'Upload' }}
+      <button type="submit" [disabled]="!selectedFile || imageIsUploading">
+        {{ imageIsUploading ? 'Uploading...' : 'Upload' }}
       </button>
     </form>
+
+      @if (imagesIsLoading()){
+        <p class="empty-state">Loading images...</p>
+      } @else if (urls.length === 0){
+        <p class="empty-state">No images yet.</p>
+      } @else {
+<!--        <ul aria-label="Uploaded images">-->
+<!--          @for (image of images(); track image.id){-->
+<!--              <li class="image-row">-->
+<!--                <img [src]="image.storagePath" alt="Uploaded image" width="240" />-->
+<!--&lt;!&ndash;                <button type="button" class="text-button" (click)="deleteImage(image)">&ndash;&gt;-->
+<!--                  Delete-->
+<!--                </button>-->
+<!--              </li>-->
+<!--          }-->
+<!--        </ul>-->
+        <div class="image-grid">
+        @for (url of urls; track url){
+          <img [src]="url" width="240"  alt=""/>
+        }
+        </div>
+      }
+
 
   </section>
 </main>

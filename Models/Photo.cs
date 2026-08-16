@@ -19,5 +19,7 @@ public class Photo
     
     public DateTime? CreatedAt { get; set; }
     
-    // public string? Url { get; set; }
+    [Range(1900, 2100)]
+    public int? YearContentCreated { get; set; }
+
 }
