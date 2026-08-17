@@ -14,43 +14,44 @@ namespace WebApplication6.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public sealed class ImageController(ApplicationDbContext dbContext, IWebHostEnvironment environment) : ControllerBase
+public sealed class ImageController(ApplicationDbContext dbContext, IWebHostEnvironment? environment = null) : ControllerBase
 {
     [HttpGet("all")]
-    public async Task<IActionResult> GetAll()
+    public async Task<ActionResult<IEnumerable<Image>>> GetAllImages()
     {
         var images = await dbContext.Images
-            .Select(image => ImageToDto(image))
+            // .Select(image => ImageToDto(image))
             .ToListAsync();
 
-        return Ok(images);
+        return images;
     }
     
     
     [HttpGet("all-ids")]
-    public async Task<IActionResult> GetAllIds()
+    public async Task<ActionResult<IEnumerable<int>>> GetAllIds()
     {
-        var images = await dbContext.Images
+        var imageIds = await dbContext.Images
             .AsNoTracking()
             .Select(i => i.Id)
             .ToListAsync();
         
-        return Ok(images);
+        return imageIds;
     }
 
 
     
     
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetImage(int id)
+    public async Task<ActionResult<Image>> GetImageById(int id)
     {
         var image = await dbContext.Images
             .FindAsync(id);
 
         var dto = ImageToDto(image);
 
-        return Ok(dto);
-
+        // return Ok(dto);
+        return image;
+        
         // if (image is null) return NotFound();
         //
         // var pr = environment.WebRootFileProvider;
@@ -64,8 +65,12 @@ public sealed class ImageController(ApplicationDbContext dbContext, IWebHostEnvi
     }
     
     [HttpPost]
-    public async Task<IActionResult> UploadImage(IFormFile file)
+    public async Task<ActionResult<Image>> UploadImage(IFormFile file)
     {
+        if (environment is null)
+        {
+            return BadRequest("Environment is null.");
+        }
         var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
         var path = Path.Combine(environment.ContentRootPath, fileName);
         
@@ -99,7 +104,8 @@ public sealed class ImageController(ApplicationDbContext dbContext, IWebHostEnvi
             dbContext.Images.Add(image);
             await dbContext.SaveChangesAsync();
 
-            return Ok(image);
+            // return Ok(image);
+            return image;
         }
         catch (Exception ex)
         {
