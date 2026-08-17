@@ -11,6 +11,8 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
     
     public DbSet<Photo> Photos => Set<Photo>();
 
+    public DbSet<UntrackedFile> UntrackedFiles => Set<UntrackedFile>();
+
     // protected override void OnModelCreating(ModelBuilder modelBuilder)
     // {
     //     modelBuilder.Entity<TodoItem>(entity =>
@@ -34,10 +36,10 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
     //             .HasDefaultValueSql("CURRENT_TIMESTAMP");
     //     });
 
-        // modelBuilder.Entity<Image>(entity =>
-        // {
-        //     entity.ToTable("images");
-        //     entity.HasKey(image => image.Id);
-        // });
+    // modelBuilder.Entity<Image>(entity =>
+    // {
+    //     entity.ToTable("images");
+    //     entity.HasKey(image => image.Id);
+    // });
     // }
 }

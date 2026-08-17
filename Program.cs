@@ -41,7 +41,7 @@ app.MapControllerRoute(
         pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
-app.Environment.ContentRootPath = "ClientApp/public";
+app.Environment.ContentRootPath = "ClientApp/public/";
 
 app.MapFallbackToFile("app/{*path:nonfile}", "app/index.html");
 

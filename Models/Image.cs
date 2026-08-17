@@ -13,7 +13,11 @@ public class Image
         
     public long FileSize { get; set; }
     
-    public string StoragePath { get; set; } = "";
+    public string StorageFileName { get; set; } = "";
     
     public string? AltText { get; set; }
+    
+    public int Width { get; set; }
+
+    public int Height { get; set; }
 }

@@ -51,6 +51,24 @@
 <!--      }-->
 
     <br><br><br>
+    <button class="primary-button" (click)="loadAllImages()">Display All Images</button>
+    @if (imagesAreLoading()){
+      <p class="empty-state">Loading images...</p>
+    } @else if (imagesLoadError()) {
+      <p class="alert-warning">An error occurred while loading images</p>
+    } @else {
+      @if (loadedImages().length != 0){
+        <div class="image-grid">
+
+          @for (image of loadedImages(); track image.id){
+            <img [ngSrc]="image.storageFileName" [width]="image.width" [height]="image.height" [alt]="(''+image.altText)">
+          }
+
+        </div>
+      }
+
+    }
+
 
   </section>
 

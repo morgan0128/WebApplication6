@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebApplication6.Data;
@@ -11,9 +12,11 @@ using WebApplication6.Data;
 namespace WebApplication6.Entities
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260816235243_m7")]
+    partial class m7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -110,28 +113,6 @@ namespace WebApplication6.Entities
                     b.HasKey("Id");
 
                     b.ToTable("TodoItems");
-                });
-
-            modelBuilder.Entity("WebApplication6.Models.UntrackedFile", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("LikelyFileLocation")
-                        .HasColumnType("text");
-
-                    b.Property<string>("OccurredElaboration")
-                        .HasColumnType("text");
-
-                    b.Property<string>("OccurredInClass")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UntrackedFiles");
                 });
 #pragma warning restore 612, 618
         }

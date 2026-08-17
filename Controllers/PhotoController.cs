@@ -30,7 +30,7 @@ public sealed class PhotoController(ApplicationDbContext dbContext, IWebHostEnvi
                 FileName = file.FileName,
                 ContentType = file.ContentType,
                 FileSize = file.Length,
-                StoragePath = $"/uploads/{fileName}"
+                StorageFileName = $"/uploads/{fileName}"
             };
 
             dbContext.Images.Add(image);
