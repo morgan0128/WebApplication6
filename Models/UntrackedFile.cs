@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication6.Models;
 
-// Used to track saved files which are NOT found in database, where represents an instance of violating expected behavior.
+// Used to track saved files which are NOT found in database, where represents an instance of violating expected behavior and waste of file storage resources.
 public class UntrackedFile
 {
     [Key]
@@ -13,5 +13,7 @@ public class UntrackedFile
 
     public string? OccurredElaboration { get; set; } // To help identify code responsible; no explicit format. 
 
-    public string? LikelyFileLocation { get; set; }
+    public string? FileLocation { get; set; }
+
+    public string? FileName { get; set; }
 }

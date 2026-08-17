@@ -28,28 +28,6 @@
       </button>
     </form>
 
-<!--      @if (imagesIsLoading()){-->
-<!--        <p class="empty-state">Loading images...</p>-->
-<!--      } @else if (urls.length === 0){-->
-<!--        <p class="empty-state">No images yet.</p>-->
-<!--      } @else {-->
-<!--&lt;!&ndash;        <ul aria-label="Uploaded images">&ndash;&gt;-->
-<!--&lt;!&ndash;          @for (image of images(); track image.id){&ndash;&gt;-->
-<!--&lt;!&ndash;              <li class="image-row">&ndash;&gt;-->
-<!--&lt;!&ndash;                <img [src]="image.storagePath" alt="Uploaded image" width="240" />&ndash;&gt;-->
-<!--&lt;!&ndash;&lt;!&ndash;                <button type="button" class="text-button" (click)="deleteImage(image)">&ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;                  Delete&ndash;&gt;-->
-<!--&lt;!&ndash;                </button>&ndash;&gt;-->
-<!--&lt;!&ndash;              </li>&ndash;&gt;-->
-<!--&lt;!&ndash;          }&ndash;&gt;-->
-<!--&lt;!&ndash;        </ul>&ndash;&gt;-->
-<!--        <div class="image-grid">-->
-<!--        @for (url of urls; track url){-->
-<!--          <img [src]="url" width="240"  alt=""/>-->
-<!--        }-->
-<!--        </div>-->
-<!--      }-->
-
     <br><br><br>
     <button class="primary-button" (click)="loadAllImages()">Display All Images</button>
     @if (imagesAreLoading()){
@@ -63,22 +41,11 @@
           @for (image of loadedImages(); track image.id){
             <img [ngSrc]="image.storageFileName" [width]="image.width" [height]="image.height" [alt]="(''+image.altText)">
           }
-
         </div>
       }
 
     }
 
-
-  </section>
-
-  <section>
-    <br>
-    <img ngSrc="3bc22964-fa59-4f06-9791-96486c8b4ee4.png" alt="Loaded image" width="646" height="771" priority>
-    <br>
-<!--    <ng-content>-->
-<!--      <ng-component *ngComponentOutlet="ImageLoader"></ng-component>-->
-<!--    </ng-content>-->
 
   </section>
 </main>

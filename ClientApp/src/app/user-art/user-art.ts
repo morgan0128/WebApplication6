@@ -88,12 +88,15 @@ export class UserArt {
       return;
     }
 
-    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
-    if (!allowedTypes.includes(file.type)) {
-      this.imageUploadError = "Choos a JPG, PNG, or WebP image.";
-      this.selectedFile = null;
-      return;
-    }
+    /* Maybe TODO */
+    /* this approach for allowedTypes filter does not seem to work, but perhaps is unnecessary */
+
+    // const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+    // if (!allowedTypes.includes(file.type)) {
+    //   this.imageUploadError = "Choos a JPG, PNG, or WebP image.";
+    //   this.selectedFile = null;
+    //   return;
+    // }
 
     const maxSizeMb = 5;
     if (file.size > maxSizeMb * 1024 * 1024) {
