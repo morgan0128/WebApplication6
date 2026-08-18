@@ -18,7 +18,6 @@
     <ItemGroup>
       <Folder Include="ClientApp\scripts\" />
       <Folder Include="ClientApp\src\app\services\" />
-      <Folder Include="wwwroot\uploads\" />
     </ItemGroup>
 
     <ItemGroup>
