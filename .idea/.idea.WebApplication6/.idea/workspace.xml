@@ -10,7 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d8a0c855-88be-4277-91b5-99ea358135ae" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.WebApplication6/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.WebApplication6/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -43,23 +43,23 @@
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0000000000316365" />
-      <entry key="MS500" value="1.0094674690885577" />
-      <entry key="S2" value="1.4961195884611465" />
-      <entry key="S5" value="2.139349610015781" />
-      <entry key="S10" value="2.5082534148273945" />
-      <entry key="S30" value="2.867649668821678" />
-      <entry key="S60" value="4.30508070398367" />
-      <entry key="M2" value="11.30374536072341" />
-      <entry key="M5" value="28.32719291134881" />
-      <entry key="M10" value="39.92677400504771" />
-      <entry key="M15" value="44.899871316162994" />
-      <entry key="M30" value="50.558683626174094" />
-      <entry key="H1" value="53.6749575733623" />
-      <entry key="H2" value="55.3105121435917" />
-      <entry key="H4" value="56.14840235467197" />
-      <entry key="D1" value="56.857105488652" />
-      <entry key="W1" value="56.979562822627024" />
+      <entry key="MS100" value="1.0000027350525997" />
+      <entry key="MS500" value="1.0799615282129686" />
+      <entry key="S2" value="2.404375860861803" />
+      <entry key="S5" value="5.951331203407351" />
+      <entry key="S10" value="9.572550119916732" />
+      <entry key="S30" value="14.052185401006549" />
+      <entry key="S60" value="16.382314290547633" />
+      <entry key="M2" value="21.698601891512325" />
+      <entry key="M5" value="37.969361178132814" />
+      <entry key="M10" value="51.461197470405544" />
+      <entry key="M15" value="57.72345185958375" />
+      <entry key="M30" value="65.16042514101773" />
+      <entry key="H1" value="69.38898790724794" />
+      <entry key="H2" value="71.6445404458035" />
+      <entry key="H4" value="72.80950273995172" />
+      <entry key="D1" value="73.79978632425001" />
+      <entry key="W1" value="73.97135370760601" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
@@ -81,23 +81,23 @@
       <entry key="W1" value="0.0" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="3.7153487797973453E-7" />
-      <entry key="MS500" value="0.05497068450823916" />
-      <entry key="S2" value="0.8278815972573949" />
-      <entry key="S5" value="1.7265498422650944" />
-      <entry key="S10" value="2.2609921006692453" />
-      <entry key="S30" value="2.773487072234304" />
-      <entry key="S60" value="4.25419294215306" />
-      <entry key="M2" value="11.27258542562756" />
-      <entry key="M5" value="28.309683329069188" />
-      <entry key="M10" value="39.9163588796455" />
-      <entry key="M15" value="44.89245883997786" />
-      <entry key="M30" value="50.554712105291244" />
-      <entry key="H1" value="53.67289908750296" />
-      <entry key="H2" value="55.3094638577106" />
-      <entry key="H4" value="56.14787333924511" />
-      <entry key="D1" value="56.8570166330009" />
-      <entry key="W1" value="56.97955011202492" />
+      <entry key="MS100" value="0.9726575892989531" />
+      <entry key="MS500" value="1.073877420966762" />
+      <entry key="S2" value="2.400485751358091" />
+      <entry key="S5" value="5.947187190144361" />
+      <entry key="S10" value="9.56909324872673" />
+      <entry key="S30" value="14.045029053579057" />
+      <entry key="S60" value="16.369105275067962" />
+      <entry key="M2" value="21.682805064051433" />
+      <entry key="M5" value="37.955982792054094" />
+      <entry key="M10" value="51.45206057463896" />
+      <entry key="M15" value="57.71664145257219" />
+      <entry key="M30" value="65.1566032450063" />
+      <entry key="H1" value="69.38696050628097" />
+      <entry key="H2" value="71.64349594268793" />
+      <entry key="H4" value="72.8089725661078" />
+      <entry key="D1" value="73.79969684230728" />
+      <entry key="W1" value="73.97134089679629" />
     </decayedShown>
   </component>
   <component name="ProblemsViewState">
@@ -217,7 +217,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1787066938148</updated>
-      <workItem from="1787066944803" duration="3119000" />
+      <workItem from="1787066944803" duration="3475000" />
     </task>
     <task id="LOCAL-00001" summary="Reformatted to Solution/&lt;projects&gt;; originally created solution and WebApplication6 project using 'put solution and project in same directory' - very bad. Now both projects, WebApplications6 AND WebApplications6.Tests are tracked by git.">
       <option name="closed" value="true" />
@@ -227,7 +227,15 @@
       <option name="project" value="LOCAL" />
       <updated>1787069805641</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Fixing gitignore after directory/solution/project changes">
+      <option name="closed" value="true" />
+      <created>1787070165072</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1787070165072</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -238,7 +246,8 @@
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
     <MESSAGE value="Reformatted to Solution/&lt;projects&gt;; originally created solution and WebApplication6 project using 'put solution and project in same directory' - very bad. Now both projects, WebApplications6 AND WebApplications6.Tests are tracked by git." />
-    <option name="LAST_COMMIT_MESSAGE" value="Reformatted to Solution/&lt;projects&gt;; originally created solution and WebApplication6 project using 'put solution and project in same directory' - very bad. Now both projects, WebApplications6 AND WebApplications6.Tests are tracked by git." />
+    <MESSAGE value="Fixing gitignore after directory/solution/project changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixing gitignore after directory/solution/project changes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
