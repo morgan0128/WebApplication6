@@ -10,7 +10,7 @@ namespace WebApplication6.Backend.Services;
 // make controller for file hosting;
 // dependency injections here;
 // or perform other similar refactorings
-public class FileImageService(IImageRepository repository, IWebHostEnvironment environment)
+public class ImageHostingService(IImageRepository repository, IWebHostEnvironment environment)
 {
     public async Task<int> HostImageAsync(IFormFile file)
     {

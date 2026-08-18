@@ -11,7 +11,7 @@ namespace WebApplication6.Backend.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public sealed class ImageController(IImageRepository repository, IWebHostEnvironment? environment = null) : ControllerBase
+public sealed class ImageController(IImageRepository repository) : ControllerBase
 {
     [HttpGet("all")]
     public async Task<ActionResult<IEnumerable<Image>>> GetAllImages()
