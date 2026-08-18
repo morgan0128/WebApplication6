@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WebApplication6.Backend.Data;
+using WebApplication6.Backend.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
 builder.Services.AddControllers();
-// 
+
+builder.Services.AddScoped<IImageRepository, ImageRepository>();
 
 var app = builder.Build();
 
