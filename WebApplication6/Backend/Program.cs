@@ -17,7 +17,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<IImageRepository, ImageRepository>();
+builder.Services.AddScoped<IImageRepository, ImageController>();
 
 var app = builder.Build();
 
