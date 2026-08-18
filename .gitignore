@@ -11,3 +11,5 @@ WebApplication6/ClientApp/public/
 WebApplication6/ClientApp/public/*
 WebApplication6/wwwroot/app/
 WebApplication6/wwwroot/uploads/*
+/WebApplication6/aspnet-run.err.log
+/WebApplication6/aspnet-run.out.log
