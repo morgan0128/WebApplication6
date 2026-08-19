@@ -16,6 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Backend\Entities\" />
       <Folder Include="ClientApp\scripts\" />
     </ItemGroup>
 

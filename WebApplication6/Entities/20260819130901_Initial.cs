@@ -1,9 +1,10 @@
-﻿#nullable disable
-
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace WebApplication6.Backend.Entities
+#nullable disable
+
+namespace WebApplication6.Entities
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -12,20 +13,22 @@ namespace WebApplication6.Backend.Entities
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Image",
+                name: "Images",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     FileName = table.Column<string>(type: "text", nullable: false),
                     ContentType = table.Column<string>(type: "text", nullable: false),
-                    FileSize = table.Column<long>(type: "bigint", nullable: false),
-                    StoragePath = table.Column<string>(type: "text", nullable: false),
-                    AltText = table.Column<string>(type: "text", nullable: true)
+                    FileSize = table.Column<long>(type: "bigint", nullable: true),
+                    StorageFileName = table.Column<string>(type: "text", nullable: false),
+                    AltText = table.Column<string>(type: "text", nullable: false),
+                    Width = table.Column<int>(type: "integer", nullable: false),
+                    Height = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Image", x => x.Id);
+                    table.PrimaryKey("PK_Images", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -37,7 +40,8 @@ namespace WebApplication6.Backend.Entities
                     ImageId = table.Column<int>(type: "integer", nullable: false),
                     Title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    YearContentCreated = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -64,7 +68,7 @@ namespace WebApplication6.Backend.Entities
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Image");
+                name: "Images");
 
             migrationBuilder.DropTable(
                 name: "Photos");

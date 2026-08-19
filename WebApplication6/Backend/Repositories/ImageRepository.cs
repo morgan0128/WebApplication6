@@ -6,7 +6,7 @@ using WebApplication6.Backend.Models;
 
 namespace WebApplication6.Backend.Repositories;
 
-public class ImageController(ApplicationDbContext context) : IImageRepository
+public class ImageRepository(ApplicationDbContext context) : IImageRepository
 {
     public async Task<ActionResult<IEnumerable<Image>>> GetAllImagesAsync()
     {

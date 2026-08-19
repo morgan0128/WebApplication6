@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebApplication6.Backend.Data;
 using WebApplication6.Backend.Repositories;
+using WebApplication6.Backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<IImageRepository, ImageController>();
+builder.Services.AddScoped<IImageRepository, ImageRepository>();
+builder.Services.AddScoped<IUntrackedFileRepository, UntrackedFileRepository>();
+builder.Services.AddScoped<IFileHostingService, LocalFileHostingService>();
 
 var app = builder.Build();
 

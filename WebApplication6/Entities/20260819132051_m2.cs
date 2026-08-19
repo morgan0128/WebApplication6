@@ -1,12 +1,12 @@
-﻿#nullable disable
-
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace WebApplication6.Backend.Entities
+#nullable disable
+
+namespace WebApplication6.Entities
 {
     /// <inheritdoc />
-    public partial class m8 : Migration
+    public partial class m2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,9 +17,8 @@ namespace WebApplication6.Backend.Entities
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    OccurredInClass = table.Column<string>(type: "text", nullable: true),
-                    OccurredElaboration = table.Column<string>(type: "text", nullable: true),
-                    LikelyFileLocation = table.Column<string>(type: "text", nullable: true)
+                    FileStorageLocation = table.Column<string>(type: "text", nullable: true),
+                    FileName = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {

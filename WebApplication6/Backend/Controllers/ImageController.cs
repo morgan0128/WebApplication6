@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication6.Backend.Data;
 using WebApplication6.Backend.Models;
 using WebApplication6.Backend.Repositories;
+using WebApplication6.Backend.Services;
 using Image = WebApplication6.Backend.Models.Image;
 
 using ImageShrp = SixLabors.ImageSharp.Image;
@@ -11,7 +12,7 @@ namespace WebApplication6.Backend.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public sealed class ImageController(IImageRepository repository) : ControllerBase
+public sealed class ImageController(IImageRepository repository, IFileHostingService service) : ControllerBase
 {
     [HttpGet("all")]
     public async Task<ActionResult<IEnumerable<Image>>> GetAllImages()
@@ -34,9 +35,34 @@ public sealed class ImageController(IImageRepository repository) : ControllerBas
     }
 
     [HttpPost]
-    public async Task<int> PostImage(Image image)
+    public async Task<IActionResult> PostImage(IFormFile file, string? altText = null)
     {
-        return await repository.PostImageAsync(image);
+        var alt = altText ?? "alt text";
+        try
+        {
+            var untracked = await service.HostImageAsync(file);
+        
+            // TODO: move all logic to service
+            var image = new Image
+            {
+                FileName = untracked.UploadedWithFileName,
+                FileSize = untracked.FileSize,
+                StorageFileName = untracked.StorageFileName,
+                ContentType = untracked.ContentType,
+                Height = untracked.Height,
+                Width = untracked.Width,
+                AltText = alt
+            };
+        
+            await repository.PostImageAsync(image);
+            return Ok(image);
+        }
+        catch (Exception ex)
+        {
+            return Problem("Error posting image.");
+        }
+
+
     }
     
     // [HttpPost]
@@ -105,11 +131,11 @@ public sealed class ImageController(IImageRepository repository) : ControllerBas
     }
     
     
-    private static ImageItemDto ImageToDto(Image image)
-    {
-        return new ImageItemDto(image.Id, image.FileName, image.ContentType, image.FileSize, image.StorageFileName, image.Width, image.Height, image.AltText);
-    }
-    
-    public sealed record ImageItemDto(int Id, string FileName, string ContentType, long FileSize, string StorageFileName, int Width, int Height, string? AltText = null);
-    
+    // private static ImageItemDto ImageToDto(Image image)
+    // {
+    //     return new ImageItemDto(image.Id, image.FileName, image.ContentType, image.FileSize, image.StorageFileName, image.Width, image.Height, image.AltText);
+    // }
+    //
+    // public sealed record ImageItemDto(int Id, string FileName, string ContentType, long FileSize, string StorageFileName, int Width, int Height, string? AltText = null);
+    //
 }

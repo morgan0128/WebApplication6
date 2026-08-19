@@ -5,19 +5,25 @@ namespace WebApplication6.Backend.Models;
 public class Image
 {
     [Key]
-    public int Id { get; set; }
+    public int Id { get; init; }
 
-    public string FileName { get; set; } = "";
+    [Required]
+    public string FileName { get; init; } = "unnamed";
 
-    public string ContentType { get; set; } = "";
-        
-    public long FileSize { get; set; }
+    [Required]
+    public string ContentType { get; init; }
     
-    public string StorageFileName { get; set; } = "";
+    public long? FileSize { get; init; }
     
-    public string? AltText { get; set; }
-    
-    public int Width { get; set; }
+    [Required]
+    public string StorageFileName { get; init; }
 
-    public int Height { get; set; }
+    [Required]
+    public string AltText { get; init; }
+    
+    [Required]
+    public int Width { get; init; }
+
+    [Required]
+    public int Height { get; init; }
 }
