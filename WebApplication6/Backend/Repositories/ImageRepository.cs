@@ -34,11 +34,19 @@ public class ImageRepository(ApplicationDbContext context) : IImageRepository
         return image;
     }
 
-    public async Task<int> PostImageAsync(Image image)
+    public async Task<ActionResult<Image>> SaveImageAsync(Image image)
     {
         context.Images.Add(image);
-        var returned = await context.SaveChangesAsync();
-        return returned;
+        await context.SaveChangesAsync();
+
+        var savedImage = await context.Images.FindAsync(image);
+
+        if (savedImage == null)
+        {
+            return new ForbidResult();
+        }
+        
+        return savedImage;
     }
 
     public async Task<IActionResult> DeleteImageByIdAsync(int id)
@@ -51,6 +59,7 @@ public class ImageRepository(ApplicationDbContext context) : IImageRepository
 
         context.Images.Remove(image);
         await context.SaveChangesAsync();
+        
         return new OkResult();
     }
 

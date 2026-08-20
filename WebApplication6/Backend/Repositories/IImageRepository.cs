@@ -11,7 +11,7 @@ public interface IImageRepository
     
     Task<ActionResult<Image?>> GetImageByIdAsync(int id);
     
-    Task<int> PostImageAsync(Image image);
+    Task<ActionResult<Image>> SaveImageAsync(Image image);
     
     Task<IActionResult> DeleteImageByIdAsync(int id);
     

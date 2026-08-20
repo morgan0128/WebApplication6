@@ -19,10 +19,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
-// builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();
+builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();
 builder.Services.AddScoped<IAlbumRepository, AlbumRepository>();
 builder.Services.AddScoped<IUntrackedFileRepository, UntrackedFileRepository>();
 builder.Services.AddScoped<IFileHostingService, LocalFileHostingService>();
+builder.Services.AddScoped<IUploadPhotoService, UploadPhotoService>();
+
 
 var app = builder.Build();
 

@@ -16,7 +16,7 @@ public class Photo
     public Image Image { get; set; }
     
     [MaxLength(100)]
-    public string? Title { get; set; }
+    public string? Name { get; set; }
     
     [MaxLength(500)]
     public string? Description { get; set; }

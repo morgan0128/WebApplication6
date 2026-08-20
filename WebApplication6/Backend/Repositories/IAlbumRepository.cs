@@ -11,8 +11,9 @@ public interface IAlbumRepository
     
     Task<ActionResult<Album?>> GetAlbumByIdAsync(int id);
 
-    Task<int> PostAlbumAsync(Album album);
+    Task<int> SaveAlbumAsync(Album album);
     
     Task<IActionResult> DeleteAlbumByIdAsync(int id);
-    
+
+    Task<ActionResult<IEnumerable<Photo>>> GetAlbumPhotosAsync(int id);
 }

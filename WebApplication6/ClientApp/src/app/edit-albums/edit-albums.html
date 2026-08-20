@@ -8,13 +8,11 @@
 
     </header>
 
-<!--    <form class="form-select" (ngSubmit)="selectAlbum()">-->
+
     <div>
       <label class="dropdown-header" for="albums">My Albums</label>
         <select class="dropdown-button" name="albums" id="albums" [(ngModel)]="selectedAlbumId" (change)="onSelectedAlbumChange()">
-<!--        <div class="dropdown-content">-->
           <option class="dropdown-header" [ngValue]="null">My Albums</option>
-<!--          dynamically loaded albums-->
           @for (album of albumDTOs(); track album.id){
             <option [ngValue]="album.id">{{ album.name }}</option>
           }
@@ -27,16 +25,11 @@
       }
 
     </div>
-<!--    </form>-->
+
     <br><br><br>
     <div>
 
 
-<!--      <form (ngSubmit)="createAlbum()" id="createnew">-->
-<!--        <input type="text" value="name"/>-->
-<!--        <input type="text" id="description">-->
-<!--        <button type="submit">Create</button>-->
-<!--      </form>-->
       <form class="composer" (ngSubmit)="createAlbum()">
         <label for="newAlbum">Create New</label>
         <div class="composer-row">
@@ -63,8 +56,7 @@
       </form>
 
     </div>
-
-
+    <br><br><br>
 <!--    <form (ngSubmit)="uploadImage()">-->
 <!--      <input-->
 <!--        type="file"-->
@@ -85,23 +77,7 @@
 <!--      </button>-->
 <!--    </form>-->
 
-<!--    <br><br><br>-->
-<!--    <button class="primary-button" (click)="loadAllImages()">Display All Images</button>-->
-<!--    @if (imagesAreLoading()){-->
-<!--      <p class="empty-state">Loading images...</p>-->
-<!--    } @else if (imagesLoadError()) {-->
-<!--      <p class="alert-warning">An error occurred while loading images</p>-->
-<!--    } @else {-->
-<!--      @if (loadedImages().length != 0){-->
-<!--        <div class="image-grid">-->
 
-<!--          @for (image of loadedImages(); track image.id){-->
-<!--            <img [ngSrc]="image.storageFileName" [width]="image.width" [height]="image.height" [alt]="(''+image.altText)">-->
-<!--          }-->
-<!--        </div>-->
-<!--      }-->
-
-<!--    }-->
 
 
   </section>

@@ -30,7 +30,7 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
         return album;
     }
 
-    public async Task<int> PostAlbumAsync(Album album)
+    public async Task<int> SaveAlbumAsync(Album album)
     {
         context.Albums.Add(album);
         return await context.SaveChangesAsync();
@@ -47,6 +47,15 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
         context.Albums.Remove(album);
         await context.SaveChangesAsync();
         return new OkResult();
+    }
 
+    public async Task<ActionResult<IEnumerable<Photo>>> GetAlbumPhotosAsync(int id)
+    {
+        var photos = await context.Albums
+            .Where(a => a.Id == id)
+            .Include(a => a.Photos)
+            .ToListAsync();
+        
+        return new ObjectResult(photos);
     }
 }

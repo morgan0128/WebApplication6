@@ -38,36 +38,36 @@ public sealed class ImageController(IImageRepository repository, IFileHostingSer
         return Ok(image.Value);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> PostImage(IFormFile file, string? altText = null)
-    {
-        var alt = altText ?? "alt text";
-        try
-        {
-            var untracked = await service.HostImageAsync(file);
-        
-            // TODO: move all logic to service
-            var image = new Image
-            {
-                FileName = untracked.UploadedWithFileName,
-                FileSize = untracked.FileSize,
-                StorageFileName = untracked.StorageFileName,
-                ContentType = untracked.ContentType,
-                Height = untracked.Height,
-                Width = untracked.Width,
-                AltText = alt
-            };
-        
-            await repository.PostImageAsync(image);
-            return Ok(image);
-        }
-        catch (Exception ex)
-        {
-            return Problem("Error posting image.");
-        }
-
-
-    }
+    // [HttpPost]
+    // public async Task<IActionResult> PostImage(IFormFile file, string? altText = null)
+    // {
+    //     var alt = altText ?? "alt text";
+    //     try
+    //     {
+    //         var untracked = await service.HostImageAsync(file);
+    //     
+    //         // TODO: move all logic to service
+    //         var image = new Image
+    //         {
+    //             FileName = untracked.UploadedWithFileName,
+    //             FileSize = untracked.FileSize,
+    //             StorageFileName = untracked.StorageFileName,
+    //             ContentType = untracked.ContentType,
+    //             Height = untracked.Height,
+    //             Width = untracked.Width,
+    //             AltText = alt
+    //         };
+    //     
+    //         await repository.SaveImageAsync(image);
+    //         return Ok(image);
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         return Problem("Error posting image.");
+    //     }
+    //
+    //
+    // }
     
     // [HttpPost]
     // public async Task<ActionResult<Image>> UploadImage(IFormFile file)

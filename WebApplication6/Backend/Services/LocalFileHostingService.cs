@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using WebApplication6.Backend.Models;
 using WebApplication6.Backend.Repositories;
 using ImageShrp = SixLabors.ImageSharp.Image;
@@ -6,7 +7,7 @@ namespace WebApplication6.Backend.Services;
 
 public class LocalFileHostingService(IWebHostEnvironment environment, IUntrackedFileRepository untrackedFileRepository) : IFileHostingService
 {
-    public async Task<UntrackedImageFileDto> HostImageAsync(IFormFile file)
+    public async Task<ActionResult<UntrackedImageFileDto>> HostImageAsync(IFormFile file)
     {
         var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
         var path = Path.Combine(environment.ContentRootPath, fileName);
@@ -18,7 +19,7 @@ public class LocalFileHostingService(IWebHostEnvironment environment, IUntracked
 
         if (!File.Exists(path))
         {
-            throw new Exception("File not found after upload. Throwing exception.");
+            return new NotFoundResult();
         }
 
         try
@@ -34,7 +35,7 @@ public class LocalFileHostingService(IWebHostEnvironment environment, IUntracked
                 FileStorageLocation = fileName
             };
             await untrackedFileRepository.PostUntrackedAsync(untracked);
-            throw;
+            return new NotFoundResult(); // TODO: Indistinguishable NotFoundResults in both places, and probably not appropriate result. Revisit later.
         }
     
     }
