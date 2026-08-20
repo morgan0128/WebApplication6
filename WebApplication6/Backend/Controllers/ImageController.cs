@@ -6,8 +6,6 @@ using WebApplication6.Backend.Repositories;
 using WebApplication6.Backend.Services;
 using Image = WebApplication6.Backend.Models.Image;
 
-using ImageShrp = SixLabors.ImageSharp.Image;
-
 namespace WebApplication6.Backend.Controllers;
 
 [ApiController]
@@ -31,7 +29,13 @@ public sealed class ImageController(IImageRepository repository, IFileHostingSer
     [HttpGet("{id}")]
     public async Task<ActionResult<Image>> GetImageById(int id)
     {
-        return await repository.GetImageByIdAsync(id);
+        var image = await repository.GetImageByIdAsync(id);
+        if (image.Value == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(image.Value);
     }
 
     [HttpPost]

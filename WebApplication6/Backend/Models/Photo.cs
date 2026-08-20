@@ -1,3 +1,4 @@
+using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -8,8 +9,11 @@ public class Photo
     [Key]
     public int Id { get; set; }
  
-    [ForeignKey("Image")]
+
     public int ImageId { get; set; }
+    
+    [ForeignKey("ImageId")]
+    public Image Image { get; set; }
     
     [MaxLength(100)]
     public string? Title { get; set; }
@@ -21,5 +25,7 @@ public class Photo
     
     [Range(1900, 2100)]
     public int? YearContentCreated { get; set; }
+    
+    public virtual ICollection<Album> Collections { get; set; } = new List<Album>();
 
 }

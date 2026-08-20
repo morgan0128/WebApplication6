@@ -9,7 +9,7 @@ public interface IImageRepository
 
     Task<ActionResult<IEnumerable<int>>> GetAllImagesIdsAsync();
     
-    Task<ActionResult<Image>> GetImageByIdAsync(int id);
+    Task<ActionResult<Image?>> GetImageByIdAsync(int id);
     
     Task<int> PostImageAsync(Image image);
     

@@ -26,7 +26,7 @@ public class ImageRepository(ApplicationDbContext context) : IImageRepository
         return imageIds;
     }
 
-    public async Task<ActionResult<Image>> GetImageByIdAsync(int id)
+    public async Task<ActionResult<Image?>> GetImageByIdAsync(int id)
     {
         var image = await context.Images
             .FindAsync(id);

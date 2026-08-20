@@ -10,6 +10,8 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
     public DbSet<Image> Images => Set<Image>();
     
     public DbSet<Photo> Photos => Set<Photo>();
+    
+    public DbSet<Album> Albums => Set<Album>();
 
     public DbSet<UntrackedFile> UntrackedFiles => Set<UntrackedFile>();
 }

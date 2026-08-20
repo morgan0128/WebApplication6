@@ -1,0 +1,108 @@
+<main class="app-edit-albums">
+  <section class="workspace">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">ASP.NET MVC + Angular + PostgreSQL</p>
+
+      </div>
+
+    </header>
+
+<!--    <form class="form-select" (ngSubmit)="selectAlbum()">-->
+    <div>
+      <label class="dropdown-header" for="albums">My Albums</label>
+        <select class="dropdown-button" name="albums" id="albums" [(ngModel)]="selectedAlbumId" (change)="onSelectedAlbumChange()">
+<!--        <div class="dropdown-content">-->
+          <option class="dropdown-header" [ngValue]="null">My Albums</option>
+<!--          dynamically loaded albums-->
+          @for (album of albumDTOs(); track album.id){
+            <option [ngValue]="album.id">{{ album.name }}</option>
+          }
+      </select>
+
+      @if (selectedAlbumId == null){
+        <p>No album selected<p>
+      } @else {
+        <p>Selected album Id is <strong>{{ selectedAlbumId }}</strong></p>
+      }
+
+    </div>
+<!--    </form>-->
+    <br><br><br>
+    <div>
+
+
+<!--      <form (ngSubmit)="createAlbum()" id="createnew">-->
+<!--        <input type="text" value="name"/>-->
+<!--        <input type="text" id="description">-->
+<!--        <button type="submit">Create</button>-->
+<!--      </form>-->
+      <form class="composer" (ngSubmit)="createAlbum()">
+        <label for="newAlbum">Create New</label>
+        <div class="composer-row">
+          <input
+            id="newAlbum"
+            name="newAlbum"
+            type="text"
+            maxlength="50"
+            autocomplete="off"
+            [(ngModel)]="newAlbumTitle"
+          />
+          <input
+            id="newAlbum"
+            name="newAlbum"
+            type="text"
+            maxlength="50"
+            autocomplete="off"
+            [(ngModel)]="newAlbumDescription"
+          />
+          <button type="submit" [disabled]="creatingAlbum()">
+            {{ creatingAlbum() ? 'Saving' : 'Create' }}
+          </button>
+          </div>
+      </form>
+
+    </div>
+
+
+<!--    <form (ngSubmit)="uploadImage()">-->
+<!--      <input-->
+<!--        type="file"-->
+<!--        accept="image/png,image/jpeg,image/webp"-->
+<!--        (change)="onFileSelected($event)"-->
+<!--      />-->
+
+<!--      @if (previewImageUrl){-->
+<!--        <img [src]="previewImageUrl" alt="Selected image preview" width="240" />-->
+<!--      }-->
+
+<!--      @if (imageUploadError){-->
+<!--        <p>{{ imageUploadError }}</p>-->
+<!--      }-->
+
+<!--      <button type="submit" [disabled]="!selectedFile || imageIsUploading">-->
+<!--        {{ imageIsUploading ? 'Uploading...' : 'Upload' }}-->
+<!--      </button>-->
+<!--    </form>-->
+
+<!--    <br><br><br>-->
+<!--    <button class="primary-button" (click)="loadAllImages()">Display All Images</button>-->
+<!--    @if (imagesAreLoading()){-->
+<!--      <p class="empty-state">Loading images...</p>-->
+<!--    } @else if (imagesLoadError()) {-->
+<!--      <p class="alert-warning">An error occurred while loading images</p>-->
+<!--    } @else {-->
+<!--      @if (loadedImages().length != 0){-->
+<!--        <div class="image-grid">-->
+
+<!--          @for (image of loadedImages(); track image.id){-->
+<!--            <img [ngSrc]="image.storageFileName" [width]="image.width" [height]="image.height" [alt]="(''+image.altText)">-->
+<!--          }-->
+<!--        </div>-->
+<!--      }-->
+
+<!--    }-->
+
+
+  </section>
+</main>

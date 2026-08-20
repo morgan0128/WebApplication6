@@ -9,11 +9,11 @@ using WebApplication6.Backend.Data;
 
 #nullable disable
 
-namespace WebApplication6.Entities
+namespace WebApplication6.Backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260819132051_m2")]
-    partial class m2
+    [Migration("20260820134216_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,41 @@ namespace WebApplication6.Entities
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("AlbumPhoto", b =>
+                {
+                    b.Property<int>("CollectionsId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PhotosId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("CollectionsId", "PhotosId");
+
+                    b.HasIndex("PhotosId");
+
+                    b.ToTable("AlbumPhoto");
+                });
+
+            modelBuilder.Entity("WebApplication6.Backend.Models.Album", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Albums");
+                });
 
             modelBuilder.Entity("WebApplication6.Backend.Models.Image", b =>
                 {
@@ -90,6 +125,8 @@ namespace WebApplication6.Entities
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ImageId");
+
                     b.ToTable("Photos");
                 });
 
@@ -133,6 +170,32 @@ namespace WebApplication6.Entities
                     b.HasKey("Id");
 
                     b.ToTable("UntrackedFiles");
+                });
+
+            modelBuilder.Entity("AlbumPhoto", b =>
+                {
+                    b.HasOne("WebApplication6.Backend.Models.Album", null)
+                        .WithMany()
+                        .HasForeignKey("CollectionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApplication6.Backend.Models.Photo", null)
+                        .WithMany()
+                        .HasForeignKey("PhotosId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("WebApplication6.Backend.Models.Photo", b =>
+                {
+                    b.HasOne("WebApplication6.Backend.Models.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Image");
                 });
 #pragma warning restore 612, 618
         }
