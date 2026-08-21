@@ -5,14 +5,16 @@ namespace WebApplication6.Backend.Repositories;
 
 public interface IImageRepository
 {
-    Task<ActionResult<IEnumerable<Image>>> GetAllImagesAsync();
+    Task<IEnumerable<Image>> GetAllImagesAsync();
 
-    Task<ActionResult<IEnumerable<int>>> GetAllImagesIdsAsync();
+    Task<IEnumerable<int>> GetAllImagesIdsAsync();
     
-    Task<ActionResult<Image?>> GetImageByIdAsync(int id);
+    Task<Image?> GetImageByIdAsync(int id);
     
-    Task<ActionResult<Image>> SaveImageAsync(Image image);
+    /// <returns>The Id of the saved image on success, or null on exception thrown or failure.</returns>
+    Task<int?> SaveImageAsync(Image image);
     
-    Task<IActionResult> DeleteImageByIdAsync(int id);
+    /// <returns>true on success, false on not found, or null on found but either exception thrown or failure</returns>
+    Task<bool?> DeleteImageByIdAsync(int id);
     
 }

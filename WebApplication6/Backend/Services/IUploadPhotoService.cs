@@ -5,7 +5,7 @@ namespace WebApplication6.Backend.Services;
 
 public interface IUploadPhotoService
 {
-    Task<IActionResult> UploadPhoto(Album album, IFormFile file, PhotoSpecDto photoSpec);
+    Task<bool> UploadPhoto(Album album, IFormFile file, PhotoSpecDto photoSpec);
 }
 
 // Specification for a photo based on user input

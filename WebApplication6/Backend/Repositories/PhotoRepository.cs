@@ -7,7 +7,7 @@ namespace WebApplication6.Backend.Repositories;
 
 public class PhotoRepository(ApplicationDbContext context) : IPhotoRepository
 {
-    public async Task<ActionResult<IEnumerable<Photo>>> GetAllPhotosAsync()
+    public async Task<IEnumerable<Photo>> GetAllPhotosAsync()
     {
         var photos = await context.Photos
             .ToListAsync();
@@ -15,7 +15,7 @@ public class PhotoRepository(ApplicationDbContext context) : IPhotoRepository
         return photos;
     }
 
-    public async Task<ActionResult<IEnumerable<int>>> GetAllPhotosIdsAsync()
+    public async Task<IEnumerable<int>> GetAllPhotosIdsAsync()
     {
         var photoIds = await context.Photos
             .Select(p => p.Id)
@@ -24,7 +24,7 @@ public class PhotoRepository(ApplicationDbContext context) : IPhotoRepository
         return photoIds;
     }
 
-    public async Task<ActionResult<Photo?>> GetPhotoByIdAsync(int id)
+    public async Task<Photo?> GetPhotoByIdAsync(int id)
     {
         var photo = await context.Photos
             .FindAsync(id);
@@ -32,23 +32,40 @@ public class PhotoRepository(ApplicationDbContext context) : IPhotoRepository
         return photo;
     }
 
-    public async Task<int> SavePhotoAsync(Photo photo)
+    public async Task<int?> SavePhotoAsync(Photo photo)
     {
-        await context.AddAsync(photo);
-
-        return await context.SaveChangesAsync();
+        context.Photos.Add(photo);
+        
+        try
+        {
+            await context.SaveChangesAsync();
+            return photo.Id;
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
     }
 
-    public async Task<IActionResult> DeletePhotoByIdAsync(int id)
+    public async Task<bool?> DeletePhotoByIdAsync(int id)
     {
         var photo = await context.Photos.FindAsync(id);
         if (photo == null)
         {
-            return new NotFoundResult();
+            return false;
         }
 
         context.Photos.Remove(photo);
-        await context.SaveChangesAsync();
-        return new OkResult();
+
+        try
+        {
+            await context.SaveChangesAsync();
+            
+            return true;
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
     }
 }

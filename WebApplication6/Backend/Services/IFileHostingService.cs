@@ -5,7 +5,7 @@ namespace WebApplication6.Backend.Services;
 
 public interface IFileHostingService
 {
-    Task<ActionResult<UntrackedImageFileDto>> HostImageAsync(IFormFile file);
+    Task<UntrackedImageFileDto?> HostImageAsync(IFormFile file);
 }
 
 public record UntrackedImageFileDto(string StorageFileName, string UploadedWithFileName, string ContentType, long? FileSize, int Width, int Height);

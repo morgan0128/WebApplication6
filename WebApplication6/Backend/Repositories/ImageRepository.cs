@@ -8,7 +8,7 @@ namespace WebApplication6.Backend.Repositories;
 
 public class ImageRepository(ApplicationDbContext context) : IImageRepository
 {
-    public async Task<ActionResult<IEnumerable<Image>>> GetAllImagesAsync()
+    public async Task<IEnumerable<Image>> GetAllImagesAsync()
     {
         var images = await context.Images
             .ToListAsync();
@@ -16,7 +16,7 @@ public class ImageRepository(ApplicationDbContext context) : IImageRepository
         return images;
     }
 
-    public async Task<ActionResult<IEnumerable<int>>> GetAllImagesIdsAsync()
+    public async Task<IEnumerable<int>> GetAllImagesIdsAsync()
     {
         var imageIds = await context.Images
             .AsNoTracking()
@@ -26,7 +26,7 @@ public class ImageRepository(ApplicationDbContext context) : IImageRepository
         return imageIds;
     }
 
-    public async Task<ActionResult<Image?>> GetImageByIdAsync(int id)
+    public async Task<Image?> GetImageByIdAsync(int id)
     {
         var image = await context.Images
             .FindAsync(id);
@@ -34,33 +34,41 @@ public class ImageRepository(ApplicationDbContext context) : IImageRepository
         return image;
     }
 
-    public async Task<ActionResult<Image>> SaveImageAsync(Image image)
+    public async Task<int?> SaveImageAsync(Image image)
     {
         context.Images.Add(image);
-        await context.SaveChangesAsync();
-
-        var savedImage = await context.Images.FindAsync(image);
-
-        if (savedImage == null)
-        {
-            return new ForbidResult();
-        }
         
-        return savedImage;
+        try
+        {
+            await context.SaveChangesAsync();
+            return image.Id;
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
     }
 
-    public async Task<IActionResult> DeleteImageByIdAsync(int id)
+    public async Task<bool?> DeleteImageByIdAsync(int id)
     {
         var image = await context.Images.FindAsync(id);
         if (image == null)
         {
-            return new NotFoundResult();
+            return false;
         }
 
         context.Images.Remove(image);
-        await context.SaveChangesAsync();
-        
-        return new OkResult();
+
+        try
+        {
+            await context.SaveChangesAsync();
+            
+            return true;
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
     }
 
 }

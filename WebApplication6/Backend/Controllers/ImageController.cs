@@ -8,34 +8,37 @@ using Image = WebApplication6.Backend.Models.Image;
 
 namespace WebApplication6.Backend.Controllers;
 
+// TODO: (probably) FULLY DEPRECATE, once app-edit-album is complete (no ImageController API)
 [ApiController]
-[Route("api/[controller]")]
-public sealed class ImageController(IImageRepository repository, IFileHostingService service) : ControllerBase
+[Route("api/Image")]
+public sealed class ImageController(IImageRepository imageRepository) : ControllerBase
 {
     [HttpGet("all")]
     public async Task<ActionResult<IEnumerable<Image>>> GetAllImages()
     {
-        return await repository.GetAllImagesAsync();
+        var images = await imageRepository.GetAllImagesAsync();
+        return Ok(images);
     }
     
     
     [HttpGet("all-ids")]
     public async Task<ActionResult<IEnumerable<int>>> GetAllImagesIds()
     {
-        return await repository.GetAllImagesIdsAsync();
+        var imageIds = await imageRepository.GetAllImagesIdsAsync();
+        return Ok(imageIds);
     }
     
     
     [HttpGet("{id}")]
     public async Task<ActionResult<Image>> GetImageById(int id)
     {
-        var image = await repository.GetImageByIdAsync(id);
-        if (image.Value == null)
+        var image = await imageRepository.GetImageByIdAsync(id);
+        if (image == null)
         {
             return NotFound();
         }
 
-        return Ok(image.Value);
+        return Ok(image);
     }
 
     // [HttpPost]
@@ -131,7 +134,13 @@ public sealed class ImageController(IImageRepository repository, IFileHostingSer
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteImageById(int id)
     {
-        return await repository.DeleteImageByIdAsync(id);
+        var status = await imageRepository.DeleteImageByIdAsync(id);
+        return status switch
+        {
+            true => Ok(),
+            null => Problem(),
+            false => NotFound()
+        };
     }
     
     
