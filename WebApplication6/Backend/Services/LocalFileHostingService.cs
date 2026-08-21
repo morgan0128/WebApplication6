@@ -7,7 +7,7 @@ namespace WebApplication6.Backend.Services;
 
 public class LocalFileHostingService(IWebHostEnvironment environment, IUntrackedFileRepository untrackedFileRepository) : IFileHostingService
 {
-    public async Task<ActionResult<UntrackedImageFileDto>> HostImageAsync(IFormFile file)
+    public async Task<UntrackedImageFileDto?> HostImageAsync(IFormFile file)
     {
         var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
         var path = Path.Combine(environment.ContentRootPath, fileName);
@@ -19,7 +19,7 @@ public class LocalFileHostingService(IWebHostEnvironment environment, IUntracked
 
         if (!File.Exists(path))
         {
-            return new NotFoundResult();
+            return null;
         }
 
         try
@@ -29,13 +29,22 @@ public class LocalFileHostingService(IWebHostEnvironment environment, IUntracked
         }
         catch (Exception ex)
         {
-            UntrackedFile untracked = new UntrackedFile
+            // for now, vague blanket exception catch and discard...
+            // however, WILL alert with a different exception here if PostUntrackedAsync fails
+            var untracked = new UntrackedFile
             {
                 FileName = file.FileName,
                 FileStorageLocation = fileName
             };
-            await untrackedFileRepository.PostUntrackedAsync(untracked);
-            return new NotFoundResult(); // TODO: Indistinguishable NotFoundResults in both places, and probably not appropriate result. Revisit later.
+            var untrackedId = await untrackedFileRepository.SaveUntrackedAsync(untracked);
+            if (untrackedId == null)
+            {
+                throw new Exception("!!!ERROR!!!\n" +
+                                    "IMAGE FILE SAVED ON HOST YET FAILED TO BE STORED IN IMAGE TABLE" +
+                                    "THEN FAILED TO BE STORED IN UNTRACKED_FILES TABLE.\n" +
+                                    "SEVERITY: LOW (HOSTING FILES LOCALLY)");
+            }
+            return null;
         }
     
     }

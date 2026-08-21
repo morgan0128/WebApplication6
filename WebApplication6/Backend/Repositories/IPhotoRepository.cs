@@ -5,13 +5,15 @@ namespace WebApplication6.Backend.Repositories;
 
 public interface IPhotoRepository
 {
-    Task<ActionResult<IEnumerable<Photo>>> GetAllPhotosAsync();
+    Task<IEnumerable<Photo>> GetAllPhotosAsync();
 
-    Task<ActionResult<IEnumerable<int>>> GetAllPhotosIdsAsync();
+    Task<IEnumerable<int>> GetAllPhotosIdsAsync();
     
-    Task<ActionResult<Photo?>> GetPhotoByIdAsync(int id);
+    Task<Photo?> GetPhotoByIdAsync(int id);
 
-    Task<int> SavePhotoAsync(Photo photo);
+    /// <returns>The Id of the saved photo on success, or null on exception thrown or failure.</returns>
+    Task<int?> SavePhotoAsync(Photo photo);
     
-    Task<IActionResult> DeletePhotoByIdAsync(int id);
+    /// <returns>true on success, false on not found, or null on found but either exception thrown or failure</returns>
+    Task<bool?> DeletePhotoByIdAsync(int id);
 }

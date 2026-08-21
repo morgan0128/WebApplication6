@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication6.Backend.Models;
 using WebApplication6.Backend.Repositories;
@@ -12,14 +13,16 @@ public sealed class AlbumController(IAlbumRepository albumRepository, IUploadPho
     [HttpGet("all")]
     public async Task<ActionResult<IEnumerable<Album>>> GetAllAlbums()
     {
-        return await albumRepository.GetAllAlbumsAsync();
+        var albums = await albumRepository.GetAllAlbumsAsync();
+        return Ok(albums);
     }
     
     
     [HttpGet("all-ids")]
     public async Task<ActionResult<IEnumerable<int>>> GetAllAlbumsIds()
     {
-        return await albumRepository.GetAllAlbumsIdsAsync();
+        var albumIds = await albumRepository.GetAllAlbumsIdsAsync();
+        return Ok(albumIds);
     }
     
     
@@ -27,42 +30,60 @@ public sealed class AlbumController(IAlbumRepository albumRepository, IUploadPho
     public async Task<ActionResult<Album>> GetAlbumById(int id)
     {
         var album = await albumRepository.GetAlbumByIdAsync(id);
-        if (album.Value == null)
+        if (album == null)
         {
             return NotFound();
         }
 
-        return Ok(album.Value);
+        return Ok(album);
     }
 
     [HttpPost]
-    public async Task<int> PostAlbum(CreateAlbumItemRequest albumRequest)
+    public async Task<ActionResult<int>> PostAlbum(CreateAlbumItemRequest albumRequest)
     {
         var album = new Album
         {
             Name = albumRequest.Name,
             Description = albumRequest.Description
         };
-        return await albumRepository.SaveAlbumAsync(album);
+
+        var id = await albumRepository.SaveAlbumAsync(album);
+        if (id is null)
+        {
+            return Problem();
+        }
+        
+        return id;
     }
     
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAlbumById(int id)
     {
-        return await albumRepository.DeleteAlbumByIdAsync(id);
+        var status = await albumRepository.DeleteAlbumByIdAsync(id);
+        return status switch
+        {
+            true => Ok(),
+            null => Problem(),
+            false => NotFound()
+        };
     }
 
     [HttpPost]
     public async Task<IActionResult> UploadPhotoToAlbum(int albumId, IFormFile file, PhotoSpecDto photoSpecification)
     {
-        var albumResult = await albumRepository.GetAlbumByIdAsync(albumId);
-        if (albumResult.Value == null)
+        var album = await albumRepository.GetAlbumByIdAsync(albumId);
+        if (album == null)
         {
             return new ForbidResult();
         }
+        
+        var succeeded = await uploadPhotoService.UploadPhoto(album, file, photoSpecification);
+        if (!succeeded)
+        {
+            return Problem();
+        }
 
-        var album = albumResult.Value;
-        return await uploadPhotoService.UploadPhoto(album, file, photoSpecification);
+        return Ok();
     }
 
     public sealed record CreateAlbumItemRequest(string? Name, string? Description);

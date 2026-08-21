@@ -4,5 +4,6 @@ namespace WebApplication6.Backend.Repositories;
 
 public interface IUntrackedFileRepository
 {
-    Task PostUntrackedAsync(UntrackedFile untrackedFile);
+    /// <returns>The Id of the saved untrackedFile on success, or null on exception thrown or failure.</returns>
+    Task<int?> SaveUntrackedAsync(UntrackedFile untrackedFile);
 }

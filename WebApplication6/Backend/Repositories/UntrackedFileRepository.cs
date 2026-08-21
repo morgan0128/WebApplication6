@@ -5,8 +5,18 @@ namespace WebApplication6.Backend.Repositories;
 
 public class UntrackedFileRepository(ApplicationDbContext context) : IUntrackedFileRepository
 {
-    public async Task PostUntrackedAsync(UntrackedFile untrackedFile)
+    public async Task<int?> SaveUntrackedAsync(UntrackedFile untrackedFile)
     {
-        await context.UntrackedFiles.AddAsync(untrackedFile);
+        context.UntrackedFiles.Add(untrackedFile);
+
+        try
+        {
+            await context.SaveChangesAsync();
+            return untrackedFile.Id;
+        }
+        catch (Exception ex)
+        {
+            return null;
+        }
     }
 }
