@@ -5,37 +5,20 @@ namespace WebApplication6.Backend.Services;
 
 public interface IUploadPhotoService
 {
-    Task<bool> UploadPhoto(Album album, IFormFile file, PhotoSpecDto photoSpec);
+    /// <summary>
+    /// Stores image file 'file' on file host, creates individual, associated db entries for new Image, Photo.
+    /// WARN: Does not create AlbumPhoto (composite key) db row.
+    /// </summary>
+    /// <param name="album"></param>
+    /// <param name="file"></param>
+    /// <param name="photoSpec"></param>
+    /// <returns>Id of newly created Photo on success, or null</returns>
+    Task<int?> UploadPhoto(Album album, IFormFile file, PhotoSpecDto photoSpec);
 }
 
 // Specification for a photo based on user input
 public record PhotoSpecDto(string? Name, string? Description, int? YearContentCreated);
 
-// public record UploadPhotoDto(IFormFile File, PhotoSpecDto PhotoSpec);
-
-// public class UploadPhotoDto
-// {
-//      public IFormFile FormData { get; set; }
-//      public PhotoSpecDto PhotoSpec { get; set; }
-// }
-
-     // public PhotoSpecDto(IFormFile imageFile, string? name, string? description, int? yearContentCreated)
-     // {
-     //     ImageFile = imageFile;
-     //     Name = name;
-     //     Description = description;
-     //     YearContentCreated = yearContentCreated;
-     // }
-
-// public class CombinedPhotoSpecDto
 public record CombinedPhotoSpecDto(IFormFile File, string? Name, string? Description, int? YearContentCreated);
-// {
-    // public IFormFile ImageFile { get; set; }
-    // public string? Name { get; set; }
-    // public string? Description { get; set; }
-    // public int? YearContentCreated { get; set; }
-    
 
-
-// }
 

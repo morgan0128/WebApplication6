@@ -86,12 +86,12 @@ public sealed class AlbumController(IAlbumRepository albumRepository, IUploadPho
             return new ForbidResult();
         }
         
-        var succeeded = await uploadPhotoService.UploadPhoto(album, file, photoSpec);
-        if (!succeeded)
-        {
-            return Problem();
-        }
-
+        var photoResult = await uploadPhotoService.UploadPhoto(album, file, photoSpec);
+        if (photoResult == null) return Problem();
+        
+        var photoToAlbum = await albumRepository.AddPhotoToAlbum(album.Id, photoResult.Value);
+        if (!photoToAlbum) return Problem();
+        
         return Ok();
     }
 

@@ -18,6 +18,7 @@ public interface IAlbumRepository
     /// <returns>true on success, or false.</returns>
     Task<bool> AddPhotoToAlbum(int albumId, int photoId);
     
+    // TODO: refactor  these Task<bool?> methods I've already decided they are weird. the other existing ones are in IImageRepository and IPhotoRepository
     /// <returns>true on success, false on not found, or null on found but either exception thrown or failure</returns>
     Task<bool?> DeleteAlbumByIdAsync(int id);
 

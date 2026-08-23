@@ -4,17 +4,15 @@ using WebApplication6.Backend.Repositories;
 
 namespace WebApplication6.Backend.Services;
 
-public class UploadPhotoService(IAlbumRepository albumRepository, IPhotoRepository photoRepository, IImageRepository imageRepository, IFileHostingService fileHostingService) : IUploadPhotoService
+public class UploadPhotoService(IPhotoRepository photoRepository, IImageRepository imageRepository, IFileHostingService fileHostingService) : IUploadPhotoService
 {
-    public async Task<bool> UploadPhoto(Album album, IFormFile file, PhotoSpecDto photoSpec)
+    public async Task<int?> UploadPhoto(Album album, IFormFile file, PhotoSpecDto photoSpec)
     {
         var altText = photoSpec.Name;
 
-        var hostImageResult = await fileHostingService.HostImageAsync(file);
+        var untrackedImage = await fileHostingService.HostImageAsync(file);
 
-        if (hostImageResult == null) return false;
-
-        var untrackedImage = hostImageResult;
+        if (untrackedImage == null) return null;
         
         var image = new Image
         {
@@ -30,7 +28,7 @@ public class UploadPhotoService(IAlbumRepository albumRepository, IPhotoReposito
         var nullableImageId = await imageRepository.SaveImageAsync(image);
         if (nullableImageId is null)
         {
-            return false;
+            return null;
         }
 
         var imageId = nullableImageId.Value;
@@ -45,13 +43,8 @@ public class UploadPhotoService(IAlbumRepository albumRepository, IPhotoReposito
         };
 
         var photoResult = await photoRepository.SavePhotoAsync(photo);
-        if (photoResult == null)
-        {
-            return false;
-        }
 
-        return await albumRepository.AddPhotoToAlbum(album.Id, photoResult.Value);
-
+        return photoResult;
     }
     
     
