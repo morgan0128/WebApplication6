@@ -22,30 +22,30 @@ public class LocalFileHostingService(IWebHostEnvironment environment, IUntracked
             return null;
         }
 
-        try
-        {
+        // try
+        // {
             var imageInfo = await ImageShrp.IdentifyAsync(path);
-            return new UntrackedImageFileDto(fileName, file.FileName, file.ContentType, file.Length, imageInfo.Width, imageInfo.Height);
-        }
-        catch (Exception ex)
-        {
-            // for now, vague blanket exception catch and discard...
-            // however, WILL alert with a different exception here if PostUntrackedAsync fails
-            var untracked = new UntrackedFile
+            if (imageInfo == null)
             {
-                FileName = file.FileName,
-                FileStorageLocation = fileName
-            };
-            var untrackedId = await untrackedFileRepository.SaveUntrackedAsync(untracked);
-            if (untrackedId == null)
-            {
-                throw new Exception("!!!ERROR!!!\n" +
-                                    "IMAGE FILE SAVED ON HOST YET FAILED TO BE STORED IN IMAGE TABLE" +
-                                    "THEN FAILED TO BE STORED IN UNTRACKED_FILES TABLE.\n" +
-                                    "SEVERITY: LOW (HOSTING FILES LOCALLY)");
+                var untracked = new UntrackedFile
+                {
+                    FileName = file.FileName,
+                    FileStorageLocation = fileName
+                };
+                var untrackedId = await untrackedFileRepository.SaveUntrackedAsync(untracked);
+                if (untrackedId == null)
+                {
+                    throw new Exception("!!!ERROR!!!\n" +
+                                        "IMAGE FILE SAVED ON HOST YET FAILED TO BE STORED IN IMAGE TABLE" +
+                                        "THEN FAILED TO BE STORED IN UNTRACKED_FILES TABLE.\n" +
+                                        "SEVERITY: LOW (HOSTING FILES LOCALLY)");
+                }
+                return null;
             }
-            return null;
-        }
+
+            return new UntrackedImageFileDto(fileName, file.FileName, file.ContentType, file.Length, imageInfo.Width, imageInfo.Height);
+
+            
     
     }
 }

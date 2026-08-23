@@ -9,6 +9,17 @@ interface AlbumDTO{
   description: string | null,
 }
 
+class PhotoSpecDTO {
+  name: string | null = null;
+  description: string | null = null;
+  yearContentCreated: number | null = null;
+}
+
+class Combined {
+  formData: FormData =  new FormData();
+  photoSpec: PhotoSpecDTO = new PhotoSpecDTO();
+}
+
 @Component({
   selector: 'app-edit-albums',
   imports: [
@@ -23,19 +34,26 @@ export class EditAlbums implements OnInit {
 
   protected readonly creatingAlbum = signal<boolean>(false);
   protected readonly creatingAlbumError = signal<boolean>(false);
-  protected newAlbumTitle = '';
+  protected newAlbumName = '';
   protected newAlbumDescription = '';
 
   protected readonly loadingAlbums = signal<boolean>(true);
   protected readonly loadingAlbumsError = signal<boolean>(false);
 
-  protected readonly selectedAlbum = signal<AlbumDTO | undefined>(undefined);
+  protected selectedAlbum: AlbumDTO | null = null;
   // protected readonly selectedAlbumId = signal<number | null>(null);
   selectedAlbumId: number | null = null;
-
   protected readonly selectingAlbumError = signal<boolean>(false);
 
+  protected newPhotoName = '';
+  protected newPhotoDescription = '';
+  newPhotoSelectedImageFile: File | null = null;
+  protected previewImageUrl: string | null = null;
+  protected imagePreviewUploadError: string | null = null;
+  protected imagePreviewUploading = false;
 
+  protected readonly uploadingPhoto = signal<boolean>(false);
+  protected uploadPhotoError: string | null = null;
 
   protected readonly albumDTOs = signal<AlbumDTO[]>([]);
 
@@ -62,7 +80,7 @@ export class EditAlbums implements OnInit {
   createAlbum(){
     this.creatingAlbum.set(true);
     this.creatingAlbumError.set(false);
-    const name = this.newAlbumTitle.trim();
+    const name = this.newAlbumName.trim();
     const description = this.newAlbumDescription.trim();
 
     let requestPath = this.apiAlbumUrl + '';
@@ -84,7 +102,7 @@ export class EditAlbums implements OnInit {
     if (this.selectedAlbumId == null){
       return; // default selection value
     }
-    if (this.selectedAlbum()?.id == this.selectedAlbumId){
+    if (this.selectedAlbum?.id == this.selectedAlbumId){
       return; // already selected
     }
 
@@ -97,12 +115,82 @@ export class EditAlbums implements OnInit {
       return;
     }
 
-    this.selectedAlbum.set(albumDTO);
+    this.selectedAlbum = albumDTO;
     this.loadAlbumSelection();
   }
 
   loadAlbumSelection(){
 
   }
+
+  protected onFileSelected(event: Event): void {
+    this.imagePreviewUploadError = null;
+
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    const maxSizeMb = 5;
+    if (file.size > maxSizeMb * 1024 * 1024) {
+      this.imagePreviewUploadError = 'Image must be under ${maxSizeMb} MB.}'
+      this.newPhotoSelectedImageFile = null;
+      return;
+    }
+
+    this.newPhotoSelectedImageFile = file;
+    this.previewImageUrl = URL.createObjectURL(file);
+  }
+
+  uploadPhotoToSelected(){
+    if (this.newPhotoSelectedImageFile == null){
+      return;
+    }
+
+    this.uploadingPhoto.set(true);
+    this.uploadPhotoError = null;
+    const formData: FormData = new FormData();
+
+    const name = this.newPhotoName.trim();
+    const description = this.newPhotoDescription.trim();
+    let yearContentCreated = 2003;
+
+    const photoSpec = new PhotoSpecDTO();
+    photoSpec.name = name;
+    photoSpec.description = description;
+    photoSpec.yearContentCreated = yearContentCreated;
+
+    formData.append('file', this.newPhotoSelectedImageFile, this.newPhotoSelectedImageFile.name);
+    formData.append('name', name);
+    formData.append('description', description)
+    formData.append('yearContentCreated', yearContentCreated.toString());
+
+    // console.log(JSON.stringify(photoSpec));
+    // formData.append('photoSpec', JSON.stringify(photoSpec));
+
+    console.log(formData.getAll('file'));
+    console.log(formData.getAll('photoSpec'));
+
+    // const combined = new Combined();
+    // combined.formData = formData;
+    // combined.photoSpec = photoSpec;
+
+
+    let requestPath = this.apiAlbumUrl + '/' + this.selectedAlbumId + '/upload';
+    this.http.post(requestPath, formData).subscribe({
+      next: () => {
+        this.uploadingPhoto.set(false);
+        // this.loadAlbums();
+      },
+      error: () => {
+        this.uploadPhotoError = "error";
+        this.uploadingPhoto.set(false);
+      }
+    })
+  }
+
+
 
 }

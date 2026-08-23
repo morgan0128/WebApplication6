@@ -68,16 +68,25 @@ public sealed class AlbumController(IAlbumRepository albumRepository, IUploadPho
         };
     }
 
-    [HttpPost]
-    public async Task<IActionResult> UploadPhotoToAlbum(int albumId, IFormFile file, PhotoSpecDto photoSpecification)
+    [HttpPost("{id:int}/upload")]
+    public async Task<IActionResult> UploadPhotoToAlbum(int id, [FromForm] CombinedPhotoSpecDto combinedPhotoSpec)
     {
-        var album = await albumRepository.GetAlbumByIdAsync(albumId);
+        var file = combinedPhotoSpec.File;
+        
+        var photoSpec = new PhotoSpecDto(combinedPhotoSpec.Name, combinedPhotoSpec.Description, combinedPhotoSpec.YearContentCreated);
+        
+        if (file.Length == 0)
+        {
+            return BadRequest("File upload fail");
+        }
+        
+        var album = await albumRepository.GetAlbumByIdAsync(id);
         if (album == null)
         {
             return new ForbidResult();
         }
         
-        var succeeded = await uploadPhotoService.UploadPhoto(album, file, photoSpecification);
+        var succeeded = await uploadPhotoService.UploadPhoto(album, file, photoSpec);
         if (!succeeded)
         {
             return Problem();

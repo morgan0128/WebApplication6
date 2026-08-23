@@ -44,7 +44,7 @@ public class UploadPhotoService(IPhotoRepository photoRepository, IImageReposito
             YearContentCreated = photoSpec.YearContentCreated ?? 1999
         };
 
-        var photoResult = await photoRepository.GetPhotoByIdAsync(imageId);
+        var photoResult = await photoRepository.SavePhotoAsync(photo);
         return photoResult != null;
     }
     
