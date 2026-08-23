@@ -4,7 +4,7 @@ using WebApplication6.Backend.Repositories;
 
 namespace WebApplication6.Backend.Services;
 
-public class UploadPhotoService(IPhotoRepository photoRepository, IImageRepository imageRepository, IFileHostingService fileHostingService) : IUploadPhotoService
+public class UploadPhotoService(IAlbumRepository albumRepository, IPhotoRepository photoRepository, IImageRepository imageRepository, IFileHostingService fileHostingService) : IUploadPhotoService
 {
     public async Task<bool> UploadPhoto(Album album, IFormFile file, PhotoSpecDto photoSpec)
     {
@@ -45,7 +45,13 @@ public class UploadPhotoService(IPhotoRepository photoRepository, IImageReposito
         };
 
         var photoResult = await photoRepository.SavePhotoAsync(photo);
-        return photoResult != null;
+        if (photoResult == null)
+        {
+            return false;
+        }
+
+        return await albumRepository.AddPhotoToAlbum(album.Id, photoResult.Value);
+
     }
     
     

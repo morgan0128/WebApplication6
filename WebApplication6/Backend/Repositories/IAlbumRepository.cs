@@ -13,6 +13,10 @@ public interface IAlbumRepository
     
     /// <returns>The Id of the saved album on success, or null on exception thrown or failure.</returns>
     Task<int?> SaveAlbumAsync(Album album);
+
+
+    /// <returns>true on success, or false.</returns>
+    Task<bool> AddPhotoToAlbum(int albumId, int photoId);
     
     /// <returns>true on success, false on not found, or null on found but either exception thrown or failure</returns>
     Task<bool?> DeleteAlbumByIdAsync(int id);

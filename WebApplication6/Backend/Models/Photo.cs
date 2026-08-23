@@ -26,6 +26,6 @@ public class Photo
     [Range(1900, 2100)]
     public int? YearContentCreated { get; set; }
     
-    public virtual ICollection<Album> Collections { get; set; } = new List<Album>();
+    public virtual ICollection<Album> Albums { get; set; } = new List<Album>();
 
 }

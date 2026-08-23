@@ -46,6 +46,32 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
         {
             return null;
         }
+    }
+
+    public async Task<bool> AddPhotoToAlbum(int albumId, int photoId)
+    {
+        var album = await context.Albums.FindAsync(albumId);
+        if (album == null)
+        {
+            return false;
+        }
+
+        var photo = await context.Photos.FindAsync(photoId);
+        if (photo == null)
+        {
+            return false;
+        }
+
+        album.Photos.Add(photo);
+        try
+        {
+            await context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
 
     }
 
