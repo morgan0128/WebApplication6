@@ -26,6 +26,6 @@ public interface IAlbumRepository
     /// Retrieves all photos for the queried Album
     /// </summary>
     /// <param name="id">The id of the Album row to query.</param>
-    /// <returns>An ICollection with T as Photo on success, or null</returns>
-    Task<ICollection<Photo>?> GetAlbumPhotosAsync(int id);
+    /// <returns>A task, fetching IAsyncEnumerable with T as Photo on success, or null</returns>
+    Task<IAsyncEnumerable<AlbumRepository.PhotoDto>?> GetAlbumPhotosAsyncEnumerable(int id);
 }

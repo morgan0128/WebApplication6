@@ -112,6 +112,17 @@
     </div>
     <br><br><br>
 
+    <div>
+      @if (photoDTOs().length !== 0){
+            @for (photo of photoDTOs(); track photo.name){
+              @let image = photo.image;
+              @if (image !== null){
+                <img [ngSrc]="image.storageFileName" [width]="image.width" [height]="image.height" [alt]="(''+image.altText)">
+              }
+            }
+        }
+    </div>
+
 
 
 

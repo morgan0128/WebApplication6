@@ -1,3 +1,4 @@
+using System.Collections;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication6.Backend.Data;
@@ -97,16 +98,23 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
         }
     }
 
-    public async Task<ICollection<Photo>?> GetAlbumPhotosAsync(int id)
+    public async Task<IAsyncEnumerable<PhotoDto>?> GetAlbumPhotosAsyncEnumerable(int id)
     {
         try
         {
             var album = await context.Albums
-                .Include(a => a.Photos)
+                .Include(a => a.Photos).ThenInclude(p => p.Image)
                 .Where(a => a.Id == id)
                 .SingleAsync();
 
-            var photos = album.Photos;
+            var photos = album.Photos
+                .Select(photo => new PhotoDto(
+                    photo.Name, 
+                    photo.Description,
+                    photo.YearContentCreated, 
+                    photo.Image
+                ))
+                .ToAsyncEnumerable();
             
             return photos;
         }
@@ -115,4 +123,6 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
             return null;
         }
     }
+
+    public sealed record PhotoDto(string? Name, string? Description, int? YearContentCreated, Image Image);
 }

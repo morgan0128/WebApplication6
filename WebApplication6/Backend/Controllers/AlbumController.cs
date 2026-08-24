@@ -38,6 +38,7 @@ public sealed class AlbumController(IAlbumRepository albumRepository, IUploadPho
         return Ok(album);
     }
 
+    
     [HttpPost]
     public async Task<ActionResult<int>> PostAlbum(CreateAlbumItemRequest albumRequest)
     {
@@ -55,19 +56,8 @@ public sealed class AlbumController(IAlbumRepository albumRepository, IUploadPho
         
         return id;
     }
-    
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteAlbumById(int id)
-    {
-        var status = await albumRepository.DeleteAlbumByIdAsync(id);
-        return status switch
-        {
-            true => Ok(),
-            null => Problem(),
-            false => NotFound()
-        };
-    }
 
+    
     [HttpPost("{id:int}/upload")]
     public async Task<IActionResult> UploadPhotoToAlbum(int id, [FromForm] CombinedPhotoSpecDto combinedPhotoSpec)
     {
@@ -94,6 +84,28 @@ public sealed class AlbumController(IAlbumRepository albumRepository, IUploadPho
         
         return Ok();
     }
+
+    [HttpGet("{id:int}/photos")]
+    public async Task<IAsyncEnumerable<AlbumRepository.PhotoDto>?> GetAllPhotos(int id)
+    {
+        var photos = await albumRepository.GetAlbumPhotosAsyncEnumerable(id);
+        return photos;
+    }
+    
+    
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteAlbumById(int id)
+    {
+        var status = await albumRepository.DeleteAlbumByIdAsync(id);
+        return status switch
+        {
+            true => Ok(),
+            null => Problem(),
+            false => NotFound()
+        };
+    }
+    
+    
 
     public sealed record CreateAlbumItemRequest(string? Name, string? Description);
 

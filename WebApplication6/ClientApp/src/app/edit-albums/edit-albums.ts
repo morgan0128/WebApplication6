@@ -2,6 +2,7 @@ import {Component, inject, OnInit, signal, Signal} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 // import {NgOptimizedImage} from '@angular/common';
 import {HttpClient} from '@angular/common/http';
+import {NgOptimizedImage} from '@angular/common';
 
 interface AlbumDTO{
   id: number,
@@ -9,21 +10,30 @@ interface AlbumDTO{
   description: string | null,
 }
 
-class PhotoSpecDTO {
+class PhotoDTO {
+  id: number | null = null;
   name: string | null = null;
   description: string | null = null;
   yearContentCreated: number | null = null;
+  image: ImageDTO | null = null;
 }
 
-class Combined {
-  formData: FormData =  new FormData();
-  photoSpec: PhotoSpecDTO = new PhotoSpecDTO();
+interface ImageDTO {
+  id: number,
+  fileName: string,
+  contentType: string,
+  fileSize: number | null,
+  storageFileName: string,
+  altText: string,
+  width: number,
+  height: number
 }
 
 @Component({
   selector: 'app-edit-albums',
   imports: [
-    FormsModule
+    FormsModule,
+    NgOptimizedImage
   ],
   templateUrl: './edit-albums.html',
   styleUrl: './edit-albums.css',
@@ -31,6 +41,7 @@ class Combined {
 export class EditAlbums implements OnInit {
   private readonly http = inject(HttpClient);
   private readonly apiAlbumUrl = '/api/Album';
+  private readonly apiImageUrl = '/api/Image';
 
   protected readonly creatingAlbum = signal<boolean>(false);
   protected readonly creatingAlbumError = signal<boolean>(false);
@@ -55,7 +66,11 @@ export class EditAlbums implements OnInit {
   protected readonly uploadingPhoto = signal<boolean>(false);
   protected uploadPhotoError: string | null = null;
 
+  protected readonly loadingPhotos = signal<boolean>(true);
+  protected readonly loadingPhotosError = signal<boolean>(false);
+
   protected readonly albumDTOs = signal<AlbumDTO[]>([]);
+  protected readonly photoDTOs = signal<PhotoDTO[]>([]);
 
   ngOnInit() {
     this.loadAlbums();
@@ -116,11 +131,29 @@ export class EditAlbums implements OnInit {
     }
 
     this.selectedAlbum = albumDTO;
-    this.loadAlbumSelection();
+    this.photoDTOs.set([]);
+    this.loadAlbumSelection().then(r => { return; });
   }
 
-  loadAlbumSelection(){
+  async loadAlbumSelection(){
+    // this.loadingPhotos.set(true);
+    // this.loadingPhotosError.set(false);
 
+    let requestPath = this.apiAlbumUrl + '/' + this.selectedAlbumId + '/photos';
+    this.http.get<AsyncIterable<PhotoDTO>>(requestPath).subscribe({
+      next: async asyncDtos => {
+        for await (const photoDto of asyncDtos){
+          this.photoDTOs().push(photoDto);
+        }
+      },
+      error: () => {
+        // this.loadingPhotos.set(false);
+        // this.loadingPhotosError.set(true);
+      },
+      complete: () => {
+        // this.loadingPhotos.set(false);
+      }
+    })
   }
 
   protected onFileSelected(event: Event): void {
@@ -157,7 +190,7 @@ export class EditAlbums implements OnInit {
     const description = this.newPhotoDescription.trim();
     let yearContentCreated = 2003;
 
-    const photoSpec = new PhotoSpecDTO();
+    const photoSpec = new PhotoDTO();
     photoSpec.name = name;
     photoSpec.description = description;
     photoSpec.yearContentCreated = yearContentCreated;
@@ -167,16 +200,8 @@ export class EditAlbums implements OnInit {
     formData.append('description', description)
     formData.append('yearContentCreated', yearContentCreated.toString());
 
-    // console.log(JSON.stringify(photoSpec));
-    // formData.append('photoSpec', JSON.stringify(photoSpec));
-
     console.log(formData.getAll('file'));
     console.log(formData.getAll('photoSpec'));
-
-    // const combined = new Combined();
-    // combined.formData = formData;
-    // combined.photoSpec = photoSpec;
-
 
     let requestPath = this.apiAlbumUrl + '/' + this.selectedAlbumId + '/upload';
     this.http.post(requestPath, formData).subscribe({
