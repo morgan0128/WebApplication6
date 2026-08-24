@@ -1,142 +1,256 @@
 <main class="app-edit-albums">
-  <section class="workspace">
+  <div class="dashboard">
     <header class="topbar">
       <div>
-        <p class="eyebrow">ASP.NET MVC + Angular + PostgreSQL</p>
-
+        <p class="eyebrow">Admin</p>
+        <h1>Album administration</h1>
+        <p class="subtitle">Manage albums, photos, and metadata.</p>
       </div>
-
+      <span class="admin-badge">Private area</span>
     </header>
 
-
-    <div class ="table">
-      <div class="col">
-      <label class="dropdown-header" for="albums">My Albums</label>
-        <select class="dropdown-button" name="albums" id="albums" [(ngModel)]="selectedAlbumId" (change)="onSelectedAlbumChange()">
-          <option class="dropdown-header" [ngValue]="null">My Albums</option>
-          @for (album of albumDTOs(); track album.id){
-            <option [ngValue]="album.id">{{ album.name }}</option>
+    @if (loadingAlbumsError() || selectingAlbumError() || creatingAlbumError() || loadingPhotosError() || uploadPhotoError) {
+      <div class="notice" role="alert">
+        <span class="notice-icon" aria-hidden="true">!</span>
+        <p>
+          @if (loadingAlbumsError()) {
+            Failed to load your albums. Please refresh and try again.
+          } @else if (selectingAlbumError()) {
+            That album could not be opened. Please choose another one.
+          } @else if (creatingAlbumError()) {
+            Failed to create that album. Please try again.
+          } @else if (loadingPhotosError()) {
+            Failed to load the photos in that album. Please try again.
+          } @else {
+            Image could not be uploaded. Please check the file and try again.
           }
-        </select>
+        </p>
+      </div>
+    }
 
-      @if (selectedAlbumId == null){
-        <p>No album selected<p>
-      } @else {
-        <p>Selected album Id is <strong>{{ selectedAlbumId }}</strong></p>
-      }
-    </div>
-      <div class="col">
-            @if (selectedAlbum != null){
-              <form class="composer" (ngSubmit)="uploadPhotoToSelected()">
-                <p>Upload a new photo to {{ selectedAlbum.name }}</p>
-                <div class="composer-row">
+    <div class="dashboard-grid">
+      <aside class="sidebar">
+        <section class="card">
+          <div class="card-heading">
+            <div>
+              <p class="eyebrow">Albums</p>
+              <h2>Manage albums</h2>
+            </div>
+            <span class="count-badge">{{ albumDTOs().length }}</span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="albums">Album</label>
+            <select
+              class="album-select"
+              name="albums"
+              id="albums"
+              [(ngModel)]="selectedAlbumId"
+              (change)="onSelectedAlbumChange()">
+              <option [ngValue]="null">Choose an album</option>
+              @for (album of albumDTOs(); track album.id) {
+                <option [ngValue]="album.id">{{ album.name }}</option>
+              }
+            </select>
+          </div>
+
+          @if (loadingAlbums()) {
+            <p class="helper-text loading-text"><span class="loading-dot"></span> Loading albums...</p>
+          } @else if (albumDTOs().length === 0) {
+            <p class="helper-text">No albums yet. Create one below.</p>
+          } @else if (selectedAlbum == null) {
+            <p class="helper-text">Select an album to manage its artwork.</p>
+          } @else {
+            <div class="selected-album-note">
+              <span class="status-dot"></span>
+              <div>
+                <strong>{{ selectedAlbum.name }}</strong>
+                <span>{{ selectedAlbum.description || 'No description' }}</span>
+              </div>
+            </div>
+          }
+        </section>
+
+        <section class="card">
+          <div class="card-heading compact-heading">
+            <div>
+              <p class="eyebrow">Albums</p>
+              <h2>Create album</h2>
+            </div>
+          </div>
+
+          <form class="stacked-form" id="newAlbum" (ngSubmit)="createAlbum()">
+            <div class="field-group">
+              <label class="field-label" for="newAlbum-form-input-name">Name</label>
+              <input
+                id="newAlbum-form-input-name"
+                name="newAlbum-form-input-name"
+                type="text"
+                maxlength="50"
+                autocomplete="off"
+                [(ngModel)]="newAlbumName" />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="newAlbum-form-input-description">Description</label>
+              <textarea
+                id="newAlbum-form-input-description"
+                name="newAlbum-form-input-description"
+                maxlength="400"
+                rows="3"
+                placeholder="Optional"
+                [(ngModel)]="newAlbumDescription"></textarea>
+            </div>
+
+            <button class="button button-secondary" type="submit" [disabled]="creatingAlbum()">
+              {{ creatingAlbum() ? 'Creating...' : 'Create album' }}
+            </button>
+          </form>
+        </section>
+      </aside>
+
+      <section class="main-column">
+        @if (selectedAlbum != null) {
+          <section class="card album-summary">
+            <div>
+              <p class="eyebrow">Selected album</p>
+              <h2>{{ selectedAlbum.name }}</h2>
+              <p>{{ selectedAlbum.description || 'No description' }}</p>
+            </div>
+            <div class="album-stat">
+              <strong>{{ photoDTOs().length }}</strong>
+              <span>{{ photoDTOs().length === 1 ? 'piece' : 'pieces' }}</span>
+            </div>
+          </section>
+
+          <section class="card upload-card">
+            <div class="card-heading upload-heading">
+              <div>
+                <p class="eyebrow">Artwork</p>
+                <h2>Upload artwork</h2>
+              </div>
+              <span class="upload-helper">PNG, JPG, or WebP · 5 MB max</span>
+            </div>
+
+            <form class="upload-form" (ngSubmit)="uploadPhotoToSelected()">
+              <div class="upload-fields">
+                <div class="field-group">
+                  <label class="field-label" for="newPhoto-form-input-name">Title</label>
                   <input
                     id="newPhoto-form-input-name"
                     name="newPhoto-form-input-name"
                     type="text"
                     maxlength="50"
                     autocomplete="off"
-                    [(ngModel)]="newPhotoName"/>
-                  <label for="newPhoto-form-input-name">Photo Name</label>
+                    [(ngModel)]="newPhotoName" />
                 </div>
-                <div class="composer-row">
+
+                <div class="field-group">
+                  <label class="field-label" for="newPhoto-form-input-description">Description</label>
                   <input
                     id="newPhoto-form-input-description"
                     name="newPhoto-form-input-description"
                     type="text"
                     maxlength="400"
                     autocomplete="off"
-                    [(ngModel)]="newPhotoDescription"/>
-                  <label for="newPhoto-form-input-description">Description</label>
-
-                    <input
-                      id="newPhoto-form-input-file"
-                      name="newPhoto-form-input-file"
-                      type="file"
-                      accept="image/png,image/jpeg,image/webp"
-                      (change)="onFileSelected($event)"
-                    />
-                    <label for="newPhoto-form-input-file">Upload File</label>
-
-                      @if (previewImageUrl){
-                        <img [src]="previewImageUrl" alt="Selected image preview" width="240" />
-                      }
-
-                      @if (imagePreviewUploadError){
-                        <p>{{ imagePreviewUploadError }}</p>
-                      }
-
-                      <button type="submit" [disabled]="!newPhotoSelectedImageFile || imagePreviewUploading">
-                        {{ imagePreviewUploading ? 'Uploading...' : 'Upload' }}
-                      </button>
+                    [(ngModel)]="newPhotoDescription" />
                 </div>
-              </form>
-            }
-      </div>
-    </div>
+              </div>
 
-    <br><br><br>
-    <div>
+              <div class="field-group">
+                <label class="field-label" for="newPhoto-form-input-file">Image file</label>
+                <input
+                  class="file-input"
+                  id="newPhoto-form-input-file"
+                  name="newPhoto-form-input-file"
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp"
+                  (change)="onFileSelected($event)" />
+                <label class="file-dropzone" [class.has-preview]="previewImageUrl" for="newPhoto-form-input-file">
+                  @if (previewImageUrl) {
+                    <img [src]="previewImageUrl" alt="Selected artwork preview" />
+                    <span class="replace-label">Choose a different image</span>
+                  } @else {
+                    <span class="dropzone-plus" aria-hidden="true">+</span>
+                    <span>Choose an image</span>
+                  }
+                </label>
+              </div>
 
-
-      <form class="composer" id="newAlbum" (ngSubmit)="createAlbum()">
-        <h2>Create New Album</h2>
-        <div class="composer-row">
-          <input
-            id="newAlbum-form-input-name"
-            name="newAlbum-form-input-name"
-            type="text"
-            maxlength="50"
-            autocomplete="off"
-            [(ngModel)]="newAlbumName"/>
-          <label for="newAlbum-form-input-name">Title</label>
-        </div>
-
-        <div class="composer-row">
-          <input
-            id="newAlbum-form-input-description"
-            name="newAlbum-form-input-description"
-            type="text"
-            maxlength="50"
-            autocomplete="off"
-            [(ngModel)]="newAlbumDescription"/>
-          <label for="newAlbum-form-input-description">Description</label>
-        </div>
-        <div class="composer-row">
-          <button type="submit" [disabled]="creatingAlbum()">
-            {{ creatingAlbum() ? 'Saving' : 'Create' }}
-          </button>
-        </div>
-      </form>
-
-    </div>
-    <br><br><br>
-
-    <div>
-      @if (photoDTOs().length !== 0){
-            @for (photo of photoDTOs(); track photo.name){
-              @let image = photo.image;
-              @if (image !== null){
-                <div class="card">
-                  <div class="card-header">
-                  <h1>{{ photo.name }}</h1>
-                  </div>
-                  <div class="card-img">
-                  <img [ngSrc]="image.storageFileName" [width]="image.width" [height]="image.height" [alt]="(''+image.altText)">
-                  </div>
-                  <div class="card-footer">
-                  <p>{{ photo.description }} <strong>{{ photo.yearContentCreated }}</strong></p>
-                  </div>
-                </div>
+              @if (imagePreviewUploadError) {
+                <p class="form-error" role="alert">{{ imagePreviewUploadError }}</p>
               }
-            }
+
+              <div class="upload-footer">
+                <p>Adding artwork to <strong>{{ selectedAlbum.name }}</strong></p>
+                <button class="button button-primary" type="submit" [disabled]="!newPhotoSelectedImageFile || uploadingPhoto()">
+                  {{ uploadingPhoto() ? 'Uploading...' : 'Upload artwork' }}
+                </button>
+              </div>
+            </form>
+          </section>
+        } @else {
+          <section class="card empty-workspace">
+            <p class="eyebrow">Album workspace</p>
+            <h2>Select an album</h2>
+            <p>Choose an album from the list to manage its artwork.</p>
+          </section>
         }
+
+        <section class="artworks-section">
+          <div class="section-heading artwork-heading">
+            <div>
+              <p class="eyebrow">Album contents</p>
+              <h2>Artwork</h2>
+            </div>
+            @if (selectedAlbum != null) {
+              <span class="artworks-count">{{ photoDTOs().length }} {{ photoDTOs().length === 1 ? 'piece' : 'pieces' }}</span>
+            }
+          </div>
+
+          @if (selectedAlbumId == null) {
+            <div class="empty-state">
+              <h3>No album selected</h3>
+              <p>Select an album above to view its artwork.</p>
+            </div>
+          } @else if (loadingPhotos()) {
+            <div class="empty-state">
+              <h3>Loading artwork...</h3>
+            </div>
+          } @else if (photoDTOs().length === 0) {
+            <div class="empty-state">
+              <h3>No artwork in this album</h3>
+              <p>Upload an image above to add the first piece.</p>
+            </div>
+          } @else {
+            <div class="art-grid">
+              @for (photo of photoDTOs(); track photo.id) {
+                @let image = photo.image;
+                @if (image !== null) {
+                  <article class="art-card">
+                    <div class="art-image">
+                      <img
+                        [ngSrc]="image.storageFileName"
+                        [width]="image.width"
+                        [height]="image.height"
+                        [alt]="image.altText || photo.name || 'Artwork'" />
+                    </div>
+                    <div class="art-card-details">
+                      <div class="art-card-title">
+                        <h3>{{ photo.name || image.fileName }}</h3>
+                        @if (photo.yearContentCreated) {
+                          <span>{{ photo.yearContentCreated }}</span>
+                        }
+                      </div>
+                      <p>{{ photo.description || 'No description' }}</p>
+                    </div>
+                  </article>
+                }
+              }
+            </div>
+          }
+        </section>
+      </section>
     </div>
-
-
-
-
-
-
-  </section>
+  </div>
 </main>

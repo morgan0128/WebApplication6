@@ -115,6 +115,7 @@ export class EditAlbums implements OnInit {
     // return;
 
     if (this.selectedAlbumId == null){
+      this.selectedAlbum = null;
       this.photoDTOs.set([]);
       return; // default selection value
     }
@@ -137,23 +138,21 @@ export class EditAlbums implements OnInit {
   }
 
   async loadAlbumSelection(){
-    // this.loadingPhotos.set(true);
-    // this.loadingPhotosError.set(false);
+    this.loadingPhotos.set(true);
+    this.loadingPhotosError.set(false);
     this.photoDTOs.set([]);
 
     let requestPath = this.apiAlbumUrl + '/' + this.selectedAlbumId + '/photos';
-    this.http.get<AsyncIterable<PhotoDTO>>(requestPath).subscribe({
-      next: async asyncDtos => {
-        for await (const photoDto of asyncDtos){
-          this.photoDTOs().push(photoDto);
-        }
+    this.http.get<PhotoDTO[]>(requestPath).subscribe({
+      next: dtos => {
+        this.photoDTOs.set(dtos);
       },
       error: () => {
-        // this.loadingPhotos.set(false);
-        // this.loadingPhotosError.set(true);
+        this.loadingPhotos.set(false);
+        this.loadingPhotosError.set(true);
       },
       complete: () => {
-        // this.loadingPhotos.set(false);
+        this.loadingPhotos.set(false);
       }
     })
   }
@@ -170,7 +169,7 @@ export class EditAlbums implements OnInit {
 
     const maxSizeMb = 5;
     if (file.size > maxSizeMb * 1024 * 1024) {
-      this.imagePreviewUploadError = 'Image must be under ${maxSizeMb} MB.}'
+      this.imagePreviewUploadError = `Image must be under ${maxSizeMb} MB.`
       this.newPhotoSelectedImageFile = null;
       return;
     }
