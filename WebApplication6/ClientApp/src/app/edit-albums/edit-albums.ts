@@ -115,6 +115,7 @@ export class EditAlbums implements OnInit {
     // return;
 
     if (this.selectedAlbumId == null){
+      this.photoDTOs.set([]);
       return; // default selection value
     }
     if (this.selectedAlbum?.id == this.selectedAlbumId){
@@ -138,6 +139,7 @@ export class EditAlbums implements OnInit {
   async loadAlbumSelection(){
     // this.loadingPhotos.set(true);
     // this.loadingPhotosError.set(false);
+    this.photoDTOs.set([]);
 
     let requestPath = this.apiAlbumUrl + '/' + this.selectedAlbumId + '/photos';
     this.http.get<AsyncIterable<PhotoDTO>>(requestPath).subscribe({
@@ -207,6 +209,7 @@ export class EditAlbums implements OnInit {
     this.http.post(requestPath, formData).subscribe({
       next: () => {
         this.uploadingPhoto.set(false);
+        this.loadAlbumSelection().then(r => { return; }); // TODO: currently performs an excessive full reload
         // this.loadAlbums();
       },
       error: () => {
