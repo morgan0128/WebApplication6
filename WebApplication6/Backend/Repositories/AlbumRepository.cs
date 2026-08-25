@@ -106,6 +106,7 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
 
             var photos = album.Photos
                 .Select(photo => new IAlbumRepository.PhotoDto(
+                    photo.Id,
                     photo.Name, 
                     photo.Description,
                     photo.YearContentCreated, 

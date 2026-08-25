@@ -28,5 +28,5 @@ public interface IAlbumRepository
     /// <returns>A task fetching IAsyncEnumerable with T as Photo on success, or null</returns>
     Task<IAsyncEnumerable<PhotoDto>?> GetAlbumPhotosAsyncEnumerable(int id);
     
-    public sealed record PhotoDto(string? Name, string? Description, int? YearContentCreated, Image Image);
+    public sealed record PhotoDto(int Id, string? Name, string? Description, int? YearContentCreated, Image Image);
 }

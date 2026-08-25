@@ -446,6 +446,7 @@ public class AlbumControllerTest
         };
 
         var photo = new IAlbumRepository.PhotoDto(
+            1,
             "Photo",
             "Photo description",
             2026,
@@ -489,11 +490,13 @@ public class AlbumControllerTest
         };
 
         var photo1 = new IAlbumRepository.PhotoDto(
+            1,
             "Photo 1",
             "Photo 1 description",
             2026,
             image);
         var photo2 = new IAlbumRepository.PhotoDto(
+            2,
             "Photo 2",
             "Photo 2 description",
             2025,
