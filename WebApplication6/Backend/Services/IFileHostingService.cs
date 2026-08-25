@@ -8,4 +8,4 @@ public interface IFileHostingService
     Task<UntrackedImageFileDto?> HostImageAsync(IFormFile file);
 }
 
-public record UntrackedImageFileDto(string StorageFileName, string UploadedWithFileName, string ContentType, long? FileSize, int Width, int Height);
+public record UntrackedImageFileDto(string StorageFileName, string Url, string UploadedWithFileName, string ContentType, long? FileSize, int Width, int Height);

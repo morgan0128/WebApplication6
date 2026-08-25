@@ -24,6 +24,7 @@ interface ImageDTO {
   contentType: string,
   fileSize: number | null,
   storageFileName: string,
+  url: string,
   altText: string,
   width: number,
   height: number

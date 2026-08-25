@@ -19,6 +19,7 @@ public class UploadPhotoService(IPhotoRepository photoRepository, IImageReposito
             FileName = untrackedImage.UploadedWithFileName,
             FileSize = untrackedImage.FileSize,
             StorageFileName = untrackedImage.StorageFileName,
+            Url = untrackedImage.Url,
             ContentType = untrackedImage.ContentType,
             Height = untrackedImage.Height,
             Width = untrackedImage.Width,

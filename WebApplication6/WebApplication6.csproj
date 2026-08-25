@@ -18,6 +18,7 @@
     <ItemGroup>
       <Folder Include="Backend\Migrations\" />
       <Folder Include="ClientApp\scripts\" />
+      <Folder Include="ClientApp\uploads\" />
     </ItemGroup>
 
     <ItemGroup>

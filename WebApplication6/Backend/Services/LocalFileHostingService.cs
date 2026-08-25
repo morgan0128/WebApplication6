@@ -5,12 +5,12 @@ using ImageShrp = SixLabors.ImageSharp.Image;
 
 namespace WebApplication6.Backend.Services;
 
-public class LocalFileHostingService(IWebHostEnvironment environment, IUntrackedFileRepository untrackedFileRepository) : IFileHostingService
+public class LocalFileHostingService(string uploadRoot, IUntrackedFileRepository untrackedFileRepository) : IFileHostingService
 {
     public async Task<UntrackedImageFileDto?> HostImageAsync(IFormFile file)
     {
         var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
-        var path = Path.Combine(environment.ContentRootPath, fileName);
+        var path = Path.Combine(uploadRoot, fileName);
         
         await using (var stream = System.IO.File.Create(path))
         {
@@ -43,7 +43,7 @@ public class LocalFileHostingService(IWebHostEnvironment environment, IUntracked
                 return null;
             }
 
-            return new UntrackedImageFileDto(fileName, file.FileName, file.ContentType, file.Length, imageInfo.Width, imageInfo.Height);
+            return new UntrackedImageFileDto(fileName, ("/uploads" + "/" + fileName), file.FileName, file.ContentType, file.Length, imageInfo.Width, imageInfo.Height);
 
             
     

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using WebApplication6.Backend.Data;
 using WebApplication6.Backend.Repositories;
 using WebApplication6.Backend.Services;
@@ -25,6 +26,17 @@ builder.Services.AddScoped<IUntrackedFileRepository, UntrackedFileRepository>();
 builder.Services.AddScoped<IFileHostingService, LocalFileHostingService>();
 builder.Services.AddScoped<IUploadPhotoService, UploadPhotoService>();
 
+var configuredUploadDirectory =
+    builder.Configuration["LocalFileStorage:UploadDirectory"]
+    ?? throw new InvalidOperationException("LocalFileStorage:UploadDirectory is not configured.");
+
+var uploadRoot = Path.GetFullPath(
+    Path.Combine(builder.Environment.ContentRootPath, configuredUploadDirectory));
+
+Directory.CreateDirectory(uploadRoot);
+
+builder.Services.AddSingleton(uploadRoot);
+
 
 var app = builder.Build();
 
@@ -37,7 +49,14 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+     FileProvider = new PhysicalFileProvider(uploadRoot),
+     RequestPath = "/uploads"
+});
+
 app.UseRouting();
 
 app.UseAuthorization();
@@ -50,7 +69,7 @@ app.MapControllerRoute(
         pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
-app.Environment.ContentRootPath = "ClientApp/public/";
+// app.Environment.ContentRootPath = "ClientApp/public/";
 
 app.MapFallbackToFile("app/{*path:nonfile}", "app/index.html");
 

@@ -17,6 +17,9 @@ public class Image
     
     [Required]
     public string StorageFileName { get; init; }
+    
+    [Required]
+    public string Url { get; init; }
 
     [Required]
     public string AltText { get; init; }
