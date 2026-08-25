@@ -218,6 +218,23 @@ export class EditAlbums implements OnInit {
     })
   }
 
+  // TODO: Have strong "Are you sure?" confirmation (e.g., enter the name of the Album)
+  deleteSelected(){
+    if (this.selectedAlbum == null) return;
+    let requestPath = this.apiAlbumUrl + '/' + this.selectedAlbumId;
+    this.http.delete(requestPath).subscribe({
+      next: () => {
+        this.selectedAlbum = null;
+        this.loadAlbums(); // TODO: excessive
+      },
+      error: () => {
+
+      }
+    });
+
+
+  }
+
 
 
 }

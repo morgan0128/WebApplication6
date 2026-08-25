@@ -3,8 +3,8 @@
     <header class="topbar">
       <div>
         <p class="eyebrow">Admin</p>
-        <h1>Album administration</h1>
-        <p class="subtitle">Manage albums, photos, and metadata.</p>
+        <h1>Album Manager</h1>
+<!--        <p class="subtitle">Manage albums your albums, photos, and metadata.</p>-->
       </div>
       <span class="admin-badge">Private area</span>
     </header>
@@ -59,15 +59,15 @@
           } @else if (albumDTOs().length === 0) {
             <p class="helper-text">No albums yet. Create one below.</p>
           } @else if (selectedAlbum == null) {
-            <p class="helper-text">Select an album to manage its artwork.</p>
+<!--            <p class="helper-text">Select an album to manage its artwork.</p>-->
           } @else {
-            <div class="selected-album-note">
-              <span class="status-dot"></span>
-              <div>
-                <strong>{{ selectedAlbum.name }}</strong>
-                <span>{{ selectedAlbum.description || 'No description' }}</span>
-              </div>
-            </div>
+<!--            <div class="selected-album-note">-->
+<!--              <span class="status-dot"></span>-->
+<!--              <div>-->
+<!--                <strong>{{ selectedAlbum.name }}</strong>-->
+<!--                <span>{{ selectedAlbum.description || 'No description' }}</span>-->
+<!--              </div>-->
+<!--            </div>-->
           }
         </section>
 
@@ -98,7 +98,6 @@
                 name="newAlbum-form-input-description"
                 maxlength="400"
                 rows="3"
-                placeholder="Optional"
                 [(ngModel)]="newAlbumDescription"></textarea>
             </div>
 
@@ -119,8 +118,11 @@
             </div>
             <div class="album-stat">
               <strong>{{ photoDTOs().length }}</strong>
-              <span>{{ photoDTOs().length === 1 ? 'piece' : 'pieces' }}</span>
+              <span>{{ photoDTOs().length === 1 ? 'photo' : 'photos' }}</span>
+              <button (click)="deleteSelected()" class="alert-danger">Delete</button>
             </div>
+
+
           </section>
 
           <section class="card upload-card">

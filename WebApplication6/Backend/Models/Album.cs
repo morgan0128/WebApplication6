@@ -10,6 +10,7 @@ public class Album
     [Required]
     public string? Name { get; set; }
     
+    [StringLength(400)]
     public string? Description { get; set; }
     
     public ICollection<Photo> Photos { get; set; } = new List<Photo>();

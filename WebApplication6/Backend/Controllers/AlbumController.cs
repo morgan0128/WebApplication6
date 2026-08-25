@@ -42,9 +42,17 @@ public sealed class AlbumController(IAlbumRepository albumRepository, IUploadPho
     [HttpPost]
     public async Task<ActionResult<int>> PostAlbum(CreateAlbumItemRequest albumRequest)
     {
+        var name = albumRequest.Name?.Trim();
+        if (string.IsNullOrEmpty(name))
+        {
+            var number = await albumRepository.GetTotalNumberAlbums();
+            number++;
+            name = "Unnamed Album #" + number;
+        }
+        
         var album = new Album
         {
-            Name = albumRequest.Name,
+            Name = name,
             Description = albumRequest.Description
         };
 

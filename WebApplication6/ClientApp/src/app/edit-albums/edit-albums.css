@@ -367,6 +367,17 @@ select:focus {
   font-size: 0.7rem;
 }
 
+
+.album-stat button {
+  margin-top: 5px;
+  min-width: stretch;
+  min-height: stretch;
+  justify-items: start;
+  align-content: start;
+  gap: 0;
+  /*min-width: 58px;*/
+}
+
 .upload-card {
   padding-bottom: 20px;
 }
