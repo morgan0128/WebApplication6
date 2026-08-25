@@ -53,13 +53,9 @@ public class AlbumControllerTest
 
         var albumList = new List<Album> { album };
         
-        // testing CI by mucking up a test
-        // TODO cleanup
-        // repositoryMock.Setup(r => r.GetAllAlbumsAsync())
-        //     .ReturnsAsync(albumList);
         repositoryMock.Setup(r => r.GetAllAlbumsAsync())
-            .ReturnsAsync(new List<Album>());
-        
+            .ReturnsAsync(albumList);
+
         var controller = new AlbumController(repositoryMock.Object, serviceMock.Object);
         
         // Act
