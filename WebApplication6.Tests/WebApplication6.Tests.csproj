@@ -24,8 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Tests\Unit\Repositories\" />
-    <Folder Include="Tests\Unit\Services\" />
+    <Folder Include="Tests\Integration\Controllers\" />
   </ItemGroup>
   
 </Project>

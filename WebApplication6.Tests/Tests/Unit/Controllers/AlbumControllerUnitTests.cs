@@ -13,7 +13,7 @@ using Xunit;
 
 namespace WebApplication6.Tests.Tests.Unit.Controllers;
 
-public class AlbumControllerTest
+public class AlbumControllerUnitTests
 {
     [Fact]
     public async Task GetAllAlbums_SingleAlbumList_ReturnsSameSingleAlbumInList()

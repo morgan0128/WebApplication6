@@ -42,7 +42,6 @@ interface ImageDTO {
 export class EditAlbums implements OnInit {
   private readonly http = inject(HttpClient);
   private readonly apiAlbumUrl = '/api/Album';
-  private readonly apiImageUrl = '/api/Image';
 
   protected readonly creatingAlbum = signal<boolean>(false);
   protected readonly creatingAlbumError = signal<boolean>(false);

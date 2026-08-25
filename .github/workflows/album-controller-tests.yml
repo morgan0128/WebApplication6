@@ -38,13 +38,13 @@ jobs:
       - name: Build
         run: dotnet build WebApplication6.sln --configuration Release --no-restore
     
-      - name: Run AlbumController tests
+      - name: Run AlbumController unit tests
         run: >
           dotnet test
           --project WebApplication6.Tests/WebApplication6.Tests.csproj
           --configuration Release
           --no-build
-          --filter-class "WebApplication6.Tests.Tests.Unit.Controllers.AlbumControllerTest"
+          --filter-class "WebApplication6.Tests.Tests.Unit.Controllers.AlbumControllerUnitTests"
     
 #      - name: Upload test results
 #        if: always()
