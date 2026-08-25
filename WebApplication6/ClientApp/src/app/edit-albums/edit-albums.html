@@ -111,7 +111,7 @@
       <section class="main-column">
         @if (selectedAlbum != null) {
           <section class="card album-summary">
-            <div>
+            <div class="album-info">
               <p class="eyebrow">Selected album</p>
               <h2>{{ selectedAlbum.name }}</h2>
               <p>{{ selectedAlbum.description || 'No description' }}</p>
@@ -121,8 +121,6 @@
               <span>{{ photoDTOs().length === 1 ? 'photo' : 'photos' }}</span>
               <button (click)="deleteSelected()" class="alert-danger">Delete</button>
             </div>
-
-
           </section>
 
           <section class="card upload-card">
@@ -192,10 +190,12 @@
             </form>
           </section>
         } @else {
-          <section class="card empty-workspace">
-            <p class="eyebrow">Album workspace</p>
-            <h2>Select an album</h2>
-            <p>Choose an album from the list to manage its artwork.</p>
+          <section class="card album-summary">
+            <div class="album-info">
+              <p class="eyebrow">Album workspace</p>
+              <h2>Select an album</h2>
+              <p>Choose an album from the list to manage its artwork.</p>
+            </div>
           </section>
         }
 

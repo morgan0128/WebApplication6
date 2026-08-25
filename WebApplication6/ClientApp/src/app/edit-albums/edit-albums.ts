@@ -56,6 +56,8 @@ export class EditAlbums implements OnInit {
   selectedAlbumId: number | null = null;
   protected readonly selectingAlbumError = signal<boolean>(false);
 
+  protected readonly proposingDelete = signal<boolean>(false);
+
   protected newPhotoName = '';
   protected newPhotoDescription = '';
   newPhotoSelectedImageFile: File | null = null;
@@ -71,6 +73,8 @@ export class EditAlbums implements OnInit {
 
   protected readonly albumDTOs = signal<AlbumDTO[]>([]);
   protected readonly photoDTOs = signal<PhotoDTO[]>([]);
+
+
 
   ngOnInit() {
     this.loadAlbums();
@@ -93,6 +97,7 @@ export class EditAlbums implements OnInit {
   }
 
   createAlbum(){
+    // this.proposingDelete.set(false);
     this.creatingAlbum.set(true);
     this.creatingAlbumError.set(false);
     const name = this.newAlbumName.trim();
@@ -113,6 +118,7 @@ export class EditAlbums implements OnInit {
 
   onSelectedAlbumChange(){
     // return;
+    // this.proposingDelete.set(false);
 
     if (this.selectedAlbumId == null){
       this.selectedAlbum = null;
@@ -221,6 +227,10 @@ export class EditAlbums implements OnInit {
   // TODO: Have strong "Are you sure?" confirmation (e.g., enter the name of the Album)
   deleteSelected(){
     if (this.selectedAlbum == null) return;
+
+    // this.proposingDelete.set(true);
+
+
     let requestPath = this.apiAlbumUrl + '/' + this.selectedAlbumId;
     this.http.delete(requestPath).subscribe({
       next: () => {
