@@ -12,7 +12,7 @@ using WebApplication6.Backend.Data;
 namespace WebApplication6.Backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260820134216_Initial")]
+    [Migration("20260825073453_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -27,13 +27,13 @@ namespace WebApplication6.Backend.Migrations
 
             modelBuilder.Entity("AlbumPhoto", b =>
                 {
-                    b.Property<int>("CollectionsId")
+                    b.Property<int>("AlbumsId")
                         .HasColumnType("integer");
 
                     b.Property<int>("PhotosId")
                         .HasColumnType("integer");
 
-                    b.HasKey("CollectionsId", "PhotosId");
+                    b.HasKey("AlbumsId", "PhotosId");
 
                     b.HasIndex("PhotosId");
 
@@ -70,15 +70,18 @@ namespace WebApplication6.Backend.Migrations
 
                     b.Property<string>("AltText")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("ContentType")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("FileName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<long?>("FileSize")
                         .HasColumnType("bigint");
@@ -88,7 +91,13 @@ namespace WebApplication6.Backend.Migrations
 
                     b.Property<string>("StorageFileName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<int>("Width")
                         .HasColumnType("integer");
@@ -116,7 +125,7 @@ namespace WebApplication6.Backend.Migrations
                     b.Property<int>("ImageId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("Name")
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
@@ -176,7 +185,7 @@ namespace WebApplication6.Backend.Migrations
                 {
                     b.HasOne("WebApplication6.Backend.Models.Album", null)
                         .WithMany()
-                        .HasForeignKey("CollectionsId")
+                        .HasForeignKey("AlbumsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

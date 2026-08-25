@@ -30,6 +30,7 @@ public class AlbumControllerTest
             FileName = "image",
             Height = 57,
             StorageFileName = "Somewhere",
+            Url = "Iam/Somewhere",
             Width = 2
         };
 
@@ -84,6 +85,7 @@ public class AlbumControllerTest
             FileName = "image",
             Height = 57,
             StorageFileName = "Somewhere",
+            Url = "Iam/Somewhere",
             Width = 2
         };
 
@@ -442,6 +444,7 @@ public class AlbumControllerTest
             FileName = "image",
             Height = 57,
             StorageFileName = "Somewhere",
+            Url = "Iam/Somewhere",
             Width = 2
         };
 
@@ -486,6 +489,7 @@ public class AlbumControllerTest
             FileName = "image",
             Height = 57,
             StorageFileName = "Somewhere",
+            Url = "Iam/Somewhere",
             Width = 2
         };
 

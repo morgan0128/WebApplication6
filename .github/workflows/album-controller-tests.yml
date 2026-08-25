@@ -40,12 +40,11 @@ jobs:
     
       - name: Run AlbumController tests
         run: >
-          dotnet test WebApplication6.Tests/WebApplication6.Tests.csproj
+          dotnet test
+          --project WebApplication6.Tests/WebApplication6.Tests.csproj
           --configuration Release
           --no-build
-          --filter "FullyQualifiedName~WebApplication6.Tests.Tests.Unit.Controllers.AlbumControllerTest"
-          --logger "trx;LogFileName=album-controller-tests.trx"
-          --results-directory TestResults
+          --filter-class "WebApplication6.Tests.Tests.Unit.Controllers.AlbumControllerTest"
     
       - name: Upload test results
         if: always()

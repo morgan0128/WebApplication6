@@ -14,7 +14,7 @@ public class UntrackedFileRepository(ApplicationDbContext context) : IUntrackedF
             await context.SaveChangesAsync();
             return untrackedFile.Id;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return null;
         }

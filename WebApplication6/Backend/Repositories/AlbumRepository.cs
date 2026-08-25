@@ -43,7 +43,7 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
             await context.SaveChangesAsync();
             return album.Id;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return null;
         }
@@ -69,7 +69,7 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
             await context.SaveChangesAsync();
             return true;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return false;
         }
@@ -89,7 +89,7 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
             await context.SaveChangesAsync();
             return true;
         }
-        catch (AggregateException ex)
+        catch (AggregateException)
         {
             return false;
         }
@@ -116,7 +116,7 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
             
             return photos;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return null;
         }

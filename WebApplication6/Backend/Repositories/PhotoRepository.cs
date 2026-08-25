@@ -41,7 +41,7 @@ public class PhotoRepository(ApplicationDbContext context) : IPhotoRepository
             await context.SaveChangesAsync();
             return photo.Id;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return null;
         }
@@ -59,7 +59,7 @@ public class PhotoRepository(ApplicationDbContext context) : IPhotoRepository
             await context.SaveChangesAsync();
             return true;
         }
-        catch (AggregateException ex)
+        catch (AggregateException)
         {
             return false;
         }

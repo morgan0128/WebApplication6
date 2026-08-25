@@ -43,7 +43,7 @@ public class ImageRepository(ApplicationDbContext context) : IImageRepository
             await context.SaveChangesAsync();
             return image.Id;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return null;
         }
@@ -61,7 +61,7 @@ public class ImageRepository(ApplicationDbContext context) : IImageRepository
             await context.SaveChangesAsync();
             return true;
         }
-        catch (AggregateException ex)
+        catch (AggregateException)
         {
             return false;
         }

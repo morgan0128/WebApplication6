@@ -13,6 +13,7 @@ public class Photo
     public int ImageId { get; set; }
     
     [ForeignKey("ImageId")]
+    [Required]
     public Image Image { get; set; }
     
     [MaxLength(100)]
