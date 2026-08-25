@@ -11,10 +11,10 @@ public interface IImageRepository
     
     Task<Image?> GetImageByIdAsync(int id);
     
-    /// <returns>The Id of the saved image on success, or null on exception thrown or failure.</returns>
+    /// <returns>Id of the saved image on success, or null on exception thrown or failure.</returns>
     Task<int?> SaveImageAsync(Image image);
     
-    /// <returns>true on success, false on not found, or null on found but either exception thrown or failure</returns>
-    Task<bool?> DeleteImageByIdAsync(int id);
+    /// <returns>true on success, or false</returns>
+    Task<bool> DeleteImageByIdAsync(int id);
     
 }

@@ -47,8 +47,7 @@ public sealed class ImageController(IImageRepository imageRepository) : Controll
         return status switch
         {
             true => Ok(),
-            null => Problem(),
-            false => NotFound()
+            false => Problem()
         };
     }
     

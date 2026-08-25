@@ -49,25 +49,21 @@ public class ImageRepository(ApplicationDbContext context) : IImageRepository
         }
     }
 
-    public async Task<bool?> DeleteImageByIdAsync(int id)
+    public async Task<bool> DeleteImageByIdAsync(int id)
     {
         var image = await context.Images.FindAsync(id);
-        if (image == null)
-        {
-            return false;
-        }
-
+        if (image == null) return false;
+        
         context.Images.Remove(image);
 
         try
         {
             await context.SaveChangesAsync();
-            
             return true;
         }
-        catch (Exception ex)
+        catch (AggregateException ex)
         {
-            return null;
+            return false;
         }
     }
 

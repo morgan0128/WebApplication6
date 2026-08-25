@@ -86,7 +86,7 @@ public sealed class AlbumController(IAlbumRepository albumRepository, IUploadPho
     }
 
     [HttpGet("{id:int}/photos")]
-    public async Task<IAsyncEnumerable<AlbumRepository.PhotoDto>?> GetAllPhotos(int id)
+    public async Task<IAsyncEnumerable<IAlbumRepository.PhotoDto>?> GetAllPhotos(int id)
     {
         var photos = await albumRepository.GetAlbumPhotosAsyncEnumerable(id);
         return photos;
@@ -100,12 +100,9 @@ public sealed class AlbumController(IAlbumRepository albumRepository, IUploadPho
         return status switch
         {
             true => Ok(),
-            null => Problem(),
-            false => NotFound()
+            false => Problem()
         };
     }
-    
-    
 
     public sealed record CreateAlbumItemRequest(string? Name, string? Description);
 

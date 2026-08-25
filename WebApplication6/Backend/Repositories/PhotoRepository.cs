@@ -47,25 +47,21 @@ public class PhotoRepository(ApplicationDbContext context) : IPhotoRepository
         }
     }
 
-    public async Task<bool?> DeletePhotoByIdAsync(int id)
+    public async Task<bool> DeletePhotoByIdAsync(int id)
     {
         var photo = await context.Photos.FindAsync(id);
-        if (photo == null)
-        {
-            return false;
-        }
+        if (photo == null) return false;
 
         context.Photos.Remove(photo);
 
         try
         {
             await context.SaveChangesAsync();
-            
             return true;
         }
-        catch (Exception ex)
+        catch (AggregateException ex)
         {
-            return null;
+            return false;
         }
     }
 }

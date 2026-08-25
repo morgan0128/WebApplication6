@@ -76,29 +76,26 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
 
     }
 
-    public async Task<bool?> DeleteAlbumByIdAsync(int id)
+    public async Task<bool> DeleteAlbumByIdAsync(int id)
     {
         var album = await context.Albums.FindAsync(id);
-        if (album == null)
-        {
-            return false;
-        }
+        if (album == null) return false;
+
 
         context.Albums.Remove(album);
 
         try
         {
             await context.SaveChangesAsync();
-            
             return true;
         }
-        catch (Exception ex)
+        catch (AggregateException ex)
         {
-            return null;
+            return false;
         }
     }
 
-    public async Task<IAsyncEnumerable<PhotoDto>?> GetAlbumPhotosAsyncEnumerable(int id)
+    public async Task<IAsyncEnumerable<IAlbumRepository.PhotoDto>?> GetAlbumPhotosAsyncEnumerable(int id)
     {
         try
         {
@@ -108,7 +105,7 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
                 .SingleAsync();
 
             var photos = album.Photos
-                .Select(photo => new PhotoDto(
+                .Select(photo => new IAlbumRepository.PhotoDto(
                     photo.Name, 
                     photo.Description,
                     photo.YearContentCreated, 
@@ -124,5 +121,5 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
         }
     }
 
-    public sealed record PhotoDto(string? Name, string? Description, int? YearContentCreated, Image Image);
+
 }
