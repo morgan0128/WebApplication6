@@ -46,12 +46,12 @@ jobs:
           --no-build
           --filter-class "WebApplication6.Tests.Tests.Unit.Controllers.AlbumControllerTest"
     
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: album-controller-test-results
-          path: TestResults
+#      - name: Upload test results
+#        if: always()
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: album-controller-test-results
+#          path: TestResults
               
       - name: Remove temporary license
         if: always()
