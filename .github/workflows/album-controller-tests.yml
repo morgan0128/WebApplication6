@@ -29,7 +29,13 @@ jobs:
         run: dotnet restore WebApplication6.sln
 
       - name: Build
-        run: dotnet build WebApplication6.sln --configuration Release --no-restore
+        env:
+          SIXLABORS_LICENSE_KEY: ${{ secrets.SIXLABORS_LICENSE_KEY }}
+        run: >
+          dotnet build WebApplication6.sln
+          --configuration Release
+          --no-restore
+          -p:SixLaborsLicenseKey="$SIXLABORS_LICENSE_KEY"
 
       - name: Run AlbumController tests
         run: >
