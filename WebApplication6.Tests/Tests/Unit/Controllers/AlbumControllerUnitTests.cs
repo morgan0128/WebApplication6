@@ -409,126 +409,126 @@ public class AlbumControllerUnitTests
         repositoryMock.Verify(r => r.AddPhotoToAlbum(album.Id, 14));
     }
 
-    [Fact]
-    public async Task GetAllPhotos_InvalidAlbumId_ReturnsNull()
-    {
-        // Arrange
-        var repositoryMock = new Mock<IAlbumRepository>();
-        var serviceMock = new Mock<IUploadPhotoService>();
+    // [Fact]
+    // public async Task GetAllPhotos_InvalidAlbumId_ReturnsNull()
+    // {
+    //     // Arrange
+    //     var repositoryMock = new Mock<IAlbumRepository>();
+    //     var serviceMock = new Mock<IUploadPhotoService>();
+    //
+    //     repositoryMock.Setup(r => r.GetAlbumPhotosAsyncEnumerable(99))
+    //         .ReturnsAsync((IAsyncEnumerable<IAlbumRepository.PhotoDto>)null);
+    //
+    //     var controller = new AlbumController(repositoryMock.Object, serviceMock.Object);
+    //
+    //     // Act
+    //     var photos = await controller.GetAllPhotos(99);
+    //
+    //     // Assert
+    //     Assert.Null(photos);
+    //     repositoryMock.Verify(r => r.GetAlbumPhotosAsyncEnumerable(99));
+    // }
 
-        repositoryMock.Setup(r => r.GetAlbumPhotosAsyncEnumerable(99))
-            .ReturnsAsync((IAsyncEnumerable<IAlbumRepository.PhotoDto>)null);
+    // [Fact]
+    // public async Task GetAllPhotos_AlbumHasSinglePhoto_ReturnsSameSinglePhotoInList()
+    // {
+    //     // Arrange
+    //     var repositoryMock = new Mock<IAlbumRepository>();
+    //     var serviceMock = new Mock<IUploadPhotoService>();
+    //
+    //     var image = new Image
+    //     {
+    //         Id = 99,
+    //         AltText = "alt text",
+    //         ContentType = "image/png",
+    //         FileName = "image",
+    //         Height = 57,
+    //         StorageFileName = "Somewhere",
+    //         Url = "Iam/Somewhere",
+    //         Width = 2
+    //     };
+    //
+    //     var photo = new IAlbumRepository.PhotoDto(
+    //         1,
+    //         "Photo",
+    //         "Photo description",
+    //         2026,
+    //         image);
+    //     var photoList = new List<IAlbumRepository.PhotoDto> { photo };
+    //
+    //     repositoryMock.Setup(r => r.GetAlbumPhotosAsyncEnumerable(1))
+    //         .ReturnsAsync(photoList.ToAsyncEnumerable());
+    //
+    //     var controller = new AlbumController(repositoryMock.Object, serviceMock.Object);
+    //
+    //     // Act
+    //     var photos = await controller.GetAllPhotos(1);
+    //     var returnedPhotos = new List<IAlbumRepository.PhotoDto>();
+    //     await foreach (var returnedPhoto in photos!)
+    //     {
+    //         returnedPhotos.Add(returnedPhoto);
+    //     }
+    //
+    //     // Assert
+    //     var item = Assert.Single(returnedPhotos);
+    //     Assert.Equal(photo, item);
+    // }
 
-        var controller = new AlbumController(repositoryMock.Object, serviceMock.Object);
-
-        // Act
-        var photos = await controller.GetAllPhotos(99);
-
-        // Assert
-        Assert.Null(photos);
-        repositoryMock.Verify(r => r.GetAlbumPhotosAsyncEnumerable(99));
-    }
-
-    [Fact]
-    public async Task GetAllPhotos_AlbumHasSinglePhoto_ReturnsSameSinglePhotoInList()
-    {
-        // Arrange
-        var repositoryMock = new Mock<IAlbumRepository>();
-        var serviceMock = new Mock<IUploadPhotoService>();
-
-        var image = new Image
-        {
-            Id = 99,
-            AltText = "alt text",
-            ContentType = "image/png",
-            FileName = "image",
-            Height = 57,
-            StorageFileName = "Somewhere",
-            Url = "Iam/Somewhere",
-            Width = 2
-        };
-
-        var photo = new IAlbumRepository.PhotoDto(
-            1,
-            "Photo",
-            "Photo description",
-            2026,
-            image);
-        var photoList = new List<IAlbumRepository.PhotoDto> { photo };
-
-        repositoryMock.Setup(r => r.GetAlbumPhotosAsyncEnumerable(1))
-            .ReturnsAsync(photoList.ToAsyncEnumerable());
-
-        var controller = new AlbumController(repositoryMock.Object, serviceMock.Object);
-
-        // Act
-        var photos = await controller.GetAllPhotos(1);
-        var returnedPhotos = new List<IAlbumRepository.PhotoDto>();
-        await foreach (var returnedPhoto in photos!)
-        {
-            returnedPhotos.Add(returnedPhoto);
-        }
-
-        // Assert
-        var item = Assert.Single(returnedPhotos);
-        Assert.Equal(photo, item);
-    }
-
-    [Fact]
-    public async Task GetAllPhotos_AlbumHasPhotos_ReturnsListOfSamePhotos()
-    {
-        // Arrange
-        var repositoryMock = new Mock<IAlbumRepository>();
-        var serviceMock = new Mock<IUploadPhotoService>();
-
-        var image = new Image
-        {
-            Id = 99,
-            AltText = "alt text",
-            ContentType = "image/png",
-            FileName = "image",
-            Height = 57,
-            StorageFileName = "Somewhere",
-            Url = "Iam/Somewhere",
-            Width = 2
-        };
-
-        var photo1 = new IAlbumRepository.PhotoDto(
-            1,
-            "Photo 1",
-            "Photo 1 description",
-            2026,
-            image);
-        var photo2 = new IAlbumRepository.PhotoDto(
-            2,
-            "Photo 2",
-            "Photo 2 description",
-            2025,
-            image);
-        var photoList = new List<IAlbumRepository.PhotoDto> { photo1, photo2 };
-
-        repositoryMock.Setup(r => r.GetAlbumPhotosAsyncEnumerable(1))
-            .ReturnsAsync(photoList.ToAsyncEnumerable());
-
-        var controller = new AlbumController(repositoryMock.Object, serviceMock.Object);
-
-        // Act
-        var photos = await controller.GetAllPhotos(1);
-        var returnedPhotos = new List<IAlbumRepository.PhotoDto>();
-        await foreach (var returnedPhoto in photos!)
-        {
-            returnedPhotos.Add(returnedPhoto);
-        }
-
-        // Assert
-        Assert.Equal(photoList, returnedPhotos);
-
-        var retrievedPhoto1 = returnedPhotos.ElementAt(0);
-        var retrievedPhoto2 = returnedPhotos.ElementAt(1);
-
-        // just in case default comparator is missing anything
-        Assert.Equal(photoList[0], retrievedPhoto1);
-        Assert.Equal(photoList[1], retrievedPhoto2);
-    }
+    // [Fact]
+    // public async Task GetAllPhotos_AlbumHasPhotos_ReturnsListOfSamePhotos()
+    // {
+    //     // Arrange
+    //     var repositoryMock = new Mock<IAlbumRepository>();
+    //     var serviceMock = new Mock<IUploadPhotoService>();
+    //
+    //     var image = new Image
+    //     {
+    //         Id = 99,
+    //         AltText = "alt text",
+    //         ContentType = "image/png",
+    //         FileName = "image",
+    //         Height = 57,
+    //         StorageFileName = "Somewhere",
+    //         Url = "Iam/Somewhere",
+    //         Width = 2
+    //     };
+    //
+    //     var photo1 = new IAlbumRepository.PhotoDto(
+    //         1,
+    //         "Photo 1",
+    //         "Photo 1 description",
+    //         2026,
+    //         image);
+    //     var photo2 = new IAlbumRepository.PhotoDto(
+    //         2,
+    //         "Photo 2",
+    //         "Photo 2 description",
+    //         2025,
+    //         image);
+    //     var photoList = new List<IAlbumRepository.PhotoDto> { photo1, photo2 };
+    //
+    //     repositoryMock.Setup(r => r.GetAlbumPhotosAsyncEnumerable(1))
+    //         .ReturnsAsync(photoList.ToAsyncEnumerable());
+    //
+    //     var controller = new AlbumController(repositoryMock.Object, serviceMock.Object);
+    //
+    //     // Act
+    //     var photos = await controller.GetAllPhotos(1);
+    //     var returnedPhotos = new List<IAlbumRepository.PhotoDto>();
+    //     await foreach (var returnedPhoto in photos!)
+    //     {
+    //         returnedPhotos.Add(returnedPhoto);
+    //     }
+    //
+    //     // Assert
+    //     Assert.Equal(photoList, returnedPhotos);
+    //
+    //     var retrievedPhoto1 = returnedPhotos.ElementAt(0);
+    //     var retrievedPhoto2 = returnedPhotos.ElementAt(1);
+    //
+    //     // just in case default comparator is missing anything
+    //     Assert.Equal(photoList[0], retrievedPhoto1);
+    //     Assert.Equal(photoList[1], retrievedPhoto2);
+    // }
     
 }

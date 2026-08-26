@@ -27,8 +27,8 @@ public interface IAlbumRepository
     /// Retrieves all photos for the queried Album
     /// </summary>
     /// <param name="id">The Id of the Album row to query.</param>
-    /// <returns>A task fetching IAsyncEnumerable with T as Photo on success, or null</returns>
-    Task<IAsyncEnumerable<PhotoDto>?> GetAlbumPhotosAsyncEnumerable(int id);
+    /// <returns>A task fetching IEnumerable with T as Photo on success, or null</returns>
+    Task<IEnumerable<PhotoDto>?> GetAlbumPhotosAsync(int id); // TODO: Make Task<IAsyncEnumerable....> instead, once have more time to look into.
     
     public sealed record PhotoDto(int Id, string? Name, string? Description, int? YearContentCreated, Image Image);
 }

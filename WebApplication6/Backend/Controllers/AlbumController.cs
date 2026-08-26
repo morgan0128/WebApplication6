@@ -94,9 +94,9 @@ public sealed class AlbumController(IAlbumRepository albumRepository, IUploadPho
     }
 
     [HttpGet("{id:int}/photos")]
-    public async Task<IAsyncEnumerable<IAlbumRepository.PhotoDto>?> GetAllPhotos(int id)
+    public async Task<IEnumerable<IAlbumRepository.PhotoDto>?> GetAllPhotos(int id)
     {
-        var photos = await albumRepository.GetAlbumPhotosAsyncEnumerable(id);
+        var photos = await albumRepository.GetAlbumPhotosAsync(id);
         return photos;
     }
     

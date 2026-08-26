@@ -1,0 +1,21 @@
+/*select {*/
+/*  width: 100%;*/
+/*  border: 1px solid var(--border);*/
+/*  border-radius: 7px;*/
+/*  padding: 10px 11px;*/
+/*  color: var(--text);*/
+/*  background: var(--surface);*/
+/*  font: inherit;*/
+/*  font-size: 0.84rem;*/
+/*  outline: none;*/
+/*}*/
+
+/*.album-select {*/
+/*  appearance: auto;*/
+/*}*/
+
+/*select:focus {*/
+/*  border-color: var(--accent);*/
+/*  box-shadow: 0 0 0 3px rgba(47, 103, 94, 0.12);*/
+/*}*/
+

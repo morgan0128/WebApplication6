@@ -103,7 +103,7 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
         }
     }
 
-    public async Task<IAsyncEnumerable<IAlbumRepository.PhotoDto>?> GetAlbumPhotosAsyncEnumerable(int id)
+    public async Task<IEnumerable<IAlbumRepository.PhotoDto>?> GetAlbumPhotosAsync(int id)
     {
         try
         {
@@ -115,12 +115,11 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
             var photos = album.Photos
                 .Select(photo => new IAlbumRepository.PhotoDto(
                     photo.Id,
-                    photo.Name, 
+                    photo.Name,
                     photo.Description,
-                    photo.YearContentCreated, 
+                    photo.YearContentCreated,
                     photo.Image
-                ))
-                .ToAsyncEnumerable();
+                ));
             
             return photos;
         }
