@@ -22,7 +22,6 @@
     <ItemGroup>
       <Folder Include="Backend\Migrations\" />
       <Folder Include="ClientApp\scripts\" />
-      <Folder Include="ClientApp\src\app\components\" />
       <Folder Include="ClientApp\src\app\services\" />
       <Folder Include="ClientApp\uploads\" />
     </ItemGroup>

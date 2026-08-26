@@ -1,0 +1,54 @@
+<section class="artworks-section">
+  <div class="section-heading artwork-heading">
+    <div>
+      <p class="eyebrow">Album contents</p>
+      <h2>Artwork</h2>
+    </div>
+    @if (selectedAlbum != null) {
+      <span class="artworks-count">{{ photos().length }} {{ photos().length === 1 ? 'piece' : 'pieces' }}</span>
+    }
+  </div>
+
+  @if (selectedAlbumId == null) {
+    <div class="empty-state">
+      <h3>No album selected</h3>
+      <p>Select an album above to view its artwork.</p>
+    </div>
+  } @else if (loadingPhotos()) {
+    <div class="empty-state">
+      <h3>Loading artwork...</h3>
+    </div>
+  } @else if (photos().length === 0) {
+    <div class="empty-state">
+      <h3>No artwork in this album</h3>
+      <p>Upload an image above to add the first piece.</p>
+    </div>
+  } @else {
+    <!--            <div class="art-grid">-->
+      <!--              @for (photo of photoDTOs(); track photo.id) {-->
+      <!--                @let image = photo.image;-->
+      <!--                @if (image !== null) {-->
+      <!--                  <article class="art-card">-->
+      <!--                    <div class="art-image">-->
+      <!--                      <img-->
+      <!--                        [ngSrc]="image.url"-->
+      <!--                        [width]="image.width"-->
+      <!--                        [height]="image.height"-->
+      <!--                        [alt]="image.altText || photo.name || 'Artwork'" />-->
+      <!--                    </div>-->
+      <!--                    <div class="art-card-details">-->
+      <!--                      <div class="art-card-title">-->
+      <!--                        <h3>{{ photo.name || image.fileName }}</h3>-->
+      <!--                        @if (photo.yearContentCreated) {-->
+      <!--                          <span>{{ photo.yearContentCreated }}</span>-->
+      <!--                        }-->
+      <!--                      </div>-->
+      <!--                      <p>{{ photo.description || 'No description' }}</p>-->
+      <!--                    </div>-->
+      <!--                  </article>-->
+      <!--                }-->
+      <!--              }-->
+      <!--            </div>-->
+    <app-photos-display [displayPhotos]="this.photos()" />
+  }
+</section>

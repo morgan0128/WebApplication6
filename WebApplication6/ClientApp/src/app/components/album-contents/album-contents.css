@@ -1,0 +1,52 @@
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--accent);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.artwork-heading {
+  align-items: flex-end;
+  margin-bottom: 13px;
+}
+
+.artwork-heading h2 {
+  margin-top: 5px;
+}
+
+.artworks-section {
+  margin-top: 6px;
+}
+
+.artworks-count {
+  padding-bottom: 2px;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.empty-state {
+  display: grid;
+  min-height: 190px;
+  place-items: center;
+  align-content: center;
+  border: 1px dashed #c4d0cd;
+  border-radius: 9px;
+  padding: 25px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.empty-state p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}

@@ -5,6 +5,8 @@ import {FormsModule} from '@angular/forms';
 import {NgOptimizedImage} from '@angular/common';
 import { PhotoItem, AlbumItem } from '../models/AlbumInterfacing';
 import { AlbumApiCaller, PhotoSpecDTO, PhotoUploadSpecification } from '../services/album-api-caller';
+import { PhotosDisplay } from '../components/photos-display/photos-display';
+import {AlbumContents} from '../components/album-contents/album-contents';
 
 // interface AlbumDTO{
 //   id: number,
@@ -37,6 +39,8 @@ import { AlbumApiCaller, PhotoSpecDTO, PhotoUploadSpecification } from '../servi
   imports: [
     FormsModule,
     NgOptimizedImage,
+    PhotosDisplay,
+    AlbumContents
   ],
   templateUrl: './edit-albums.html',
   styleUrl: './edit-albums.css',
@@ -55,9 +59,10 @@ export class EditAlbums implements OnInit {
   protected readonly loadingAlbums = signal<boolean>(true);
   protected readonly loadingAlbumsError = signal<boolean>(false);
 
-  protected selectedAlbum: AlbumItem | null = null;
-  // protected readonly selectedAlbumId = signal<number | null>(null);
-  selectedAlbumId: number | null = null;
+  // protected selectedAlbum: AlbumItem | null = null;
+  protected selectedAlbum = signal<AlbumItem | null>(null);
+  protected readonly selectedAlbumId = signal<number | null>(null);
+  // selectedAlbumId: number | null = null;
   protected readonly selectingAlbumError = signal<boolean>(false);
 
   protected readonly proposingDelete = signal<boolean>(false);
@@ -72,11 +77,11 @@ export class EditAlbums implements OnInit {
   protected readonly uploadingPhoto = signal<boolean>(false);
   protected uploadPhotoError: string | null = null;
 
-  protected readonly loadingPhotos = signal<boolean>(true);
+  protected readonly loadingPhotos = signal<boolean>(false);
   protected readonly loadingPhotosError = signal<boolean>(false);
 
   protected readonly albumDTOs = signal<AlbumItem[]>([]);
-  protected readonly photoDTOs = signal<PhotoItem[]>([]);
+  protected readonly photos = signal<PhotoItem[]>([]);
 
 
 
@@ -124,43 +129,43 @@ export class EditAlbums implements OnInit {
     // return;
     // this.proposingDelete.set(false);
 
-    if (this.selectedAlbumId == null){
-      this.selectedAlbum = null;
-      this.photoDTOs.set([]);
+    if (this.selectedAlbumId() == null){
+      this.selectedAlbum.set(null);
+      this.photos.set([]);
       return; // default selection value
     }
-    if (this.selectedAlbum?.id == this.selectedAlbumId){
+    if (this.selectedAlbum()?.id == this.selectedAlbumId()){
       return; // already selected
     }
 
     this.selectingAlbumError.set(false);
 
-    const albumDTO = this.albumDTOs().find(a => a.id == this.selectedAlbumId);
+    const albumDTO = this.albumDTOs().find(a => a.id == this.selectedAlbumId());
 
     if (!albumDTO){
       this.selectingAlbumError.set(true);
       return;
     }
 
-    this.selectedAlbum = albumDTO;
-    this.photoDTOs.set([]);
+    this.selectedAlbum.set(albumDTO);
+    this.photos.set([]);
     this.loadAlbumSelection();
   }
 
   loadAlbumSelection(){
-    if (this.selectedAlbumId == null){
+    if (this.selectedAlbumId() == null) {
       this.loadingPhotosError.set(true);
       return;
     }
 
     this.loadingPhotos.set(true);
     this.loadingPhotosError.set(false);
-    this.photoDTOs.set([]);
+    this.photos.set([]);
 
-    let request = this.albumApi.getPhotos(this.selectedAlbumId);
+    let request = this.albumApi.getPhotos(<number>this.selectedAlbumId());
     request.subscribe({
       next: photos => {
-        this.photoDTOs.set(photos);
+        this.photos.set(photos);
         this.loadingPhotos.set(false);
       },
       error: () => {
@@ -192,7 +197,7 @@ export class EditAlbums implements OnInit {
   }
 
   uploadPhotoToSelected(){
-    if (this.selectedAlbumId == null || this.newPhotoSelectedImageFile == null){
+    if (this.selectedAlbumId() == null || this.newPhotoSelectedImageFile == null){
       return;
     }
 
@@ -210,7 +215,7 @@ export class EditAlbums implements OnInit {
 
     const uploadSpecification = new PhotoUploadSpecification(this.newPhotoSelectedImageFile, photoSpec);
 
-    let request = this.albumApi.uploadPhoto(this.selectedAlbumId, uploadSpecification);
+    let request = this.albumApi.uploadPhoto(<number>this.selectedAlbumId(), uploadSpecification);
     request.subscribe({
       next: () => {
         this.uploadingPhoto.set(false);
@@ -227,14 +232,14 @@ export class EditAlbums implements OnInit {
 
   // TODO: Have strong "Are you sure?" confirmation (e.g., enter the name of the Album)
   deleteSelected(){
-    if (this.selectedAlbumId == null){
+    if (this.selectedAlbumId() == null){
       return;
     }
 
-    let request = this.albumApi.deleteAlbum(this.selectedAlbumId);
+    let request = this.albumApi.deleteAlbum(<number>this.selectedAlbumId());
     request.subscribe({
       next: () => {
-        this.selectedAlbum = null;
+        this.selectedAlbum.set(null);
         this.loadAlbums(); // TODO: excessive
       },
       error: () => {
