@@ -38,8 +38,6 @@ import {AlbumContents} from '../components/album-contents/album-contents';
   selector: 'app-edit-albums',
   imports: [
     FormsModule,
-    NgOptimizedImage,
-    PhotosDisplay,
     AlbumContents
   ],
   templateUrl: './edit-albums.html',
