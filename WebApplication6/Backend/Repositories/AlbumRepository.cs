@@ -90,10 +90,17 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
 
         for (var attempt = 1; attempt <= maximumAttempts; attempt++)
         {
-            var nextOrder =
-                (await context.AlbumPhotos
-                     .Where(ap => ap.AlbumId == albumId)
-                     .MaxAsync(ap => ap.Order, cancellationToken)) + 1;
+            var albumPhotos = context.AlbumPhotos.Where(ap => ap.AlbumId == albumId);
+            var nextOrder = -1;
+            if (!albumPhotos.Any())
+            {
+                nextOrder = 0;
+            }
+            else
+            {
+                nextOrder = (await albumPhotos.MaxAsync(ap => ap.Order, cancellationToken)) + 1;
+            }
+
 
             var albumPhoto = new AlbumPhoto
             {
@@ -146,7 +153,7 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
         }
     }
 
-    public async Task<IEnumerable<IAlbumRepository.PhotoDto>?> GetAlbumPhotosAsync(int id)
+    public async Task<IEnumerable<IAlbumRepository.PhotoDto>> GetAlbumPhotosAsync(int id)
     {
         try
         {
@@ -155,7 +162,7 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
                 .Where(a => a.Id == id)
                 .SingleAsync();
 
-            if (album.Photos.Count == 0) return null;
+            if (album.Photos.Count == 0) return new List<IAlbumRepository.PhotoDto>();
 
             var albumPhotos = await context.AlbumPhotos
                 .Where(ap => ap.AlbumId == album.Id)
@@ -184,7 +191,8 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
         }
         catch (Exception)
         {
-            return null;
+            // return new List<IAlbumRepository.PhotoDto>();
+            throw;
         }
     }
 

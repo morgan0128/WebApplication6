@@ -41,7 +41,7 @@ public interface IAlbumRepository
     /// </summary>
     /// <param name="id">The Id of the Album row to query.</param>
     /// <returns>A (nullable) IEnumerable of PhotoDto with no guarantee that they have a correct or an explicit ordering</returns>
-    Task<IEnumerable<PhotoDto>?> GetAlbumPhotosAsync(int id); // TODO: Make Task<IAsyncEnumerable....> instead, once have more time to look into.
+    Task<IEnumerable<PhotoDto>> GetAlbumPhotosAsync(int id); // TODO: Make Task<IAsyncEnumerable....> instead, once have more time to look into.
 
     Task<bool> ReorderPhotoInAlbum(int albumId, int photoId, int newOrder, CancellationToken cancellationToken = default);
 
