@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebApplication6.Backend.Data;
@@ -11,9 +12,11 @@ using WebApplication6.Backend.Data;
 namespace WebApplication6.Backend.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260828112530_AlbumPhotoMigration")]
+    partial class AlbumPhotoMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,7 +71,7 @@ namespace WebApplication6.Backend.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(true);
 
-                    b.Property<int>("Order")
+                    b.Property<int?>("Order")
                         .HasColumnType("integer");
 
                     b.HasKey("AlbumId", "PhotoId")
@@ -81,10 +84,7 @@ namespace WebApplication6.Backend.Migrations
                         .IsUnique()
                         .HasDatabaseName("UX_AlbumPhoto_AlbumsId_Order");
 
-                    b.ToTable("AlbumPhoto", null, t =>
-                        {
-                            t.HasCheckConstraint("CK_AlbumPhoto_Order_NonNegative", "\"Order\" >= 0");
-                        });
+                    b.ToTable("AlbumPhoto", (string)null);
                 });
 
             modelBuilder.Entity("WebApplication6.Backend.Models.Image", b =>

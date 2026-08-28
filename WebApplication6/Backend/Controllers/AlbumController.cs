@@ -87,7 +87,7 @@ public sealed class AlbumController(IAlbumRepository albumRepository, IUploadPho
         var photoResult = await uploadPhotoService.UploadPhoto(album, file, photoSpec);
         if (photoResult == null) return Problem();
         
-        var photoToAlbum = await albumRepository.AddPhotoToAlbum(album.Id, photoResult.Value);
+        var photoToAlbum = await albumRepository.AddPhotoToAlbumAsync(album.Id, photoResult.Value);
         if (!photoToAlbum) return Problem();
         
         return Ok();
@@ -98,6 +98,17 @@ public sealed class AlbumController(IAlbumRepository albumRepository, IUploadPho
     {
         var photos = await albumRepository.GetAlbumPhotosAsync(id);
         return photos;
+    }
+
+    [HttpPut("{id:int}/{photoId:int}/reorder/{toDest:int}")]
+    public async Task<IActionResult> ReorderPhoto(int id, int photoId, int toDest)
+    {
+        var reordering = await albumRepository.ReorderPhotoInAlbum(id, photoId, toDest);
+        return reordering switch
+        {
+            true => Ok(),
+            false => Problem()
+        };
     }
     
     

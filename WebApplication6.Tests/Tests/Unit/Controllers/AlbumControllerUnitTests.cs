@@ -276,7 +276,7 @@ public class AlbumControllerUnitTests
                     spec.Description == null &&
                     spec.YearContentCreated == null)))
             .ReturnsAsync(14);
-        repositoryMock.Setup(r => r.AddPhotoToAlbum(album.Id, 14))
+        repositoryMock.Setup(r => r.AddPhotoToAlbumAsync(album.Id, 14))
             .ReturnsAsync(true);
 
         var controller = new AlbumController(repositoryMock.Object, serviceMock.Object);
@@ -294,7 +294,7 @@ public class AlbumControllerUnitTests
                 spec.Name == null &&
                 spec.Description == null &&
                 spec.YearContentCreated == null)));
-        repositoryMock.Verify(r => r.AddPhotoToAlbum(album.Id, 14));
+        repositoryMock.Verify(r => r.AddPhotoToAlbumAsync(album.Id, 14));
     }
 
     [Fact]
@@ -321,7 +321,7 @@ public class AlbumControllerUnitTests
                     spec.Description == description &&
                     spec.YearContentCreated == yearContentCreated)))
             .ReturnsAsync(14);
-        repositoryMock.Setup(r => r.AddPhotoToAlbum(album.Id, 14))
+        repositoryMock.Setup(r => r.AddPhotoToAlbumAsync(album.Id, 14))
             .ReturnsAsync(true);
 
         var controller = new AlbumController(repositoryMock.Object, serviceMock.Object);
@@ -344,7 +344,7 @@ public class AlbumControllerUnitTests
                 spec.Name == name &&
                 spec.Description == description &&
                 spec.YearContentCreated == yearContentCreated)));
-        repositoryMock.Verify(r => r.AddPhotoToAlbum(album.Id, 14));
+        repositoryMock.Verify(r => r.AddPhotoToAlbumAsync(album.Id, 14));
     }
 
     [Fact]
@@ -374,11 +374,11 @@ public class AlbumControllerUnitTests
         // Assert
         var problemResult = Assert.IsType<ObjectResult>(result);
         Assert.Equal(500, problemResult.StatusCode);
-        repositoryMock.Verify(r => r.AddPhotoToAlbum(It.IsAny<int>(), It.IsAny<int>()), Times.Never);
+        repositoryMock.Verify(r => r.AddPhotoToAlbumAsync(It.IsAny<int>(), It.IsAny<int>()), Times.Never);
     }
 
     [Fact]
-    public async Task UploadPhotoToAlbum_repositoryAddPhotoToAlbumReturnsFalse_ReturnsProblem()
+    public async Task UploadPhotoToAlbum_repositoryAddPhotoToAlbumAsyncReturnsFalse_ReturnsProblem()
     {
         // Arrange
         var repositoryMock = new Mock<IAlbumRepository>();
@@ -394,7 +394,7 @@ public class AlbumControllerUnitTests
                 It.IsAny<IFormFile>(),
                 It.IsAny<PhotoSpecDto>()))
             .ReturnsAsync(14);
-        repositoryMock.Setup(r => r.AddPhotoToAlbum(album.Id, 14))
+        repositoryMock.Setup(r => r.AddPhotoToAlbumAsync(album.Id, 14))
             .ReturnsAsync(false);
 
         var controller = new AlbumController(repositoryMock.Object, serviceMock.Object);
@@ -406,7 +406,7 @@ public class AlbumControllerUnitTests
         // Assert
         var problemResult = Assert.IsType<ObjectResult>(result);
         Assert.Equal(500, problemResult.StatusCode);
-        repositoryMock.Verify(r => r.AddPhotoToAlbum(album.Id, 14));
+        repositoryMock.Verify(r => r.AddPhotoToAlbumAsync(album.Id, 14));
     }
 
     // [Fact]

@@ -12,8 +12,8 @@ public class Album
     
     [StringLength(400)]
     public string? Description { get; set; }
-    
-    public ICollection<Photo> Photos { get; set; } = new List<Photo>();
-    
+
+    public ICollection<Photo> Photos { get; set; } = [];
+    public ICollection<AlbumPhoto> AlbumPhotos { get; set; } = [];
     
 }

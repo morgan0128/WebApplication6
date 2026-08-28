@@ -17,8 +17,21 @@ public interface IAlbumRepository
     Task<int?> SaveAlbumAsync(Album album);
 
 
-    /// <returns>true on success, or false.</returns>
-    Task<bool> AddPhotoToAlbum(int albumId, int photoId);
+    // /// <returns>true on success, or false.</returns>
+    // Task<bool> AddPhotoToAlbum(int albumId, int photoId);
+
+    /// <summary>
+    /// TODO
+    /// Uses retry approach to setting an 'appended' Order, which is not ideal, but
+    /// working on separate frontend refactoring and don't want to divert into
+    /// writing interfaces + dependency injections for type of DB
+    /// (as correct 'pessimistic' implementations may differ depending on DBMS)
+    /// </summary>
+    /// <param name="albumId"></param>
+    /// <param name="photoId"></param>
+    /// <param name="cancellationToken">(Optional)</param>
+    /// <returns>true on success, or false</returns>
+    Task<bool> AddPhotoToAlbumAsync(int albumId, int photoId, CancellationToken cancellationToken = default);
     
     /// <returns>true on success, or false on not found</returns>
     Task<bool> DeleteAlbumByIdAsync(int id);
@@ -27,8 +40,18 @@ public interface IAlbumRepository
     /// Retrieves all photos for the queried Album
     /// </summary>
     /// <param name="id">The Id of the Album row to query.</param>
-    /// <returns>A task fetching IEnumerable with T as Photo on success, or null</returns>
+    /// <returns>A (nullable) IEnumerable of PhotoDto with no guarantee that they have a correct or an explicit ordering</returns>
     Task<IEnumerable<PhotoDto>?> GetAlbumPhotosAsync(int id); // TODO: Make Task<IAsyncEnumerable....> instead, once have more time to look into.
-    
-    public sealed record PhotoDto(int Id, string? Name, string? Description, int? YearContentCreated, Image Image);
+
+    Task<bool> ReorderPhotoInAlbum(int albumId, int photoId, int newOrder, CancellationToken cancellationToken = default);
+
+    public sealed record PhotoDto(int Id, string? Name, string? Description, int? YearContentCreated, Image Image, int? Order);
+    // {
+    //     public int Id = Id;
+    //     public string? Name = Name;
+    //     public string? Description = Description;
+    //     public int? YearContentCreated = YearContentCreated;
+    //     public Image Image = Image;
+    //     public int? Order = null;
+    // }
 }
