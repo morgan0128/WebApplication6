@@ -199,55 +199,44 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
         }
     }
 
-    public async Task<bool> ReorderPhotoInAlbum(int albumId, int photoId, int newOrder, CancellationToken cancellationToken = default)
+    public async Task<bool> ReorderPhotoInAlbum(int albumId, int photoId, int newOrder)
     {
         if (newOrder < 0) return false;
 
-        await using var transaction =
-            await context.Database.BeginTransactionAsync(
-                System.Data.IsolationLevel.Serializable,
-                cancellationToken);
-
-        var links = await context.AlbumPhotos
+        var albumPhotos = await context.AlbumPhotos
             .Where(ap => ap.AlbumId == albumId)
             .OrderBy(ap => ap.Order)
-            .ToListAsync(cancellationToken: cancellationToken);
+            .ToListAsync();
 
-        var photoToReorder = links.SingleOrDefault(ap => ap.PhotoId == photoId);
-        if (photoToReorder is null) return false;
+        var toMove = albumPhotos.Find(ap => ap.PhotoId == photoId);
+        if (toMove == null) return false;
 
-        var finalOrders = new Dictionary<AlbumPhoto, int>
+        var atOrder = albumPhotos.Find(ap => ap.Order == newOrder);
+        if (atOrder == null)
         {
-            [photoToReorder] = newOrder
-        };
-
-        foreach (var link in links)
+            toMove.Order = newOrder;
+            await context.SaveChangesAsync();
+            return true;
+        } else if (atOrder.PhotoId == toMove.PhotoId)
         {
-            if (link.PhotoId == photoId || link.Order < newOrder) continue;
-            if (link.Order == int.MaxValue) return false;
-
-            finalOrders[link] = link.Order + 1;
+            return true;
         }
+        else
+        {
+            var index = albumPhotos.IndexOf(atOrder);
+            while (index < albumPhotos.Count)
+            {
+                var moveMeForward = albumPhotos[index];
+                moveMeForward.Order = moveMeForward.Order + 1;
+                index++;
+            }
+            await context.SaveChangesAsync();
 
-        var highestRequiredOrder = Math.Max(
-            links.Max(ap => (long)ap.Order),
-            finalOrders.Values.Max(order => (long)order));
-
-        if (highestRequiredOrder + finalOrders.Count > int.MaxValue) return false;
-
-        var temporaryOrder = (int)highestRequiredOrder + 1;
-        foreach (var link in finalOrders.Keys)
-            link.Order = temporaryOrder++;
-
-        await context.SaveChangesAsync(cancellationToken);
-
-        foreach (var (link, finalOrder) in finalOrders)
-            link.Order = finalOrder;
-
-        await context.SaveChangesAsync(cancellationToken);
-        await transaction.CommitAsync(cancellationToken);
-
-        return true;
+            toMove.Order = newOrder;
+            await context.SaveChangesAsync();
+            return true;
+        }
+        
     }
 
     public async Task<bool> ToggleDisplaysName(int albumId, int photoId)
@@ -274,7 +263,7 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
         return true;
     }
 
-    public async Task<bool> ToggleDisplaysYearCC(int albumId, int photoId)
+    public async Task<bool> ToggleDisplaysYearContenCreated(int albumId, int photoId)
     {
         var ap = await context.AlbumPhotos
             .FindAsync(albumId, photoId);

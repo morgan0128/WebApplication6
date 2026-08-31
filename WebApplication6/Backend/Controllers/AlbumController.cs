@@ -136,9 +136,9 @@ public sealed class AlbumController(IAlbumRepository albumRepository, IUploadPho
     }
     
     [HttpPatch("{id:int}/{photoId:int}/displaysYearCC")]
-    public async Task<IActionResult> ToggleDisplaysYearCC(int id, int photoId)
+    public async Task<IActionResult> ToggleDisplaysYearContentCreated(int id, int photoId)
     {
-        var request = await albumRepository.ToggleDisplaysYearCC(id, photoId);
+        var request = await albumRepository.ToggleDisplaysYearContenCreated(id, photoId);
         return request switch
         {
             true => Ok(),
