@@ -16,6 +16,10 @@ export type PhotoItem = {
   description: string | null,
   yearContentCreated: number | null,
   image: ImageItem | null,
+  order: number | null,
+  displaysName: boolean,
+  displaysDescription: boolean,
+  displaysYearCC: boolean
 }
 
 export type AlbumItem = {

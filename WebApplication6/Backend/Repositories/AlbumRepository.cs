@@ -153,7 +153,7 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
         }
     }
 
-    public async Task<IEnumerable<IAlbumRepository.PhotoDto>> GetAlbumPhotosAsync(int id)
+    public async Task<IEnumerable<IAlbumRepository.AlbumPhotoDto>> GetAlbumPhotosAsync(int id)
     {
         try
         {
@@ -162,7 +162,7 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
                 .Where(a => a.Id == id)
                 .SingleAsync();
 
-            if (album.Photos.Count == 0) return new List<IAlbumRepository.PhotoDto>();
+            if (album.Photos.Count == 0) return new List<IAlbumRepository.AlbumPhotoDto>();
 
             var albumPhotos = await context.AlbumPhotos
                 .Where(ap => ap.AlbumId == album.Id)
@@ -175,13 +175,16 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
                     albumPhotos,
                     (p => p.Id),
                     (ap => ap.PhotoId),
-                    (photo, albumPhoto) => new IAlbumRepository.PhotoDto(
+                    (photo, albumPhoto) => new IAlbumRepository.AlbumPhotoDto(
                         photo.Id,
                         photo.Name,
                         photo.Description,
                         photo.YearContentCreated,
                         photo.Image,
-                        albumPhoto.Order
+                        albumPhoto.Order,
+                        albumPhoto.DisplaysName,
+                        albumPhoto.DisplaysDescription,
+                        albumPhoto.DisplaysYearContentCreated
                     )
                 )
                 .OrderBy(photos => photos.Order)
@@ -191,7 +194,7 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
         }
         catch (Exception)
         {
-            // return new List<IAlbumRepository.PhotoDto>();
+            // return new List<IAlbumRepository.AlbumPhotoDto>();
             throw;
         }
     }
@@ -244,6 +247,18 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
         await context.SaveChangesAsync(cancellationToken);
         await transaction.CommitAsync(cancellationToken);
 
+        return true;
+    }
+
+    public async Task<bool> ToggleDisplaysName(int albumId, int photoId)
+    {
+        var ap = await context.AlbumPhotos
+            .FindAsync(albumId, photoId);
+
+        if (ap == null) return false;
+        
+        ap.DisplaysName = !ap.DisplaysName;
+        await context.SaveChangesAsync();
         return true;
     }
 

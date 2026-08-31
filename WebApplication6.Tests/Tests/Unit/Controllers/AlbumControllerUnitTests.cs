@@ -417,7 +417,7 @@ public class AlbumControllerUnitTests
     //     var serviceMock = new Mock<IUploadPhotoService>();
     //
     //     repositoryMock.Setup(r => r.GetAlbumPhotosAsyncEnumerable(99))
-    //         .ReturnsAsync((IAsyncEnumerable<IAlbumRepository.PhotoDto>)null);
+    //         .ReturnsAsync((IAsyncEnumerable<IAlbumRepository.AlbumPhotoDto>)null);
     //
     //     var controller = new AlbumController(repositoryMock.Object, serviceMock.Object);
     //
@@ -448,13 +448,13 @@ public class AlbumControllerUnitTests
     //         Width = 2
     //     };
     //
-    //     var photo = new IAlbumRepository.PhotoDto(
+    //     var photo = new IAlbumRepository.AlbumPhotoDto(
     //         1,
     //         "Photo",
     //         "Photo description",
     //         2026,
     //         image);
-    //     var photoList = new List<IAlbumRepository.PhotoDto> { photo };
+    //     var photoList = new List<IAlbumRepository.AlbumPhotoDto> { photo };
     //
     //     repositoryMock.Setup(r => r.GetAlbumPhotosAsyncEnumerable(1))
     //         .ReturnsAsync(photoList.ToAsyncEnumerable());
@@ -463,7 +463,7 @@ public class AlbumControllerUnitTests
     //
     //     // Act
     //     var photos = await controller.GetAllPhotos(1);
-    //     var returnedPhotos = new List<IAlbumRepository.PhotoDto>();
+    //     var returnedPhotos = new List<IAlbumRepository.AlbumPhotoDto>();
     //     await foreach (var returnedPhoto in photos!)
     //     {
     //         returnedPhotos.Add(returnedPhoto);
@@ -493,19 +493,19 @@ public class AlbumControllerUnitTests
     //         Width = 2
     //     };
     //
-    //     var photo1 = new IAlbumRepository.PhotoDto(
+    //     var photo1 = new IAlbumRepository.AlbumPhotoDto(
     //         1,
     //         "Photo 1",
     //         "Photo 1 description",
     //         2026,
     //         image);
-    //     var photo2 = new IAlbumRepository.PhotoDto(
+    //     var photo2 = new IAlbumRepository.AlbumPhotoDto(
     //         2,
     //         "Photo 2",
     //         "Photo 2 description",
     //         2025,
     //         image);
-    //     var photoList = new List<IAlbumRepository.PhotoDto> { photo1, photo2 };
+    //     var photoList = new List<IAlbumRepository.AlbumPhotoDto> { photo1, photo2 };
     //
     //     repositoryMock.Setup(r => r.GetAlbumPhotosAsyncEnumerable(1))
     //         .ReturnsAsync(photoList.ToAsyncEnumerable());
@@ -514,7 +514,7 @@ public class AlbumControllerUnitTests
     //
     //     // Act
     //     var photos = await controller.GetAllPhotos(1);
-    //     var returnedPhotos = new List<IAlbumRepository.PhotoDto>();
+    //     var returnedPhotos = new List<IAlbumRepository.AlbumPhotoDto>();
     //     await foreach (var returnedPhoto in photos!)
     //     {
     //         returnedPhotos.Add(returnedPhoto);

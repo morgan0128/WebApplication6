@@ -198,62 +198,18 @@
             </div>
           </section>
         }
-            <app-album-contents [selectedAlbum]="this.selectedAlbum()" [selectedAlbumId]="this.selectedAlbumId()" [loadingPhotos]="this.loadingPhotos()" [photos]="this.photos()" />
-<!--        <section class="artworks-section">-->
-<!--          <div class="section-heading artwork-heading">-->
-<!--            <div>-->
-<!--              <p class="eyebrow">Album contents</p>-->
-<!--              <h2>Artwork</h2>-->
-<!--            </div>-->
-<!--            @if (selectedAlbum != null) {-->
-<!--              <span class="artworks-count">{{ photos().length }} {{ photos().length === 1 ? 'piece' : 'pieces' }}</span>-->
-<!--            }-->
-<!--          </div>-->
-
-<!--          @if (selectedAlbumId == null) {-->
-<!--            <div class="empty-state">-->
-<!--              <h3>No album selected</h3>-->
-<!--              <p>Select an album above to view its artwork.</p>-->
-<!--            </div>-->
-<!--          } @else if (loadingPhotos()) {-->
-<!--            <div class="empty-state">-->
-<!--              <h3>Loading artwork...</h3>-->
-<!--            </div>-->
-<!--          } @else if (photos().length === 0) {-->
-<!--            <div class="empty-state">-->
-<!--              <h3>No artwork in this album</h3>-->
-<!--              <p>Upload an image above to add the first piece.</p>-->
-<!--            </div>-->
-<!--          } @else {-->
-<!--&lt;!&ndash;            <div class="art-grid">&ndash;&gt;-->
-<!--&lt;!&ndash;              @for (photo of photoDTOs(); track photo.id) {&ndash;&gt;-->
-<!--&lt;!&ndash;                @let image = photo.image;&ndash;&gt;-->
-<!--&lt;!&ndash;                @if (image !== null) {&ndash;&gt;-->
-<!--&lt;!&ndash;                  <article class="art-card">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <div class="art-image">&ndash;&gt;-->
-<!--&lt;!&ndash;                      <img&ndash;&gt;-->
-<!--&lt;!&ndash;                        [ngSrc]="image.url"&ndash;&gt;-->
-<!--&lt;!&ndash;                        [width]="image.width"&ndash;&gt;-->
-<!--&lt;!&ndash;                        [height]="image.height"&ndash;&gt;-->
-<!--&lt;!&ndash;                        [alt]="image.altText || photo.name || 'Artwork'" />&ndash;&gt;-->
-<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <div class="art-card-details">&ndash;&gt;-->
-<!--&lt;!&ndash;                      <div class="art-card-title">&ndash;&gt;-->
-<!--&lt;!&ndash;                        <h3>{{ photo.name || image.fileName }}</h3>&ndash;&gt;-->
-<!--&lt;!&ndash;                        @if (photo.yearContentCreated) {&ndash;&gt;-->
-<!--&lt;!&ndash;                          <span>{{ photo.yearContentCreated }}</span>&ndash;&gt;-->
-<!--&lt;!&ndash;                        }&ndash;&gt;-->
-<!--&lt;!&ndash;                      </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                      <p>{{ photo.description || 'No description' }}</p>&ndash;&gt;-->
-<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                  </article>&ndash;&gt;-->
-<!--&lt;!&ndash;                }&ndash;&gt;-->
-<!--&lt;!&ndash;              }&ndash;&gt;-->
-<!--&lt;!&ndash;            </div>&ndash;&gt;-->
-<!--            <app-photos-display [displayPhotos]="this.photos()" />-->
-<!--          }-->
-<!--        </section>-->
       </section>
-    </div>
+      </div>
+<!--    TODO-->
+<!--    <br>-->
+<!--      <section>-->
+<!--            <app-portfolio-manager />-->
+<!--      </section>-->
+    <br>
+      <section>
+        @if (this.selectedAlbumId !== null){
+          <app-album-contents [selectedAlbum]="this.selectedAlbum()" [selectedAlbumId]="this.selectedAlbumId()!" [loadingPhotos]="this.loadingPhotos()" [photos]="this.photos()" />
+        }
+      </section>
   </div>
 </main>

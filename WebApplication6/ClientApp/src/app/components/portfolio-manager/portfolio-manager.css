@@ -1,0 +1,49 @@
+.portfolio-card {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  /*align-items: start;*/
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 21px;
+  background: var(--surface);
+  gap: 20px;
+}
+
+.portfolio-card > .styling-select-container {
+  font-size: 30px;
+  text-align: center;
+  display: flex;
+  gap: 2px;
+}
+
+.styling-select-buttons {
+  display: grid;
+  gap: 1px;
+}
+
+select {
+  width: 100%;
+  /*border: 1px solid var(--border);*/
+  border-radius: 7px;
+  padding: 10px 11px;
+  color: var(--text);
+  background: var(--surface);
+  font: inherit;
+  font-size: 0.84rem;
+  outline: none;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px rgba(47, 103, 94, 0.12);
+}
+
+.styling-select {
+  appearance: auto;
+}
+
+.styling-navigation-container {
+  /*align-self: end;*/
+}

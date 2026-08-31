@@ -40,18 +40,13 @@ public interface IAlbumRepository
     /// Retrieves all photos for the queried Album
     /// </summary>
     /// <param name="id">The Id of the Album row to query.</param>
-    /// <returns>A (nullable) IEnumerable of PhotoDto with no guarantee that they have a correct or an explicit ordering</returns>
-    Task<IEnumerable<PhotoDto>> GetAlbumPhotosAsync(int id); // TODO: Make Task<IAsyncEnumerable....> instead, once have more time to look into.
+    /// <returns>A (nullable) IEnumerable of AlbumPhotoDto with no guarantee that they have a correct or an explicit ordering</returns>
+    Task<IEnumerable<AlbumPhotoDto>> GetAlbumPhotosAsync(int id); // TODO: Make Task<IAsyncEnumerable....> instead, once have more time to look into.
 
     Task<bool> ReorderPhotoInAlbum(int albumId, int photoId, int newOrder, CancellationToken cancellationToken = default);
+    
+    Task<bool> ToggleDisplaysName(int albumId, int photoId);
 
-    public sealed record PhotoDto(int Id, string? Name, string? Description, int? YearContentCreated, Image Image, int? Order);
-    // {
-    //     public int Id = Id;
-    //     public string? Name = Name;
-    //     public string? Description = Description;
-    //     public int? YearContentCreated = YearContentCreated;
-    //     public Image Image = Image;
-    //     public int? Order = null;
-    // }
+    public sealed record AlbumPhotoDto(int Id, string? Name, string? Description, int? YearContentCreated, Image Image, int? Order, bool displaysName = true, bool displaysDescription = true, bool displaysYearCC = true);
+
 }

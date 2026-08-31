@@ -1,5 +1,6 @@
 @let image = photo().image;
 @if (image !== null) {
+<!--  <article class="art-card" cdkDrag>-->
   <article class="art-card">
     <div class="art-image">
       <img
@@ -9,13 +10,24 @@
         [alt]="image.altText || photo.name || 'Artwork'" />
     </div>
     <div class="art-card-details">
-      <div class="art-card-title">
-        <h3>{{ photo().name || image.fileName }}</h3>
-        @if (photo().yearContentCreated) {
-          <span>{{ photo().yearContentCreated }}</span>
+      <span>
+        <button style="background-color: green; color: white; font-size: 18px;">{{ photo().order }}</button>
+      </span>
+      <div class="art-card-user-field">
+        <h3>{{ photo().name }}</h3>
+<!--        <input type="checkbox" />-->
+        @if (!this.togglingDisplaysName()){
+        <button [style]="'background-color: ' + displaysNameColor()" (click)="toggleDisplaysName()"></button>
         }
       </div>
-      <p>{{ photo().description || 'No description' }}</p>
+      <div class="art-card-user-field">
+        <p>{{ photo().description || 'No description' }}</p>
+        <input type="checkbox"/>
+      </div>
+      <div class="art-card-user-field">
+        <p>{{ photo().yearContentCreated || '' }} </p>
+        <input type="checkbox" />
+      </div>
     </div>
   </article>
 }

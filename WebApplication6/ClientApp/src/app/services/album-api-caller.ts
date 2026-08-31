@@ -45,6 +45,11 @@ export class AlbumApiCaller {
     return this.http.delete(requestPath);
   }
 
+  toggleDisplaysName(albumId: number, photoId: number){
+    let requestPath = this.apiAlbumUrl + '/' + albumId + '/' + photoId + '/displaysName';
+    return this.http.put(requestPath, photoId);
+  }
+
 
 
 }

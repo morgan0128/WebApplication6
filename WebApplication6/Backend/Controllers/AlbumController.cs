@@ -8,7 +8,8 @@ namespace WebApplication6.Backend.Controllers;
 
 [ApiController]
 [Route("api/Album")]
-public sealed class AlbumController(IAlbumRepository albumRepository, IUploadPhotoService uploadPhotoService) : ControllerBase
+public sealed class AlbumController(IAlbumRepository albumRepository, IUploadPhotoService uploadPhotoService)
+    : ControllerBase
 {
     [HttpGet("all")]
     public async Task<ActionResult<IEnumerable<Album>>> GetAllAlbums()
@@ -16,16 +17,16 @@ public sealed class AlbumController(IAlbumRepository albumRepository, IUploadPho
         var albums = await albumRepository.GetAllAlbumsAsync();
         return Ok(albums);
     }
-    
-    
+
+
     [HttpGet("all-ids")]
     public async Task<ActionResult<IEnumerable<int>>> GetAllAlbumsIds()
     {
         var albumIds = await albumRepository.GetAllAlbumsIdsAsync();
         return Ok(albumIds);
     }
-    
-    
+
+
     [HttpGet("{id}")]
     public async Task<ActionResult<Album>> GetAlbumById(int id)
     {
@@ -38,7 +39,7 @@ public sealed class AlbumController(IAlbumRepository albumRepository, IUploadPho
         return Ok(album);
     }
 
-    
+
     [HttpPost]
     public async Task<ActionResult<int>> PostAlbum(CreateAlbumItemRequest albumRequest)
     {
@@ -49,7 +50,7 @@ public sealed class AlbumController(IAlbumRepository albumRepository, IUploadPho
             number++;
             name = "Unnamed Album #" + number;
         }
-        
+
         var album = new Album
         {
             Name = name,
@@ -61,40 +62,41 @@ public sealed class AlbumController(IAlbumRepository albumRepository, IUploadPho
         {
             return Problem();
         }
-        
+
         return id;
     }
 
-    
+
     [HttpPost("{id:int}/upload")]
     public async Task<IActionResult> UploadPhotoToAlbum(int id, [FromForm] CombinedPhotoSpecDto combinedPhotoSpec)
     {
         var file = combinedPhotoSpec.File;
-        
-        var photoSpec = new PhotoSpecDto(combinedPhotoSpec.Name, combinedPhotoSpec.Description, combinedPhotoSpec.YearContentCreated);
-        
+
+        var photoSpec = new PhotoSpecDto(combinedPhotoSpec.Name, combinedPhotoSpec.Description,
+            combinedPhotoSpec.YearContentCreated);
+
         if (file.Length == 0)
         {
             return BadRequest("File upload fail");
         }
-        
+
         var album = await albumRepository.GetAlbumByIdAsync(id);
         if (album == null)
         {
             return new ForbidResult();
         }
-        
+
         var photoResult = await uploadPhotoService.UploadPhoto(album, file, photoSpec);
         if (photoResult == null) return Problem();
-        
+
         var photoToAlbum = await albumRepository.AddPhotoToAlbumAsync(album.Id, photoResult.Value);
         if (!photoToAlbum) return Problem();
-        
+
         return Ok();
     }
 
     [HttpGet("{id:int}/photos")]
-    public async Task<IEnumerable<IAlbumRepository.PhotoDto>> GetAlbumPhotos(int id)
+    public async Task<IEnumerable<IAlbumRepository.AlbumPhotoDto>> GetAlbumPhotos(int id)
     {
         var photos = await albumRepository.GetAlbumPhotosAsync(id);
         return photos;
@@ -110,9 +112,20 @@ public sealed class AlbumController(IAlbumRepository albumRepository, IUploadPho
             false => Problem()
         };
     }
-    
-    
-    [HttpDelete("{id}")]
+
+    [HttpPut("{id:int}/{photoId:int}/displaysName")]
+    public async Task<IActionResult> ToggleDisplaysName(int id, int photoId)
+    {
+        var request = await albumRepository.ToggleDisplaysName(id, photoId);
+        return request switch
+        {
+            true => Ok(),
+            false => Problem()
+        };
+    }
+
+
+[HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAlbumById(int id)
     {
         var status = await albumRepository.DeleteAlbumByIdAsync(id);

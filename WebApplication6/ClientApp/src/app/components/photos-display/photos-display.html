@@ -1,6 +1,7 @@
+<!--<div cdkDropList class="art-grid" (cdkDropListDropped)="drop($event)">-->
 <div class="art-grid">
   @for (photo of displayPhotos(); track photo.id) {
-    <app-admin-view-photo-card [photo]="photo" />
+    <app-admin-view-photo-card [albumId]="albumId()" [photo]="photo" />
 <!--    @let image = photo.image;-->
 <!--    @if (image !== null) {-->
 <!--      <article class="art-card">-->

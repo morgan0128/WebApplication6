@@ -10,7 +10,7 @@ import {PhotosDisplay} from '../photos-display/photos-display';
 })
 export class AlbumContents {
   public readonly selectedAlbum = input<AlbumItem | null>(null);
-  public readonly selectedAlbumId = input<number | null>(null);
+  public readonly selectedAlbumId = input.required<number>();
   public readonly loadingPhotos = input<boolean>(false);
   public readonly photos = input<PhotoItem[]>([]);
 

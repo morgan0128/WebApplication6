@@ -1,12 +1,11 @@
 import {Component, inject, OnInit, signal, Signal} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-// import {NgOptimizedImage} from '@angular/common';
-// import {HttpClient} from '@angular/common/http';
 import {NgOptimizedImage} from '@angular/common';
 import { PhotoItem, AlbumItem } from '../models/AlbumInterfacing';
 import { AlbumApiCaller, PhotoSpecDTO, PhotoUploadSpecification } from '../services/album-api-caller';
 import { PhotosDisplay } from '../components/photos-display/photos-display';
 import {AlbumContents} from '../components/album-contents/album-contents';
+import {PortfolioManager} from '../components/portfolio-manager/portfolio-manager';
 
 // interface AlbumDTO{
 //   id: number,
@@ -38,7 +37,8 @@ import {AlbumContents} from '../components/album-contents/album-contents';
   selector: 'app-edit-albums',
   imports: [
     FormsModule,
-    AlbumContents
+    AlbumContents,
+    PortfolioManager
   ],
   templateUrl: './edit-albums.html',
   styleUrl: './edit-albums.css',

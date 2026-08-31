@@ -1,21 +1,53 @@
 
 .art-card {
   overflow: hidden;
-  border: 1px solid var(--border);
+  border: 0.1em solid rgb(62 62 62 / 0.4);
   border-radius: 9px;
-  background: var(--surface);
+  background: white;
 }
 
 .art-card-details {
   padding: 14px 15px 16px;
+  display: grid;
+  align-items: end;
+}
+
+.art-card-user-field {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.art-card-user-field h3 {
+  overflow: hidden;
+  margin: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.art-card-user-field p {
+  grid-column: 1;
+  overflow: hidden;
+  margin: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.art-card-user-field input {
+  grid-column: 2;
+  overflow: hidden;
+  margin: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .art-card-title {
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
+  /*justify-content: space-between;*/
   gap: 10px;
 }
+
 
 .art-card-title h3 {
   overflow: hidden;
@@ -44,13 +76,28 @@
 .art-image {
   position: relative;
   display: grid;
-  min-height: 220px;
+  /*grid-template-areas: 'art-image';*/
   place-items: center;
+  min-height: 560px;
+  max-height: 560px;
   overflow: hidden;
   background: #e7eeeb;
 }
 
+/*.art-image > * {*/
+/*  grid-area: art-image;*/
+/*}*/
+
+/*.art-image > div {*/
+/*  z-index: 1;*/
+/*}*/
+
+/*.art-image button {*/
+/*  z-index: 1;*/
+/*}*/
+
 .art-image img {
+  /*z-index: 0;*/
   display: block;
   width: auto;
   height: auto;
