@@ -45,12 +45,25 @@ export class AlbumApiCaller {
     return this.http.delete(requestPath);
   }
 
-  toggleDisplaysName(albumId: number, photoId: number){
-    let requestPath = this.apiAlbumUrl + '/' + albumId + '/' + photoId + '/displaysName';
-    return this.http.put(requestPath, photoId);
+  reorder(albumId: number, photoId: number, toDest: number){
+    let requestPath = this.apiAlbumUrl + '/' + albumId + '/' + photoId + '/reorder/' + toDest;
+    return this.http.put(requestPath, null);
   }
 
+  toggleDisplaysName(albumId: number, photoId: number){
+    let requestPath = this.apiAlbumUrl + '/' + albumId + '/' + photoId + '/displaysName';
+    return this.http.patch(requestPath, null);
+  }
 
+  toggleDisplaysDescription(albumId: number, photoId: number){
+    let requestPath = this.apiAlbumUrl + '/' + albumId + '/' + photoId + '/displaysDescription';
+    return this.http.patch(requestPath, null);
+  }
+
+  toggleDisplaysYearCC(albumId: number, photoId: number){
+    let requestPath = this.apiAlbumUrl + '/' + albumId + '/' + photoId + '/displaysYearCC';
+    return this.http.patch(requestPath, null);
+  }
 
 }
 

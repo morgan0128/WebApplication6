@@ -208,7 +208,8 @@
     <br>
       <section>
         @if (this.selectedAlbumId !== null){
-          <app-album-contents [selectedAlbum]="this.selectedAlbum()" [selectedAlbumId]="this.selectedAlbumId()!" [loadingPhotos]="this.loadingPhotos()" [photos]="this.photos()" />
+          <app-album-contents [selectedAlbum]="this.selectedAlbum()" [selectedAlbumId]="this.selectedAlbumId()!" [loadingPhotos]="this.loadingPhotos()" [photos]="this.photos()"
+          (photoStateChange)="photoChangedStateUpdate($event)" (orderChanged)="loadAlbumSelection()"/>
         }
       </section>
   </div>

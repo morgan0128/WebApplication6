@@ -1,4 +1,4 @@
-import {Component, input} from '@angular/core';
+import {Component, input, output} from '@angular/core';
 import {AlbumItem, PhotoItem} from '../../models/AlbumInterfacing';
 import {PhotosDisplay} from '../photos-display/photos-display';
 
@@ -13,5 +13,8 @@ export class AlbumContents {
   public readonly selectedAlbumId = input.required<number>();
   public readonly loadingPhotos = input<boolean>(false);
   public readonly photos = input<PhotoItem[]>([]);
+
+  readonly photoStateChange = output<PhotoItem>();
+  readonly orderChanged = output(); // reload all photos
 
 }

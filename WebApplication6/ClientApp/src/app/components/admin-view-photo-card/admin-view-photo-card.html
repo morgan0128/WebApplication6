@@ -11,22 +11,22 @@
     </div>
     <div class="art-card-details">
       <span>
-        <button style="background-color: green; color: white; font-size: 18px;">{{ photo().order }}</button>
+        <button style="background-color: green; color: white; font-size: 18px;" (click)="toggleOrderVisibilityView()">{{ photo().order }}</button>
+        @if (editingOrder()){
+          <input type="number" name="newOrderValue" [(ngModel)]="newOrderValue" (keydown.enter)="updateOrder(newOrderValue)"/>
+        }
       </span>
       <div class="art-card-user-field">
         <h3>{{ photo().name }}</h3>
-<!--        <input type="checkbox" />-->
-        @if (!this.togglingDisplaysName()){
         <button [style]="'background-color: ' + displaysNameColor()" (click)="toggleDisplaysName()"></button>
-        }
       </div>
       <div class="art-card-user-field">
         <p>{{ photo().description || 'No description' }}</p>
-        <input type="checkbox"/>
+        <button [style]="'background-color: ' + displaysDescColor()" (click)="toggleDisplaysDesc()"></button>
       </div>
       <div class="art-card-user-field">
         <p>{{ photo().yearContentCreated || '' }} </p>
-        <input type="checkbox" />
+        <button [style]="'background-color: ' + displaysYearCCColor()" (click)="toggleDisplaysYearCC()"></button>
       </div>
     </div>
   </article>

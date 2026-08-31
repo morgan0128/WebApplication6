@@ -113,10 +113,32 @@ public sealed class AlbumController(IAlbumRepository albumRepository, IUploadPho
         };
     }
 
-    [HttpPut("{id:int}/{photoId:int}/displaysName")]
+    [HttpPatch("{id:int}/{photoId:int}/displaysName")]
     public async Task<IActionResult> ToggleDisplaysName(int id, int photoId)
     {
         var request = await albumRepository.ToggleDisplaysName(id, photoId);
+        return request switch
+        {
+            true => Ok(),
+            false => Problem()
+        };
+    }
+    
+    [HttpPatch("{id:int}/{photoId:int}/displaysDescription")]
+    public async Task<IActionResult> ToggleDisplaysDescription(int id, int photoId)
+    {
+        var request = await albumRepository.ToggleDisplaysDescription(id, photoId);
+        return request switch
+        {
+            true => Ok(),
+            false => Problem()
+        };
+    }
+    
+    [HttpPatch("{id:int}/{photoId:int}/displaysYearCC")]
+    public async Task<IActionResult> ToggleDisplaysYearCC(int id, int photoId)
+    {
+        var request = await albumRepository.ToggleDisplaysYearCC(id, photoId);
         return request switch
         {
             true => Ok(),

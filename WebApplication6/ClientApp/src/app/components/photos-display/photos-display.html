@@ -1,27 +1,5 @@
-<!--<div cdkDropList class="art-grid" (cdkDropListDropped)="drop($event)">-->
 <div class="art-grid">
   @for (photo of displayPhotos(); track photo.id) {
-    <app-admin-view-photo-card [albumId]="albumId()" [photo]="photo" />
-<!--    @let image = photo.image;-->
-<!--    @if (image !== null) {-->
-<!--      <article class="art-card">-->
-<!--        <div class="art-image">-->
-<!--          <img-->
-<!--            [ngSrc]="image.url"-->
-<!--            [width]="image.width"-->
-<!--            [height]="image.height"-->
-<!--            [alt]="image.altText || photo.name || 'Artwork'" />-->
-<!--        </div>-->
-<!--        <div class="art-card-details">-->
-<!--          <div class="art-card-title">-->
-<!--            <h3>{{ photo.name || image.fileName }}</h3>-->
-<!--            @if (photo.yearContentCreated) {-->
-<!--              <span>{{ photo.yearContentCreated }}</span>-->
-<!--            }-->
-<!--          </div>-->
-<!--          <p>{{ photo.description || 'No description' }}</p>-->
-<!--        </div>-->
-<!--      </article>-->
-<!--    }-->
+    <app-admin-view-photo-card [albumId]="albumId()" [photo]="photo" (photoStateChange)="photoStateChange.emit($event)" (orderChanged)="orderChanged.emit()"/>
   }
 </div>

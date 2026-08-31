@@ -7,32 +7,6 @@ import { PhotosDisplay } from '../components/photos-display/photos-display';
 import {AlbumContents} from '../components/album-contents/album-contents';
 import {PortfolioManager} from '../components/portfolio-manager/portfolio-manager';
 
-// interface AlbumDTO{
-//   id: number,
-//   name: string | null,
-//   description: string | null,
-// }
-//
-// class PhotoSpecDTO {
-//   // id: number | null = null;
-//   name: string | null = null;
-//   description: string | null = null;
-//   yearContentCreated: number | null = null;
-//   // image: ImageDTO | null = null;
-// }
-//
-// interface ImageDTO {
-//   id: number,
-//   fileName: string,
-//   contentType: string,
-//   fileSize: number | null,
-//   storageFileName: string,
-//   url: string,
-//   altText: string,
-//   width: number,
-//   height: number
-// }
-
 @Component({
   selector: 'app-edit-albums',
   imports: [
@@ -59,7 +33,7 @@ export class EditAlbums implements OnInit {
 
   // protected selectedAlbum: AlbumItem | null = null;
   protected selectedAlbum = signal<AlbumItem | null>(null);
-  protected readonly selectedAlbumId = signal<number | null>(null);
+  protected selectedAlbumId = signal<number | null>(null);
   // selectedAlbumId: number | null = null;
   protected readonly selectingAlbumError = signal<boolean>(false);
 
@@ -246,6 +220,14 @@ export class EditAlbums implements OnInit {
     });
 
 
+  }
+
+  photoChangedStateUpdate(updatedPhoto: PhotoItem) {
+    this.photos.update(photos =>
+      photos.map(photo =>
+        photo.id === updatedPhoto.id ? updatedPhoto : photo
+      )
+    );
   }
 
 

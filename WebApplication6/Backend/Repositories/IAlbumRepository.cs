@@ -46,6 +46,10 @@ public interface IAlbumRepository
     Task<bool> ReorderPhotoInAlbum(int albumId, int photoId, int newOrder, CancellationToken cancellationToken = default);
     
     Task<bool> ToggleDisplaysName(int albumId, int photoId);
+    
+    Task<bool> ToggleDisplaysDescription(int albumId, int photoId);
+    
+    Task<bool> ToggleDisplaysYearCC(int albumId, int photoId);
 
     public sealed record AlbumPhotoDto(int Id, string? Name, string? Description, int? YearContentCreated, Image Image, int? Order, bool displaysName = true, bool displaysDescription = true, bool displaysYearCC = true);
 

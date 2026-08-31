@@ -261,6 +261,30 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
         await context.SaveChangesAsync();
         return true;
     }
+    
+    public async Task<bool> ToggleDisplaysDescription(int albumId, int photoId)
+    {
+        var ap = await context.AlbumPhotos
+            .FindAsync(albumId, photoId);
 
+        if (ap == null) return false;
+        
+        ap.DisplaysDescription = !ap.DisplaysDescription;
+        await context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> ToggleDisplaysYearCC(int albumId, int photoId)
+    {
+        var ap = await context.AlbumPhotos
+            .FindAsync(albumId, photoId);
+
+        if (ap == null) return false;
+        
+        ap.DisplaysYearContentCreated = !ap.DisplaysYearContentCreated;
+        await context.SaveChangesAsync();
+        return true;
+    }
+    
 
 }
