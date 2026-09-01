@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication6.Backend.Models;
 
@@ -15,5 +16,7 @@ public class Album
 
     public ICollection<Photo> Photos { get; set; } = [];
     public ICollection<AlbumPhoto> AlbumPhotos { get; set; } = [];
+    
+    public PortfolioPage PortfolioPage { get; set; }
     
 }
