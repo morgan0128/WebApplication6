@@ -206,6 +206,8 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
             .OrderBy(ap => ap.Order)
             .ToListAsync();
 
+        if (albumPhotos.Count == 0) return false; // this should not be reached from frontend
+
         if (newOrder < 0)
         {
             // recognize that an operation occurred by normalizing the order, but violates constraint
@@ -215,7 +217,7 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
 
         var toMove = albumPhotos.Find(ap => ap.PhotoId == photoId);
         
-        if (toMove == null) return false; // this should not be accessible from frontend
+        if (toMove == null) return false; // this should not be reached from frontend
         
         var ofOrder = albumPhotos.Find(ap => ap.Order == newOrder);
         
