@@ -201,42 +201,99 @@ public class AlbumRepository(ApplicationDbContext context) : IAlbumRepository
 
     public async Task<bool> ReorderPhotoInAlbum(int albumId, int photoId, int newOrder)
     {
-        if (newOrder < 0) return false;
-
         var albumPhotos = await context.AlbumPhotos
             .Where(ap => ap.AlbumId == albumId)
             .OrderBy(ap => ap.Order)
             .ToListAsync();
 
-        var toMove = albumPhotos.Find(ap => ap.PhotoId == photoId);
-        if (toMove == null) return false;
-
-        var atOrder = albumPhotos.Find(ap => ap.Order == newOrder);
-        if (atOrder == null)
+        if (newOrder < 0)
         {
-            toMove.Order = newOrder;
-            await context.SaveChangesAsync();
-            return true;
-        } else if (atOrder.PhotoId == toMove.PhotoId)
-        {
+            // recognize that an operation occurred by normalizing the order, but violates constraint
+            await NormalizeOrder(albumId);
             return true;
         }
-        else
-        {
-            var index = albumPhotos.IndexOf(atOrder);
-            while (index < albumPhotos.Count)
-            {
-                var moveMeForward = albumPhotos[index];
-                moveMeForward.Order = moveMeForward.Order + 1;
-                index++;
-            }
-            await context.SaveChangesAsync();
 
+        var toMove = albumPhotos.Find(ap => ap.PhotoId == photoId);
+        
+        if (toMove == null) return false; // this should not be accessible from frontend
+        
+        var ofOrder = albumPhotos.Find(ap => ap.Order == newOrder);
+        
+        if (ofOrder == null)
+        {
             toMove.Order = newOrder;
             await context.SaveChangesAsync();
+            await NormalizeOrder(albumId);
             return true;
         }
         
+        if (ofOrder.PhotoId == toMove.PhotoId)
+        {
+            // recognize that an operation occurred by normalizing the order, but do nothing to grant
+            await NormalizeOrder(albumId);
+            return true;
+        }
+        
+        var index = albumPhotos.IndexOf(ofOrder);
+        if (toMove.Order < ofOrder.Order)
+        {
+            /* toMove.Order < ofOrder.Order; as such the user expects that this operation moves 'toMove' after 'ofOrder' */
+
+            
+            // normalize first: need to pack the Order of AlbumPhotos preceding ofOrder as tightly as possible (limited by 0)
+            await NormalizeOrder(albumId);
+            
+            // normalized, so no longer want to use newOrder
+            var newOrderNormalized = albumPhotos[index].Order;
+
+            var lowerBound = albumPhotos.IndexOf(toMove) + 1;
+            var upperBound = index;
+            toMove.Order = albumPhotos[^1].Order + 1; // temporary reassignment
+
+            for (var i = lowerBound; i <= upperBound; i++)
+            {
+                var moveMeBackward = albumPhotos[i];
+                moveMeBackward.Order = moveMeBackward.Order - 1;
+            }
+            await context.SaveChangesAsync(); // avoid circular dependency
+
+            toMove.Order = newOrderNormalized;
+            await context.SaveChangesAsync();
+
+            return true; // order already normalized
+        }
+
+        /* toMove.Order > ofOrder.Order; as such the user expects that this operation moves 'toMove' before 'ofOrder' */
+        while (index < albumPhotos.Count)
+        {
+            var moveMeForward = albumPhotos[index];
+            moveMeForward.Order = moveMeForward.Order + 1;
+            index++;
+        }
+        
+        await context.SaveChangesAsync(); // avoid circular dependency
+
+        toMove.Order = newOrder;
+        await context.SaveChangesAsync();
+        
+        await NormalizeOrder(albumId);
+
+        return true;
+    }
+
+    private async Task NormalizeOrder(int albumId)
+    {
+        var albumPhotos = await context.AlbumPhotos
+            .Where(ap => ap.AlbumId == albumId)
+            .OrderBy(ap => ap.Order)
+            .ToListAsync();
+    
+        for (var i = 0; i < albumPhotos.Count; i++)
+        {
+            albumPhotos[i].Order = i;
+        }
+    
+        await context.SaveChangesAsync();
     }
 
     public async Task<bool> ToggleDisplaysName(int albumId, int photoId)

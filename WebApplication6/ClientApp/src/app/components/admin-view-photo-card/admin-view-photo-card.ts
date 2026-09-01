@@ -1,4 +1,4 @@
-import {Component, computed, inject, input, output, signal} from '@angular/core';
+import {Component, computed, effect, inject, input, output, signal} from '@angular/core';
 import {PhotoItem} from '../../models/AlbumInterfacing';
 import {NgOptimizedImage} from '@angular/common';
 import { AlbumApiCaller } from '../../services/album-api-caller';
@@ -32,6 +32,14 @@ export class AdminViewPhotoCard {
 
   protected readonly editingOrder = signal<boolean>(false);
   newOrderValue: number = -1;
+
+  constructor() {
+    effect(() => {
+      if (this.photo().order != null){
+        this.newOrderValue = this.photo().order!;
+      }
+      });
+  }
 
   toggleOrderVisibilityView(){
     this.editingOrder.set(!this.editingOrder());
