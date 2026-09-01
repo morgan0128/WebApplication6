@@ -15,6 +15,8 @@ public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> 
 
     public DbSet<AlbumPhoto> AlbumPhotos => Set<AlbumPhoto>();
 
+    public DbSet<PortfolioPage> PortfolioPages => Set<PortfolioPage>();
+
     public DbSet<UntrackedFile> UntrackedFiles => Set<UntrackedFile>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
