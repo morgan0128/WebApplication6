@@ -61,21 +61,96 @@ public class PortfolioPageRepository(ApplicationDbContext context) : IPortfolioP
 
     public async Task<bool> ReorderPortfolioPageInNavAsync(int ppId, int newNavOrder)
     {
-        throw new NotImplementedException();
+        // Magic numbers: these represent the bounds of the range attribute on PortfolioPage.NavbarOrder. TODO Refactor.
+        if (newNavOrder is < -1 or > 4) return false;
+            
+        var toReorder = await context.PortfolioPages
+            .FindAsync(ppId);
+        if (toReorder == null || toReorder.NavbarOrder == newNavOrder) return false;
+        
+        if (newNavOrder == -1)
+        {
+            toReorder.NavbarOrder = newNavOrder;
+            await context.SaveChangesAsync();
+            return true;
+        }
+        
+        var found = await context.PortfolioPages
+            .Where(p => p.NavbarOrder == newNavOrder)
+            .FirstOrDefaultAsync();
+        if (found != null) return false;
+
+        toReorder.NavbarOrder = newNavOrder;
+        await context.SaveChangesAsync();
+        return true;
     }
 
-    public async Task<bool> PublishPortfolioPageAsync(int ppId, int? navOrder)
+    public async Task<IEnumerable<PortfolioPage>> GetPublishedInNavbarOrdered()
     {
-        throw new NotImplementedException();
+        var pages = await context.PortfolioPages
+            .Where(pp => pp.Published && pp.NavbarOrder != -1)
+            .OrderBy(pp => pp.NavbarOrder)
+            .ToListAsync();
+
+        return pages;
+    }
+
+    public async Task<int?> PublishPortfolioPageAsync(int ppId, int? navOrder)
+    {
+        var toPublish = await context.PortfolioPages
+            .FindAsync(ppId);
+        if (toPublish == null || toPublish.Published) return null;
+        
+        await ReorderPortfolioPageInNavAsync(ppId, ((navOrder is >= -1 and <= 4) ? navOrder.Value : -1));
+
+        toPublish.Published = true;
+        await context.SaveChangesAsync();
+        return toPublish.NavbarOrder;
+    }
+    
+    public async Task<bool> UnpublishPortfolioPageAsync(int ppId)
+    {
+        var toUnpublish = await context.PortfolioPages
+            .FindAsync(ppId);
+        if (toUnpublish is not { Published: true }) return false;
+        
+        toUnpublish.Published = false;
+        toUnpublish.NavbarOrder = -1;
+        await context.SaveChangesAsync();
+        return true;
     }
 
     public async Task<bool> UpdatePortfolioPageAsync(int ppId, IPortfolioPageRepository.UpdatePortfolioPageDto model)
     {
-        throw new NotImplementedException();
+        if (model is { NavTitle: null, Title: null }) return false;
+
+        var pPage = await context.PortfolioPages
+            .FindAsync(ppId);
+        if (pPage is null) return false;
+        
+        if (model.Title is not null)
+        {
+            pPage.Title = model.Title;
+        }
+        if (model.NavTitle is not null)
+        {
+            pPage.NavTitle = model.NavTitle;
+        }
+
+        await context.SaveChangesAsync();
+        return true;
     }
 
     public async Task<bool> DeletePortfolioPageAsync(int id)
     {
-        throw new NotImplementedException();
+        var pPage = await context.PortfolioPages
+            .FindAsync(id);
+
+        if (pPage is null) return false;
+
+        context.PortfolioPages.Remove(pPage);
+        await context.SaveChangesAsync();
+
+        return true;
     }
 }

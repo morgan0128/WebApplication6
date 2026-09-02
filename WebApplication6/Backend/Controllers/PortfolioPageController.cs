@@ -47,8 +47,28 @@ public sealed class PortfolioPageController(IPortfolioPageRepository portfolioRe
     [HttpGet("preview")]
     public async Task<IActionResult> PreviewLayout(PageLayoutPreset layout)
     {
+        // TODO not yet implemented
         return Ok();
     }
+
+    [HttpPatch("{id:int}/modify/layout-preset")]
+    public async Task<IActionResult> UpdateLayoutPreset(int id, int layout)
+    {
+        if (!Enum.IsDefined((PageLayoutPreset)layout)) return Problem($"Failed. {layout} is not a valid PageLayoutPreset.");
+        
+        var applyChanges = await portfolioRepository.SetPortfolioPageLayoutPresetAsync(id, (PageLayoutPreset)layout);
+        return applyChanges ? Ok() : Problem();
+    }
+
+    [HttpPatch("{id:int}/modify/nav-order")]
+    public async Task<IActionResult> AssignNavOrder(int id, int navOrder)
+    {
+        var reordered = await portfolioRepository.ReorderPortfolioPageInNavAsync(id, navOrder);
+
+        return reordered ? Ok() : Problem();
+    }
+    
+    
 
     public sealed record CreatePortfolioForAlbumRequest(int albumId, string Name);
 

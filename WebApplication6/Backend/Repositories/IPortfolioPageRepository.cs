@@ -18,7 +18,14 @@ public interface IPortfolioPageRepository
     
     Task<bool> ReorderPortfolioPageInNavAsync(int ppId, int newNavOrder);
 
-    Task<bool> PublishPortfolioPageAsync(int ppId, int? navOrder);
+    Task<IEnumerable<PortfolioPage>> GetPublishedInNavbarOrdered();
+
+    /// <param name="ppId"></param>
+    /// <param name="navOrder"></param>
+    /// <returns>Returns NavbarOrder of PortfolioPage associated with ppId on published successfully, or null</returns>
+    Task<int?> PublishPortfolioPageAsync(int ppId, int? navOrder);
+    
+    Task<bool> UnpublishPortfolioPageAsync(int ppId);
 
     Task<bool> UpdatePortfolioPageAsync(int ppId, UpdatePortfolioPageDto model);
     
