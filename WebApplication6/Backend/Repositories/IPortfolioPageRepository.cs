@@ -18,6 +18,8 @@ public interface IPortfolioPageRepository
     
     Task<bool> ReorderPortfolioPageInNavAsync(int ppId, int newNavOrder);
 
+    Task<IEnumerable<PortfolioPage>> GetPublishedNotInNavbar();
+
     Task<IEnumerable<PortfolioPage>> GetPublishedInNavbarOrdered();
 
     /// <param name="ppId"></param>

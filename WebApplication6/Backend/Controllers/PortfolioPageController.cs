@@ -67,7 +67,60 @@ public sealed class PortfolioPageController(IPortfolioPageRepository portfolioRe
 
         return reordered ? Ok() : Problem();
     }
+
+    [HttpGet("published/not-in-nav")]
+    public async Task<IEnumerable<PortfolioPage>> GetPublishedNotInNav()
+    {
+        var pages = await portfolioRepository.GetPublishedNotInNavbar();
+        return pages;
+    }
     
+    [HttpGet("published/in-nav/ordered")]
+    public async Task<IEnumerable<PortfolioPage>> GetPublishedAndInNavOrdered()
+    {
+        var pages = await portfolioRepository.GetPublishedInNavbarOrdered();
+        return pages;
+    }
+
+    [HttpPatch("publish/{id:int}")]
+    public async Task<int?> PublishPortfolioPage(int id, int? navOrder)
+    {
+        var assignedNavOrder = await portfolioRepository.PublishPortfolioPageAsync(id, navOrder);
+        return assignedNavOrder;
+    }
+
+    [HttpPatch("unpublish/{id:int}")]
+    public async Task<IActionResult> UnpublishPortfolioPage(int id)
+    {
+        var unpublished = await portfolioRepository.UnpublishPortfolioPageAsync(id);
+        return unpublished switch
+        {
+            false => Problem(),
+            true => Ok()
+        };
+    }
+
+    [HttpPatch("{id:int}/modify")]
+    public async Task<IActionResult> ModifyPortfolioPage(int id, IPortfolioPageRepository.UpdatePortfolioPageDto model)
+    {
+        var modified = await portfolioRepository.UpdatePortfolioPageAsync(id, model);
+        return modified switch
+        {
+            false => Problem(),
+            true => Ok()
+        };
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> DeletePortfolioPage(int id)
+    {
+        var deleted = await portfolioRepository.DeletePortfolioPageAsync(id);
+        return deleted switch
+        {
+            false => Problem(),
+            true => Ok()
+        };
+    }
     
 
     public sealed record CreatePortfolioForAlbumRequest(int albumId, string Name);

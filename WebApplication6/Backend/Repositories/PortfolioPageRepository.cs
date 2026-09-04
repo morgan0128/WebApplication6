@@ -85,6 +85,15 @@ public class PortfolioPageRepository(ApplicationDbContext context) : IPortfolioP
         return true;
     }
 
+    public async Task<IEnumerable<PortfolioPage>> GetPublishedNotInNavbar()
+    {
+        var pages = await context.PortfolioPages
+            .Where(pp => pp.Published && pp.NavbarOrder == -1)
+            .ToListAsync();
+
+        return pages;
+    }
+
     public async Task<IEnumerable<PortfolioPage>> GetPublishedInNavbarOrdered()
     {
         var pages = await context.PortfolioPages
