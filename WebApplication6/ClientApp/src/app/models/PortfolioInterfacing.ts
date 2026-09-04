@@ -1,3 +1,6 @@
+export const PAGE_LAYOUT_PRESETS = ['default', 'cozy', 'spooky'] as const;
+export type PageLayoutPreset = (typeof PAGE_LAYOUT_PRESETS)[number];
+
 export type PortfolioPageItem = {
   id: number,
   navTitle: string,
@@ -5,7 +8,7 @@ export type PortfolioPageItem = {
   published: boolean,
   navbarOrder: number,
   albumId: number,
-  pageLayoutPreset: string,
+  pageLayoutPreset: PageLayoutPreset,
 }
 
 export class CreatePortfolioPageFromAlbumRequest {
@@ -17,3 +20,5 @@ export class CreatePortfolioPageFromAlbumRequest {
   albumId: number = -1;
   name: string = '';
 }
+
+

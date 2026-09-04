@@ -1,8 +1,12 @@
-import {Component, inject, input, signal, ViewEncapsulation} from '@angular/core';
+import {Component, inject, input, linkedSignal, signal, ViewEncapsulation} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {PortfolioApiCaller} from '../../services/portfolio-api-caller';
 import {AlbumItem} from '../../models/AlbumInterfacing';
-import {CreatePortfolioPageFromAlbumRequest, PortfolioPageItem} from '../../models/PortfolioInterfacing';
+import {
+  CreatePortfolioPageFromAlbumRequest,
+  PageLayoutPreset,
+  PortfolioPageItem
+} from '../../models/PortfolioInterfacing';
 import {toObservable, toSignal} from '@angular/core/rxjs-interop';
 import {of, switchMap} from 'rxjs';
 
@@ -20,7 +24,7 @@ export class PortfolioManager {
   public readonly selectedAlbum = input.required<AlbumItem | null>();
   private readonly selectedAlbum$ = toObservable(this.selectedAlbum);
 
-  protected readonly portfolioPage = toSignal(
+  protected readonly fetchedPortfolioPage = toSignal(
     this.selectedAlbum$.pipe(
       switchMap(album => {
           if (album == null) {
@@ -35,36 +39,34 @@ export class PortfolioManager {
       { initialValue: null }
   );
 
-  protected readonly stylingLayouts = toSignal<string[]>(this.portfolioApi.getPageLayoutPresetNumberValues());
-  protected selectedStyleLayout: string | null = null;
+  protected readonly portfolioPage = linkedSignal(() => this.fetchedPortfolioPage());
+
+  protected readonly stylingLayouts = toSignal<PageLayoutPreset[]>(this.portfolioApi.getPageLayoutPresets());
+  // protected selectedStyleLayout: string | null = null;
+  protected selectedStyleLayout: PageLayoutPreset | null = null;
 
 
 
 
   onPortfolioPageItemLoaded(){
-
+    // TODO select the stylingLayout associated with the portfolio page
   }
 
-  // private initializePortfolioPage() : (PortfolioPageItem | null) {
-  //   if (this.selectedAlbum == null) return null;
-  //   let createRequestItem = new CreatePortfolioPageFromAlbumRequest(this.selectedAlbum()!.id, this.selectedAlbum()!.name ?? '');
-  //
-  //   this.portfolioApi.postPortfolioPage(createRequestItem).subscribe({
-  //     next: item => {
-  //       return item;
-  //     },
-  //     error: () => {
-  //       return null;
-  //     },
-  //     complete: () => {
-  //       return null;
-  //     }
-  //   });
-  // }
-
   onApplyStyling() {
-    if (this.selectedStyleLayout == null) return;
+    if (this.portfolioPage() == null || this.selectedStyleLayout == null) return;
+    const portfolio = this.portfolioPage()!;
+    const layoutPreset = this.selectedStyleLayout;
 
+
+
+    this.portfolioApi.applyPageLayoutPreset(portfolio.id, layoutPreset)
+      .subscribe({
+        next: () => {
+          this.portfolioPage.update(current =>
+            current == null ? null : { ...current, layoutPreset }
+          );
+        }
+      });
   }
 
 

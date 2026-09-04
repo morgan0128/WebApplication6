@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication6.Backend.Models;
 using WebApplication6.Backend.Repositories;
@@ -93,12 +94,10 @@ public sealed class PortfolioPageController(IPortfolioPageRepository portfolioRe
     }
 
     [HttpPatch("{id:int}/modify/layout-preset")]
-    public async Task<IActionResult> UpdateLayoutPreset(int id, int layout)
+    public async Task<IActionResult> UpdateLayoutPreset(int id, [FromBody] UpdateLayoutPresetRequest request)
     {
-        if (!Enum.IsDefined((PageLayoutPreset)layout)) return Problem($"Failed. {layout} is not a valid PageLayoutPreset.");
-        
-        var applyChanges = await portfolioRepository.SetPortfolioPageLayoutPresetAsync(id, (PageLayoutPreset)layout);
-        return applyChanges ? Ok() : Problem();
+        var applied = await portfolioRepository.SetPortfolioPageLayoutPresetAsync(id, request.LayoutPreset);
+        return applied ? NoContent() : NotFound();
     }
 
     [HttpPatch("{id:int}/modify/nav-order")]
@@ -164,7 +163,7 @@ public sealed class PortfolioPageController(IPortfolioPageRepository portfolioRe
     }
 
     [HttpGet("styling-enums")]
-    public async Task<string[]> GetPageLayoutPresets()
+    public PageLayoutPreset[] GetPageLayoutPresets()
     {
         // var enumNames = Enum.GetNames<PageLayoutPreset>();
         // var enumValues = Enum.GetValuesAsUnderlyingType<PageLayoutPreset>().Cast<int>().ToList();
@@ -179,11 +178,11 @@ public sealed class PortfolioPageController(IPortfolioPageRepository portfolioRe
         // }
         //
         // return enumTuples;
-        var enums = Enum.GetNames<PageLayoutPreset>();
-        return enums;
+        return Enum.GetValues<PageLayoutPreset>();
     }
     
 
     public sealed record FetchOrCreateUsingAlbumDto(int albumId, string Name);
-
+    
+    public sealed record UpdateLayoutPresetRequest(PageLayoutPreset LayoutPreset);
 }

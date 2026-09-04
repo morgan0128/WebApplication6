@@ -1,6 +1,9 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using WebApplication6.Backend.Data;
+using WebApplication6.Backend.Models;
 using WebApplication6.Backend.Repositories;
 using WebApplication6.Backend.Services;
 
@@ -17,7 +20,13 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
-builder.Services.AddControllers();
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters
+            .Add(new JsonStringEnumConverter<PageLayoutPreset>(JsonNamingPolicy.CamelCase, allowIntegerValues: false));
+    });
 
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();

@@ -10,13 +10,14 @@
       [(ngModel)]="selectedStyleLayout"
     >
       <option [ngValue]="null">Page Styling</option>
-      @for (n of stylingLayouts(); track n){
-        <option [ngValue]="n">{{ n }}</option>
+      @for (s of stylingLayouts(); track s){
+        @let sCapitalized = s.at(0)!.toLocaleUpperCase() + s.substring(1, s.length);
+        <option [ngValue]="s">{{ sCapitalized }}</option>
       }
     </select>
     <div class="styling-select-buttons">
       <button>preview</button>
-      <button>apply</button>
+      <button (click)="onApplyStyling()">apply</button>
     </div>
 
   </div>
