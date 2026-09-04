@@ -5,22 +5,22 @@ namespace WebApplication6.Backend.Repositories;
 
 public interface IPortfolioPageRepository
 {
-    Task<IEnumerable<PortfolioPage>> GetAllPublishedAsync();
+    Task<IEnumerable<PortfolioPageDto>> GetAllPublishedAsync();
     
-    Task<PortfolioPage?> GetPortfolioPageByIdAsync(int id);
+    Task<PortfolioPageDto?> GetPortfolioPageByIdAsync(int id);
     
-    Task<PortfolioPage?> GetPortfolioPageByAlbumAsync(int albumId);
+    Task<PortfolioPageDto?> GetPortfolioPageByAlbumAsync(int albumId);
     
     /// <returns>Id of the saved portfolio page on success, or null on exception thrown or failure.</returns>
-    Task<int?> SavePortfolioPageAsync(PortfolioPage portfolioPage);
+    Task<PortfolioPageDto?> SavePortfolioPageAsync(PortfolioPage portfolioPage);
 
     Task<bool> SetPortfolioPageLayoutPresetAsync(int ppId, PageLayoutPreset layout);
     
     Task<bool> ReorderPortfolioPageInNavAsync(int ppId, int newNavOrder);
 
-    Task<IEnumerable<PortfolioPage>> GetPublishedNotInNavbar();
+    Task<IEnumerable<PortfolioPageDto>> GetPublishedNotInNavbar();
 
-    Task<IEnumerable<PortfolioPage>> GetPublishedInNavbarOrdered();
+    Task<IEnumerable<PortfolioPageDto>> GetPublishedInNavbarOrdered();
 
     /// <param name="ppId"></param>
     /// <param name="navOrder"></param>
@@ -33,6 +33,18 @@ public interface IPortfolioPageRepository
     
     /// <returns>true on success, or false on not found</returns>
     Task<bool> DeletePortfolioPageAsync(int id);
+    
+    // Task<IEnumerable<int>> Get
 
     public sealed record UpdatePortfolioPageDto(string? NavTitle, string? Title);
+    
+    public sealed record PortfolioPageDto(
+        int Id,
+        string NavTitle,
+        string Title,
+        bool Published,
+        int NavbarOrder,
+        int AlbumId,
+        PageLayoutPreset LayoutPreset);
+    
 }

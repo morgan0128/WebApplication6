@@ -23,15 +23,22 @@ public class PortfolioPage
     
     [ForeignKey("AlbumId")]
     [Required]
-    public Album Album { get; set; }
+    public virtual Album Album { get; set; }
 
     public PageLayoutPreset LayoutPreset { get; set; } = PageLayoutPreset.Default;
 
 }
 
+// public enum PageLayoutPreset
+// {
+//     Default = 1,
+//     Cozy = 2,
+//     Spooky = 3
+// }
+
 public enum PageLayoutPreset
 {
-    Default = 1,
-    Cozy = 2,
-    Spooky = 3
+    Default = 0,
+    Cozy = 1,
+    Spooky = 2
 }

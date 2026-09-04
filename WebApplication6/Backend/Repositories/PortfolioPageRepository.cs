@@ -7,39 +7,45 @@ namespace WebApplication6.Backend.Repositories;
 
 public class PortfolioPageRepository(ApplicationDbContext context) : IPortfolioPageRepository
 {
-    public async Task<IEnumerable<PortfolioPage>> GetAllPublishedAsync()
+    public async Task<IEnumerable<IPortfolioPageRepository.PortfolioPageDto>> GetAllPublishedAsync()
     {
         var publishedPages = await context.PortfolioPages
             .Where(pp => pp.Published == true)
+            .Select(pp => PortfolioPageToDto(pp))
             .ToListAsync();
 
         return publishedPages;
     }
 
-    public async Task<PortfolioPage?> GetPortfolioPageByIdAsync(int id)
+    public async Task<IPortfolioPageRepository.PortfolioPageDto?> GetPortfolioPageByIdAsync(int id)
     {
         var portfolio = await context.PortfolioPages
             .FindAsync(id);
-
-        return portfolio;
+        return (portfolio == null) ? null : PortfolioPageToDto(portfolio);
     }
 
-    public async Task<PortfolioPage?> GetPortfolioPageByAlbumAsync(int albumId)
+    public async Task<IPortfolioPageRepository.PortfolioPageDto?> GetPortfolioPageByAlbumAsync(int albumId)
     {
+        var albumExists = await context.Albums
+            .FindAsync(albumId);
+        if (albumExists == null)
+        {
+            throw new KeyNotFoundException();
+        }
         var portfolio = await context.PortfolioPages
             .Where(pp => pp.AlbumId == albumId)
-            .FirstAsync();
+            .FirstOrDefaultAsync();
         
-        return portfolio;
+        return (portfolio == null) ? null : PortfolioPageToDto(portfolio);
     }
 
-    public async Task<int?> SavePortfolioPageAsync(PortfolioPage portfolioPage)
+    public async Task<IPortfolioPageRepository.PortfolioPageDto?> SavePortfolioPageAsync(PortfolioPage portfolioPage)
     {
         context.PortfolioPages.Add(portfolioPage);
         try
         {
             await context.SaveChangesAsync();
-            return portfolioPage.Id;
+            return PortfolioPageToDto(portfolioPage);
         }
         catch (Exception)
         {
@@ -85,18 +91,20 @@ public class PortfolioPageRepository(ApplicationDbContext context) : IPortfolioP
         return true;
     }
 
-    public async Task<IEnumerable<PortfolioPage>> GetPublishedNotInNavbar()
+    public async Task<IEnumerable<IPortfolioPageRepository.PortfolioPageDto>> GetPublishedNotInNavbar()
     {
         var pages = await context.PortfolioPages
+            .Select(pp => PortfolioPageToDto(pp))
             .Where(pp => pp.Published && pp.NavbarOrder == -1)
             .ToListAsync();
 
         return pages;
     }
 
-    public async Task<IEnumerable<PortfolioPage>> GetPublishedInNavbarOrdered()
+    public async Task<IEnumerable<IPortfolioPageRepository.PortfolioPageDto>> GetPublishedInNavbarOrdered()
     {
         var pages = await context.PortfolioPages
+            .Select(pp => PortfolioPageToDto(pp))
             .Where(pp => pp.Published && pp.NavbarOrder != -1)
             .OrderBy(pp => pp.NavbarOrder)
             .ToListAsync();
@@ -161,5 +169,10 @@ public class PortfolioPageRepository(ApplicationDbContext context) : IPortfolioP
         await context.SaveChangesAsync();
 
         return true;
+    }
+    
+    public static IPortfolioPageRepository.PortfolioPageDto PortfolioPageToDto(PortfolioPage p)
+    {
+        return new IPortfolioPageRepository.PortfolioPageDto(p.Id, p.NavTitle, p.Title, p.Published, p.NavbarOrder, p.AlbumId, p.LayoutPreset);
     }
 }

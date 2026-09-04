@@ -10,39 +10,80 @@ public sealed class PortfolioPageController(IPortfolioPageRepository portfolioRe
 {
 
     [HttpGet("published")]
-    public async Task<IEnumerable<PortfolioPage>> GetAllPublishedPortfolioPages()
+    public async Task<IEnumerable<IPortfolioPageRepository.PortfolioPageDto>> GetAllPublishedPortfolioPages()
     {
         var pps = await portfolioRepository.GetAllPublishedAsync();
         return pps;
     }
 
     [HttpGet("{id:int}")]
-    public async Task<PortfolioPage?> GetPortfolioPageById(int id)
+    public async Task<IPortfolioPageRepository.PortfolioPageDto?> GetPortfolioPageById(int id)
     {
         var pp = await portfolioRepository.GetPortfolioPageByIdAsync(id);
         return pp;
     }
     
-    [HttpGet("by-album/{albumId:int}")]
-    public async Task<PortfolioPage?> GetPortfolioPageByAlbumId(int albumId)
-    {
-        var pp = await portfolioRepository.GetPortfolioPageByAlbumAsync(albumId);
-        return pp;
-    }
+    // [HttpGet("by-album/{albumId:int}")]
+    // public async Task<IPortfolioPageRepository.PortfolioPageDto?> GetPortfolioPageByAlbumId(int albumId)
+    // {
+    //     var pp = await portfolioRepository.GetPortfolioPageByAlbumAsync(albumId);
+    //     return pp;
+    // }
     
-    [HttpPost]
-    public async Task<IActionResult> PostPortfolioPage(CreatePortfolioForAlbumRequest albumRequest)
+    private async Task<IPortfolioPageRepository.PortfolioPageDto?> PostPortfolioPage(FetchOrCreateUsingAlbumDto albumRequest)
     {
         var pp = new PortfolioPage();
         pp.AlbumId = albumRequest.albumId;
-        pp.Title = albumRequest.Name[..80].TrimEnd();
-        pp.NavTitle = albumRequest.Name[..20].TrimEnd();
         
-        var ppId = await portfolioRepository.SavePortfolioPageAsync(pp);
-        if (ppId == null) return Problem();
+        pp.Title = albumRequest.Name.Trim();
+        if (pp.Title.Length > 80)
+        {
+            pp.Title = pp.Title[..80];
+        }
+
+        pp.NavTitle = pp.Title;
+        if (pp.NavTitle.Length > 20)
+        {
+            pp.NavTitle = pp.NavTitle[..20];
+        }
+
         
-        return Ok();
+        var saved = await portfolioRepository.SavePortfolioPageAsync(pp);
+        return saved;
     }
+
+    [HttpPost("fetch-or-create")]
+    public async Task<ActionResult<IPortfolioPageRepository.PortfolioPageDto?>> FetchOrCreatePortfolioPage(FetchOrCreateUsingAlbumDto correspondingAlbum)
+    {
+        try
+        {
+            var pp = await portfolioRepository.GetPortfolioPageByAlbumAsync(correspondingAlbum.albumId);
+            if (pp != null)
+            {
+                return pp;
+            }
+
+            var created = await PostPortfolioPage(correspondingAlbum);
+            return created;
+
+        }
+        catch (AggregateException e)
+        {
+            var innerExceptions = e.InnerExceptions;
+            using (var exEnumerator = innerExceptions.GetEnumerator())
+            {
+                while (exEnumerator.MoveNext())
+                {
+                    if (exEnumerator.Current.GetType() != typeof(KeyNotFoundException)) continue;
+                    
+                    var keyNotFound = (KeyNotFoundException)exEnumerator.Current;
+                    return new BadRequestResult();
+                }
+                throw;
+            }
+        }
+    }
+        
 
     [HttpGet("preview")]
     public async Task<IActionResult> PreviewLayout(PageLayoutPreset layout)
@@ -69,14 +110,14 @@ public sealed class PortfolioPageController(IPortfolioPageRepository portfolioRe
     }
 
     [HttpGet("published/not-in-nav")]
-    public async Task<IEnumerable<PortfolioPage>> GetPublishedNotInNav()
+    public async Task<IEnumerable<IPortfolioPageRepository.PortfolioPageDto>> GetPublishedNotInNav()
     {
         var pages = await portfolioRepository.GetPublishedNotInNavbar();
         return pages;
     }
     
     [HttpGet("published/in-nav/ordered")]
-    public async Task<IEnumerable<PortfolioPage>> GetPublishedAndInNavOrdered()
+    public async Task<IEnumerable<IPortfolioPageRepository.PortfolioPageDto>> GetPublishedAndInNavOrdered()
     {
         var pages = await portfolioRepository.GetPublishedInNavbarOrdered();
         return pages;
@@ -121,8 +162,28 @@ public sealed class PortfolioPageController(IPortfolioPageRepository portfolioRe
             true => Ok()
         };
     }
+
+    [HttpGet("styling-enums")]
+    public async Task<string[]> GetPageLayoutPresets()
+    {
+        // var enumNames = Enum.GetNames<PageLayoutPreset>();
+        // var enumValues = Enum.GetValuesAsUnderlyingType<PageLayoutPreset>().Cast<int>().ToList();
+        // (string, int)[] enumTuples = [];
+        //
+        // var length = enumNames.Length;
+        // if (enumValues.Count != length) return enumTuples;
+        //
+        // for (var i = 0; i < length; i++)
+        // {
+        //     enumTuples[i] = (enumNames[i], enumValues[i]);
+        // }
+        //
+        // return enumTuples;
+        var enums = Enum.GetNames<PageLayoutPreset>();
+        return enums;
+    }
     
 
-    public sealed record CreatePortfolioForAlbumRequest(int albumId, string Name);
+    public sealed record FetchOrCreateUsingAlbumDto(int albumId, string Name);
 
 }

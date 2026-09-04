@@ -201,12 +201,14 @@
       </section>
       </div>
     <br>
+    @if (selectedAlbum() != null){
       <section>
-            <app-portfolio-manager />
+        <app-portfolio-manager [selectedAlbum]="selectedAlbum()" />
       </section>
-    <br>
+      <br>
+    }
       <section>
-        @if (this.selectedAlbumId !== null){
+        @if (this.selectedAlbumId() !== null){
           <app-album-contents [selectedAlbum]="this.selectedAlbum()" [selectedAlbumId]="this.selectedAlbumId()!" [loadingPhotos]="this.loadingPhotos()" [photos]="this.photos()"
           (photoStateChange)="photoChangedStateUpdate($event)" (orderChanged)="loadAlbumSelection()"/>
         }

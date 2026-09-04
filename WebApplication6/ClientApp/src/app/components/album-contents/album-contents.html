@@ -4,7 +4,7 @@
       <p class="eyebrow">Album contents</p>
       <h2>Artwork</h2>
     </div>
-    @if (selectedAlbum != null) {
+    @if (selectedAlbum() != null) {
       <span class="artworks-count">{{ photos().length }} {{ photos().length === 1 ? 'piece' : 'pieces' }}</span>
     }
   </div>

@@ -2,11 +2,17 @@
 <section class="card portfolio-card">
 <!--    <label class="field-label" for="albums">Album</label>-->
   <div class="styling-select-container">
+    <label for="stylings">Styling</label>
     <select
       class="styling-select"
-      name="albums"
-      id="albums">
-      <option>Page Styling</option>
+      name="stylings"
+      id="stylings"
+      [(ngModel)]="selectedStyleLayout"
+    >
+      <option [ngValue]="null">Page Styling</option>
+      @for (n of stylingLayouts(); track n){
+        <option [ngValue]="n">{{ n }}</option>
+      }
     </select>
     <div class="styling-select-buttons">
       <button>preview</button>

@@ -65,7 +65,6 @@ export class EditAlbums implements OnInit {
     this.loadingAlbums.set(true);
 
     let request = this.albumApi.getAlbums();
-    this.loadingAlbums.set(false);
     request.subscribe({
         next: albums => {
           this.albumDTOs.set(albums);
